@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kerala Coders Cafe (KCC)
 
-## Getting Started
+Welcome to the **Kerala Coders Cafe**, a modern tech coding community for developers, programmers, and students in Kerala.
 
-First, run the development server:
+## 🚀 About the Project
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+This is a "Coming Soon" landing page for our community, built with:
+- **Next.js 16** (App Router)
+- **Tailwind CSS 4**
+- **Framer Motion** for animations
+- **Lucide React** for icons
+- **GitHub API** for dynamic contributor listing
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Setup Instructions
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/atomrobic/Keralacoderscafe.git
+   cd Keralacoderscafe
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-## Learn More
+3. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+4. **Open in browser:**
+   Navigate to [http://localhost:3000](http://localhost:3000)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🤝 Community Links
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **GitHub Repository:** [atomrobic/Keralacoderscafe](https://github.com/atomrobic/Keralacoderscafe)
+- **WhatsApp Group:** [Join Here](https://chat.whatsapp.com/GisLp4Xp2Y8BkK8XlP2Xp2)
 
-## Deploy on Vercel
+## 👥 Contributors
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project is powered by amazing people! Our landing page automatically fetches and displays our top contributors from GitHub.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Special thanks to everyone who helps make KCC a great space!
