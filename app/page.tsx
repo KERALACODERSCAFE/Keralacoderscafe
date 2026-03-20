@@ -1,19 +1,22 @@
+import NavBar from "./components/NavBar";
 import Hero from "./components/Hero";
+import Mission from "./components/Mission";
 import Contributors from "./components/Contributors";
+import Projects from "./components/Projects";
+import Guidelines from "./components/Guidelines";
+import JoinCTA from "./components/JoinCTA";
 import Footer from "./components/Footer";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Hero />
-        
-        {/* Divider */}
-        <div className="w-full max-w-2xl mx-auto h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-10" />
-        
-        <Contributors />
-      </div>
-      
+    <main className="relative z-10">
+      <NavBar />
+      <Hero />
+      <Mission />
+      <Contributors />
+      <Projects />
+      <Guidelines />
+      <JoinCTA />
       <Footer />
     </main>
   );

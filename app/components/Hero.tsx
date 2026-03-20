@@ -1,78 +1,70 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Github, MessageSquareCode } from "lucide-react";
 import Link from "next/link";
-import { cn } from "../utils/cn";
+import Image from "next/image";
 
 export default function Hero() {
   return (
-    <section className="relative flex flex-col items-center justify-center pt-20 pb-12 text-center">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="mb-8 p-3 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm"
-      >
-        <div className="px-4 py-1 text-xs font-semibold tracking-wider text-blue-400 uppercase">
-          Coming Soon
+    <header className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+      <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none overflow-hidden text-kcc-gold">
+        <div className="relative w-full h-full max-w-4xl max-h-[80vh] opacity-100">
+          <Image
+            src="https://res.cloudinary.com/ddtpurhae/image/upload/v1773985458/ChatGPT_Image_Mar_20_2026_10_41_14_AM_relkov.png"
+            alt="Kerala Coders Cafe community illustration"
+            fill
+            sizes="100vw"
+            className="object-contain animate-fade-in"
+            priority
+          />
         </div>
-      </motion.div>
+        <div className="absolute inset-0 hero-gradient" />
+      </div>
 
-      <motion.h1
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6"
-      >
-        We are a Tech <br />
-        <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-          Coding Community
-        </span>
-      </motion.h1>
+      <div className="relative z-10 text-center px-6 max-w-6xl mx-auto">
+        <div className="text-xs tracking-[0.5em] text-kcc-gold uppercase mb-6 animate-fade-in-up">
+          KERALA'S TECH COMMUNITY
+        </div>
 
-      <motion.p
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="max-w-2xl text-lg md:text-xl text-slate-400 mb-10 px-4"
-      >
-        Learn, Build, and Grow Together. A thriving ecosystem where developers 
-        collaborate, students learn, and innovators build the future of Kerala's tech scene.
-      </motion.p>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-        className="flex flex-col sm:flex-row gap-4 px-4 w-full sm:w-auto"
-      >
-        <Link
-          href="https://github.com/atomrobic/Keralacoderscafe"
-          target="_blank"
-          className={cn(
-            "flex items-center justify-center gap-2 px-8 py-4 rounded-full",
-            "bg-white text-slate-950 font-bold text-lg",
-            "transition-all duration-300 hover:scale-105 active:scale-95",
-            "hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]"
-          )}
+        <h1
+          className="text-[15vw] md:text-[12vw] lg:text-[10rem] font-black tracking-tighter text-kcc-accent leading-none select-none animate-fade-in-up delay-100"
+          style={{ fontFamily: "var(--font-newsreader)" }}
         >
-          <Github className="w-5 h-5" />
-          GitHub Repo
-        </Link>
-        <Link
-          href="https://chat.whatsapp.com/GisLp4Xp2Y8BkK8XlP2Xp2" // Placeholder or actual link if provided
-          target="_blank"
-          className={cn(
-            "flex items-center justify-center gap-2 px-8 py-4 rounded-full",
-            "bg-white/5 border border-white/10 text-white font-bold text-lg backdrop-blur-sm",
-            "transition-all duration-300 hover:bg-white/10 hover:scale-105 active:scale-95"
-          )}
-        >
-          <MessageSquareCode className="w-5 h-5" />
-          WhatsApp Group
-        </Link>
-      </motion.div>
-    </section>
+          Kerala Coders<br />Cafe
+        </h1>
+
+
+        <p className="text-base md:text-lg text-kcc-text-dim mt-8 max-w-2xl mx-auto leading-relaxed animate-fade-in-up delay-300">
+          A vibrant community of developers, designers, and tech enthusiasts from Kerala.
+          Building the future, one commit at a time.
+        </p>
+
+        <div className="mt-12 flex flex-col sm:flex-row justify-center gap-6 animate-fade-in-up delay-400">
+          <Link
+            href="https://github.com/atomrobic/keralacoderscafe-saas"
+            target="_blank"
+            rel="noopener"
+            className="bg-kcc-accent text-kcc-bg px-10 py-4 text-xs tracking-widest uppercase font-semibold hover:bg-kcc-gold transition-all duration-300 inline-flex items-center justify-center gap-2"
+          >
+            <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>code</span>
+            View on GitHub
+          </Link>
+          <Link
+            href="https://chat.whatsapp.com/Kd3tVwJfjjh0HRZtoYfxcm"
+            target="_blank"
+            rel="noopener"
+            className="border border-kcc-border text-kcc-accent px-10 py-4 text-xs tracking-widest uppercase font-semibold hover:bg-white/5 hover:border-kcc-gold transition-all duration-300 inline-flex items-center justify-center gap-2"
+          >
+            <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>chat</span>
+            Join WhatsApp
+          </Link>
+        </div>
+
+        <div className="mt-16 animate-fade-in-up delay-500">
+          <a href="#about" className="text-kcc-text-dim hover:text-kcc-gold transition-colors inline-block">
+            <span className="material-symbols-outlined animate-bounce" style={{ fontSize: "40px" }}>keyboard_arrow_down</span>
+          </a>
+        </div>
+      </div>
+    </header>
   );
 }
