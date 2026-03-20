@@ -1,21 +1,16 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   images: {
     remotePatterns: [
       {
         protocol: "https",
         hostname: "avatars.githubusercontent.com",
-        port: "",
-        pathname: "/**",
-        search: "",
+        pathname: "/u/**",
       },
       {
         protocol: "https",
         hostname: "res.cloudinary.com",
-        port: "",
         pathname: "/ddtpurhae/**",
-        search: "",
       },
     ],
   },

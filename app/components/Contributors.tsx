@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { Users } from "lucide-react";
 
 interface Contributor {
   id: number;
@@ -22,14 +20,13 @@ export default function Contributors() {
     async function fetchContributors() {
       try {
         const res = await fetch(
-          "https://api.github.com/repos/atomrobic/Keralacoderscafe/contributors"
+          "https://api.github.com/repos/atomrobic/keralacoderscafe-saas/contributors?per_page=12"
         );
         if (!res.ok) throw new Error("Failed to fetch");
         const data = await res.json();
-        setContributors(data.slice(0, 12)); // Limit to top 12
+        setContributors(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error("Error fetching contributors:", err);
-        // Fallback or empty state
       } finally {
         setLoading(false);
       }
@@ -38,59 +35,70 @@ export default function Contributors() {
   }, []);
 
   return (
-    <section className="py-20 px-4 max-w-5xl mx-auto">
-      <div className="flex items-center justify-center gap-3 mb-10">
-        <Users className="w-6 h-6 text-blue-400" />
-        <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
-          Our Contributors
-        </h2>
-      </div>
+    <section id="contributors" className="relative py-32 px-6 md:px-12 bg-kcc-bg">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-20">
+          <span className="text-xs tracking-[0.4em] text-kcc-gold uppercase">Our Community</span>
+          <h2
+            className="text-5xl md:text-7xl italic text-kcc-accent mt-4"
+            style={{ fontFamily: "var(--font-newsreader)" }}
+          >
+            Top Contributors
+          </h2>
+          <p className="text-kcc-text-dim mt-4 max-w-2xl mx-auto">
+            Meet the amazing developers who make Kerala Coders Cafe possible.
+            Every commit, every PR, every discussion matters.
+          </p>
+        </div>
 
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-6 md:gap-8">
-        <AnimatePresence>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {loading
-            ? Array.from({ length: 6 }).map((_, i) => (
-                <div
-                  key={`skeleton-${i}`}
-                  className="flex flex-col items-center gap-3"
-                >
-                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/5 animate-pulse" />
-                  <div className="w-12 h-3 bg-white/5 rounded animate-pulse" />
-                </div>
+            ? Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="skeleton aspect-square rounded-lg" />
               ))
-            : contributors.map((contributor, i) => (
-                <motion.div
+            : contributors.map((contributor, index) => (
+                <Link
                   key={contributor.id}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3, delay: i * 0.05 }}
-                  className="group flex flex-col items-center gap-3"
+                  href={contributor.html_url}
+                  target="_blank"
+                  rel="noopener"
+                  className="group bg-kcc-surface-elevated hover-lift overflow-hidden relative block animate-fade-in-up"
+                  style={{ animationDelay: `${index * 0.1}s`, opacity: 0 }}
                 >
-                  <Link
-                    href={contributor.html_url}
-                    target="_blank"
-                    className="relative w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-2 border-transparent transition-all duration-300 group-hover:border-blue-400 group-hover:scale-110"
-                  >
+                  <div className="aspect-square relative">
                     <Image
                       src={contributor.avatar_url}
                       alt={contributor.login}
                       fill
-                      className="object-cover"
+                      className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                      sizes="(max-width: 768px) 50vw, 25vw"
                     />
-                  </Link>
-                  <span className="text-sm font-medium text-slate-400 truncate w-full text-center">
-                    {contributor.login}
-                  </span>
-                </motion.div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-kcc-bg via-transparent to-transparent opacity-60" />
+                    <div className="absolute bottom-0 left-0 right-0 p-4">
+                      <div className="text-sm font-semibold text-kcc-accent mb-1">{contributor.login}</div>
+                      <div className="text-xs text-kcc-gold">{contributor.contributions} contributions</div>
+                    </div>
+                  </div>
+                </Link>
               ))}
-        </AnimatePresence>
-      </div>
-
-      {!loading && contributors.length === 0 && (
-        <div className="text-center text-slate-500 py-10">
-          Be the first one to contribute!
+          {!loading && contributors.length === 0 && (
+            <p className="text-kcc-text-dim col-span-full text-center py-10">
+              Be the first to contribute!
+            </p>
+          )}
         </div>
-      )}
+
+        <div className="text-center mt-12">
+          <Link
+            href="https://github.com/atomrobic/keralacoderscafe-saas/graphs/contributors"
+            target="_blank"
+            rel="noopener"
+            className="text-kcc-gold text-xs tracking-widest uppercase border-b border-kcc-gold/30 pb-2 hover:border-kcc-gold transition-all inline-block"
+          >
+            View All Contributors
+          </Link>
+        </div>
+      </div>
     </section>
   );
 }
