@@ -15,45 +15,85 @@ const manrope = Manrope({
   display: "swap",
 });
 
-
 export const metadata: Metadata = {
+  metadataBase: new URL("https://kcc.sh"),
+
   title: {
-    default: "Kerala Coders Cafe | കേരള കോഡേഴ്സ് കഫേ",
+    default: "Kerala Coders Cafe | Developer Community Kerala",
     template: "%s | Kerala Coders Cafe",
   },
-  description: "A vibrant community of developers from God's Own Country. Building, learning, and growing together.",
-  keywords: ["Kerala Coders Cafe", "KCC", "Tech Community Kerala", "Coding Community Kerala", "Developers Kerala", "Programming Community", "Learn Coding Kerala"],
+
+  description:
+    "Kerala Coders Cafe is a growing developer community from Kerala. Join to learn coding, contribute to open source, and build projects together.",
+
+  keywords: [
+    "Kerala Coders Cafe",
+    "Kerala developers",
+    "Coding community Kerala",
+    "Learn programming Kerala",
+    "Open source Kerala",
+    "Developers India community",
+  ],
+
   authors: [{ name: "Kerala Coders Cafe Team" }],
   creator: "Kerala Coders Cafe",
   publisher: "Kerala Coders Cafe",
-  category: "Technology",
+  category: "technology",
+
   alternates: {
-    canonical: "https://kcc.sh",
+    canonical: "/",
   },
-  metadataBase: new URL("https://kcc.sh"),
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://kcc.sh",
-    title: "Kerala Coders Cafe | കേരള കോഡേഴ്സ് കഫേ",
-    description: "A vibrant community of developers from God's Own Country. Building, learning, and growing together.",
+    url: "/",
+    title: "Kerala Coders Cafe 🚀",
+    description:
+      "A vibrant community of developers from Kerala. Build, learn, and grow together.",
     siteName: "Kerala Coders Cafe",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Kerala Coders Cafe" }],
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Kerala Coders Cafe",
+      },
+    ],
   },
+
   twitter: {
     card: "summary_large_image",
-    title: "Kerala Coders Cafe | The Tech Community for Kerala",
-    description: "The most active tech coding community in Kerala.",
+    title: "Kerala Coders Cafe 🚀",
+    description:
+      "Join Kerala's fastest growing developer community.",
     creator: "@KeralaCodersCafe",
     images: ["/og-image.png"],
   },
-  robots: { index: true, follow: true },
+
   icons: {
     icon: "/logo.png",
+    shortcut: "/logo.png",
     apple: "/logo.png",
   },
+
+  manifest: "/manifest.json", // 🔥 PWA support
 };
 
+
+// 🔥 Enhanced Schema (SEO boost)
 const organizationLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -61,35 +101,46 @@ const organizationLd = {
   url: "https://kcc.sh",
   logo: "https://kcc.sh/logo.png",
   description:
-    "Community of developers, designers, and tech enthusiasts from Kerala collaborating on open-source and learning together.",
+    "Kerala Coders Cafe is a developer community focused on learning, building, and contributing to open-source.",
+  foundingLocation: {
+    "@type": "Place",
+    name: "Kerala, India",
+  },
   sameAs: [
     "https://github.com/atomrobic/keralacoderscafe-saas",
     "https://chat.whatsapp.com/Kd3tVwJfjjh0HRZtoYfxcm",
   ],
 };
 
+
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html
       lang="en"
-      className={`${newsreader.variable} ${manrope.variable} h-full dark`}
+      className={`${newsreader.variable} ${manrope.variable} h-full`}
     >
       <head>
+        {/* Google Icons */}
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
         />
+
+        {/* Schema JSON-LD */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationLd),
+          }}
         />
       </head>
-      <body className="min-h-full">
-        <div className="glow-overlay" />
+
+      <body className="min-h-full bg-black text-white antialiased">
+        <div className="glow-overlay pointer-events-none" />
         {children}
       </body>
     </html>
