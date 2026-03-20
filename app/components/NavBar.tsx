@@ -109,7 +109,7 @@ export default function NavBar() {
 
           <div className="absolute bottom-12 left-8 right-8">
             <Link
-              href="https://github.com/atomrobic/keralacoderscafe-saas"
+              href="https://github.com/KERALACODERSCAFE/Keralacoderscafe"
               target="_blank"
               rel="noopener"
               className="flex items-center gap-3 text-kcc-text-dim hover:text-kcc-gold transition-colors"
