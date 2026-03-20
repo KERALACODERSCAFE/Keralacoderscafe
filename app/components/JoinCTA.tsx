@@ -20,7 +20,7 @@ export default function JoinCTA() {
 
       <div className="flex flex-col sm:flex-row gap-6">
         <Link
-          href="https://github.com/atomrobic/keralacoderscafe-saas"
+          href="https://github.com/KERALACODERSCAFE/Keralacoderscafe"
           target="_blank"
           rel="noopener"
           className="bg-kcc-accent text-kcc-bg px-12 py-5 text-xs tracking-widest uppercase font-semibold hover:bg-kcc-gold transition-all duration-300 inline-flex items-center justify-center gap-2"
