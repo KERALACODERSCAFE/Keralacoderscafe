@@ -40,7 +40,7 @@ export default function Hero() {
 
         <div className="mt-12 flex flex-col sm:flex-row justify-center gap-6 animate-fade-in-up delay-400">
           <Link
-            href="https://github.com/atomrobic/keralacoderscafe-saas"
+            href="https://github.com/KERALACODERSCAFE/Keralacoderscafe"
             target="_blank"
             rel="noopener"
             className="bg-kcc-accent text-kcc-bg px-10 py-4 text-xs tracking-widest uppercase font-semibold hover:bg-kcc-gold transition-all duration-300 inline-flex items-center justify-center gap-2"

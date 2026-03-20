@@ -20,7 +20,7 @@ export default function Contributors() {
     async function fetchContributors() {
       try {
         const res = await fetch(
-          "https://api.github.com/repos/atomrobic/keralacoderscafe-saas/contributors?per_page=12"
+          "https://api.github.com/repos/KERALACODERSCAFE/Keralacoderscafe/contributors?per_page=12"
         );
         if (!res.ok) throw new Error("Failed to fetch");
         const data = await res.json();
@@ -90,7 +90,7 @@ export default function Contributors() {
 
         <div className="text-center mt-12">
           <Link
-            href="https://github.com/atomrobic/keralacoderscafe-saas/graphs/contributors"
+            href="https://github.com/KERALACODERSCAFE/Keralacoderscafe/graphs/contributors"
             target="_blank"
             rel="noopener"
             className="text-kcc-gold text-xs tracking-widest uppercase border-b border-kcc-gold/30 pb-2 hover:border-kcc-gold transition-all inline-block"
