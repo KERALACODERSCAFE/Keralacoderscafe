@@ -9,7 +9,7 @@ export default function Hero() {
       <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none overflow-hidden text-kcc-gold">
         <div className="relative w-full h-full max-w-4xl max-h-[80vh] opacity-100">
           <Image
-            src="https://res.cloudinary.com/ddtpurhae/image/upload/v1773985458/ChatGPT_Image_Mar_20_2026_10_41_14_AM_relkov.png"
+            src="https://res.cloudinary.com/ddtpurhae/image/upload/v1773996258/file_000000000ff872089c1ca82d3c166b47_kyb0er.png"
             alt="Kerala Coders Cafe community illustration"
             fill
             sizes="100vw"
