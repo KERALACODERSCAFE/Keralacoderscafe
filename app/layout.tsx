@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Newsreader, Manrope } from "next/font/google";
+import { Caveat, Instrument_Serif, Manrope, Newsreader } from "next/font/google";
 import "./globals.css";
 
 const newsreader = Newsreader({
@@ -11,6 +11,20 @@ const newsreader = Newsreader({
 
 const manrope = Manrope({
   variable: "--font-manrope",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  weight: "400",
+  display: "swap",
+});
+
+const caveat = Caveat({
+  variable: "--font-caveat",
   subsets: ["latin"],
   display: "swap",
 });
@@ -121,7 +135,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${newsreader.variable} ${manrope.variable} h-full`}
+      className={`${newsreader.variable} ${manrope.variable} ${instrumentSerif.variable} ${caveat.variable} h-full`}
     >
       <head>
         {/* Google Icons */}
@@ -139,8 +153,7 @@ export default function RootLayout({
         />
       </head>
 
-      <body className="min-h-full bg-black text-white antialiased">
-        <div className="glow-overlay pointer-events-none" />
+      <body className="min-h-full bg-kcc-paper text-black antialiased">
         {children}
       </body>
     </html>
