@@ -1,15 +1,6 @@
 import Link from "next/link";
 import { Github, MessageCircle } from "lucide-react";
 
-const quickLinks = ["About Us", "Contributors", "Projects", "GitHub", "WhatsApp"];
-const quickLinksHrefs = [
-  "#about",
-  "#contributors",
-  "#projects",
-  "https://github.com/KERALACODERSCAFE/Keralacoderscafe",
-  "https://chat.whatsapp.com/Kd3tVwJfjjh0HRZtoYfxcm"
-];
-
 const quickLinks = [
   { label: "About", href: "#about" },
   { label: "Contributors", href: "#contributors" },
@@ -18,8 +9,16 @@ const quickLinks = [
 ];
 
 const resources = [
-  { label: "GitHub", href: "https://github.com/KERALACODERSCAFE/Keralacoderscafe" },
-  { label: "WhatsApp", href: "https://chat.whatsapp.com/Kd3tVwJfjjh0HRZtoYfxcm" },
+  {
+    label: "GitHub",
+    href: "https://github.com/KERALACODERSCAFE/Keralacoderscafe",
+    icon: <Github className="h-4 w-4" />,
+  },
+  {
+    label: "WhatsApp",
+    href: "https://chat.whatsapp.com/GisLp4Xp2Y8BkK8XlP2Xp2",
+    icon: <MessageCircle className="h-4 w-4" />,
+  },
 ];
 
 export default function Footer() {
@@ -53,7 +52,7 @@ export default function Footer() {
                 <Link
                   key={link.label}
                   href={link.href}
-                  className="text-sm text-black/66 transition-colors hover:text-black"
+                  className="text-sm text-black/66 transition-all duration-300 hover:text-black hover:translate-x-1"
                 >
                   {link.label}
                 </Link>
@@ -72,8 +71,9 @@ export default function Footer() {
                   href={link.href}
                   target="_blank"
                   rel="noopener"
-                  className="text-sm text-black/66 transition-colors hover:text-black"
+                  className="flex items-center gap-2 text-sm text-black/66 transition-all duration-300 hover:text-black hover:translate-x-1"
                 >
+                  {link.icon}
                   {link.label}
                 </Link>
               ))}
