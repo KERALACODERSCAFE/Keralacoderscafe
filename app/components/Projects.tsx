@@ -6,7 +6,7 @@ const projects = [
   {
     title: "Kerala Dev Directory",
     description: "Our Kerala Coders Cafe developer profile showcase — explore member profiles, discover skills, and connect with talented developers in our community.",
-    color: "hsla(0, 81%, 45%, 0.58)",
+    color: "hsla(0, 3%, 8%, 0.58)",
     background: "grass-top-down",
     icon: "people",
     category: "Community",
@@ -16,7 +16,7 @@ const projects = [
   {
     title: "Tech Events Calendar",
     description: "Never miss a meetup, workshop, or conference in Kerala. Built for the community.",
-    color: "hsla(158, 43%, 25%, 0.34)",
+    color: "hsla(0, 3%, 8%, 0.58)",
     background: "grass-left",
     icon: "link",
     category: "Events",
@@ -26,7 +26,7 @@ const projects = [
   {
     title: "Job Board",
     description: "Kerala-focused tech opportunities. Connecting local talent with global companies.",
-    color: "hsla(32, 62%, 35%, 0.45)",
+    color: "hsla(0, 3%, 8%, 0.58)",
     background: "curves",
     icon: "link",
     category: "Careers",
@@ -36,7 +36,7 @@ const projects = [
   {
     title: "Learning Hub",
     description: "Curated resources and tutorials for the next generation of Kerala developers.",
-    color: "hsla(320, 60%, 40%, 0.40)",
+    color: "hsla(0, 3%, 8%, 0.58)",
     background: "circles-top",
     icon: "ribbon",
     category: "Education",
@@ -46,7 +46,7 @@ const projects = [
   {
     title: "Open Source",
     description: "Track and celebrate community contributions to global open source projects.",
-    color: "hsla(225, 58%, 35%, 0.43)",
+    color: "hsla(0, 3%, 8%, 0.58)",
     background: "circles-corner",
     icon: "coil",
     category: "Open Source",
@@ -56,7 +56,7 @@ const projects = [
   {
     title: "Developers Blog",
     description: "Articles, tutorials, and insights written by Kerala developers. Share your knowledge.",
-    color: "hsla(262, 44%, 35%, 0.43)",
+    color: "hsla(0, 3%, 8%, 0.58)",
     background: "grass-bottom",
     icon: "ribbon",
     category: "Insights",
