@@ -137,18 +137,14 @@ export default function Contributors() {
                   </div>
 
                   <div className="mt-6">
-                    <h3 className="text-[1.45rem] font-semibold tracking-[-0.04em] text-black">
-                      {contributor.login}
-                    </h3>
-                    <p className="mt-2 text-sm leading-6 text-black/60">
-                      {contributor.contributions} public contributions to the
-                      website repository.
-                    </p>
+                    <div className="h-7 w-2/3 skeleton rounded-full" />
+                    <div className="mt-3 h-4 w-3/4 skeleton rounded-full" />
+                    <div className="mt-2 h-4 w-2/3 skeleton rounded-full" />
                   </div>
 
-                  <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-black/62 transition-colors group-hover:text-black">
-                    View GitHub profile
-                    <ArrowUpRight className="h-4 w-4" />
+                  <div className="mt-6 flex items-end justify-between gap-4 border-t border-black/10 pt-4">
+                    <div className="h-10 w-20 skeleton rounded-[0.8rem]" />
+                    <div className="h-4 w-24 skeleton rounded-full" />
                   </div>
                 </div>
               ))
