@@ -1,0 +1,19 @@
+{
+  "featured": [
+    {
+      "username": "atomrobic",
+      "role": "Lead & Founder",
+      "position": 1
+    },
+    {
+      "username": "AbyvargheseMandapathel",
+      "role": "Lead & Co-Founder",
+      "position": 2
+    },
+    {
+      "username": "AHADBAVA",
+      "role": "Core Member",
+      "position": 3
+    }
+  ]
+}
