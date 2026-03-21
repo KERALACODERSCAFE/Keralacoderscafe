@@ -39,6 +39,13 @@ This is a "Coming Soon" landing page for our community, built with:
 
 ## 👥 Contributors
 
-This project is powered by amazing people! Our landing page automatically fetches and displays our top contributors from GitHub.
+| Contributor | Role |
+| :--- | :--- |
+| [![atomrobic](https://github.com/atomrobic.png?size=40)](https://github.com/atomrobic) | ![Community Lead & Founder](https://img.shields.io/badge/Community%20Lead%20%26%20Founder-blue) |
+| [![AbyvargheseMandapathel](https://github.com/AbyvargheseMandapathel.png?size=40)](https://github.com/AbyvargheseMandapathel) | ![Community Lead & Co-Founder](https://img.shields.io/badge/Community%20Lead%20%26%20Co--Founder-green) |
+| [![AHADBAVA](https://github.com/AHADBAVA.png?size=40)](https://github.com/AHADBAVA) | ![Team member](https://img.shields.io/badge/Team%20member-orange) |
 
-Special thanks to everyone who helps make KCC ( Kerala Coders Community)  a great space!
+> [!NOTE]
+> This project is powered by amazing people! Our [landing page](https://keralacoderscafe.vercel.app/) automatically fetches and displays our top contributors from GitHub.
+
+Special thanks to everyone who helps make KCC (Kerala Coders Community) a great space!
