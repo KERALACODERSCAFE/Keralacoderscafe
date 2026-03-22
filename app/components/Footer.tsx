@@ -3,10 +3,10 @@ import SectionReveal from "./SectionReveal";
 import { GITHUB_REPO_URL, WHATSAPP_GATE_PATH } from "../lib/site-links";
 
 const quickLinks = [
-  { label: "About", href: "#about" },
-  { label: "Contributors", href: "#contributors" },
-  { label: "Projects", href: "#projects" },
-  { label: "Get Involved", href: "#join" },
+  { label: "About", href: "/#about" },
+  { label: "Contributors", href: "/contributors" },
+  { label: "Projects", href: "/#projects" },
+  { label: "Get Involved", href: "/#join" },
 ];
 
 const resources = [
