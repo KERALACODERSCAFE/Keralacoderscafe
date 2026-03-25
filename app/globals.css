@@ -1,0 +1,228 @@
+@import "tailwindcss";
+
+@theme {
+  --font-headline: var(--font-newsreader);
+  --font-body: var(--font-manrope);
+  --font-label: var(--font-manrope);
+  --font-editorial: var(--font-instrument-serif);
+  --font-hand: var(--font-caveat);
+
+  --color-kcc-bg: #ffffff;
+  --color-kcc-surface: #ffffff;
+  --color-kcc-surface-elevated: #ffffff;
+  --color-kcc-gold: #FFE66D;
+  /* Neubrutalist Yellow */
+  --color-kcc-gold-dim: #FFD100;
+  --color-kcc-green: #A5FFD6;
+  /* Neubrutalist Lime */
+  --color-kcc-green-bright: #00FF85;
+  --color-kcc-text: #000000;
+  --color-kcc-text-dim: #333333;
+  --color-kcc-accent: #FF6B6B;
+  /* Neubrutalist Pink */
+  --color-kcc-border: #000000;
+  --color-kcc-paper: #ffffff;
+  --color-kcc-ink: #000000;
+  --color-kcc-accent-green-soft: #A5FFD6;
+  --color-kcc-accent-yellow-soft: #FFE66D;
+
+  /* Neubrutalist Specific */
+  --brutalist-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+  --brutalist-shadow-lg: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+  --brutalist-border: 3px solid #000000;
+}
+
+@layer base {
+  html {
+    scroll-padding-top: 96px;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: #ffffff;
+    color: #000000;
+    font-family: var(--font-manrope), sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: #FFE66D;
+    color: #000000;
+  }
+
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #ffffff;
+    border-left: 3px solid #000;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #000000;
+    border: 2px solid #ffffff;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #333333;
+  }
+}
+
+@layer utilities {
+  .border-brutalist {
+    border: var(--brutalist-border);
+  }
+
+  .shadow-brutalist {
+    box-shadow: var(--brutalist-shadow);
+  }
+
+  .shadow-brutalist-lg {
+    box-shadow: var(--brutalist-shadow-lg);
+  }
+
+  .hover-brutalist:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 7px 7px 0px 0px rgba(0, 0, 0, 1);
+  }
+
+  .active-brutalist:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+  }
+
+  .hover-lift {
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-skeleton {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes float-gentle {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes float-slow {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(-2deg);
+  }
+
+  50% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 1.5s ease-out forwards;
+}
+
+.skeleton {
+  animation: pulse-skeleton 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  background: #1a1a1a;
+}
+
+.delay-100 {
+  animation-delay: 0.1s;
+  opacity: 0;
+}
+
+.delay-200 {
+  animation-delay: 0.2s;
+  opacity: 0;
+}
+
+.delay-300 {
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+
+.delay-400 {
+  animation-delay: 0.4s;
+  opacity: 0;
+}
+
+.delay-500 {
+  animation-delay: 0.5s;
+  opacity: 0;
+}
+
+.animate-float-gentle {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 7s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.chilanka-regular {
+  font-family: "Chilanka", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
