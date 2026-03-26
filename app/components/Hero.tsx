@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowUpRight, Github, MessageCircle } from "lucide-react";
 import ColourfulText from "./ColourfulText";
 import { useState, useEffect } from "react";
+import TerminalCard from "./ui/TerminalCard";
 
 const highlights = [
   "From 1-day beginners to 10+ years experienced developers",
@@ -118,6 +119,14 @@ export default function Hero() {
 
           {/* ─── NEWSPAPER + STAMP COLLECTION ─── */}
           <div className="relative mx-auto w-full max-w-[520px] animate-fade-in delay-200 flex flex-col gap-6 lg:self-start">
+            <TerminalCard
+              command={`git clone https://github.com/atomrobic/Keralacoderscafe.git
+cd Keralacoderscafe
+npm install
+npm run dev`}
+              language="bash"
+              className="mb-4 rotate-1 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
+            />
 
 
 
