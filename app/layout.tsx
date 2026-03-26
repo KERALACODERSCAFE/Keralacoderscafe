@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Caveat, Instrument_Serif, Manrope, Newsreader } from "next/font/google";
+import { Caveat, Instrument_Serif, Manrope, Newsreader, Chilanka } from "next/font/google";
 import "./globals.css";
 
 const newsreader = Newsreader({
@@ -26,6 +26,13 @@ const instrumentSerif = Instrument_Serif({
 const caveat = Caveat({
   variable: "--font-caveat",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const chilanka = Chilanka({
+  variable: "--font-chilanka",
+  subsets: ["latin"],
+  weight: "400",
   display: "swap",
 });
 
@@ -128,6 +135,7 @@ const organizationLd = {
 
 
 import FloatingCTA from "./components/FloatingCTA";
+import SmoothScroll from "./components/SmoothScroll";
 
 export default function RootLayout({
   children,
@@ -137,20 +145,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${newsreader.variable} ${manrope.variable} ${instrumentSerif.variable} ${caveat.variable} h-full`}
+      className={`${newsreader.variable} ${manrope.variable} ${instrumentSerif.variable} ${caveat.variable} ${chilanka.variable} h-full`}
     >
       <head>
-        {/* Google Fonts: Chilanka */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Chilanka&display=swap" rel="stylesheet" />
-
-        {/* Google Icons */}
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
-        />
-
         {/* Schema JSON-LD */}
         <script
           type="application/ld+json"
@@ -161,8 +158,10 @@ export default function RootLayout({
       </head>
 
       <body className="min-h-full bg-kcc-paper text-black antialiased">
-        {children}
-        <FloatingCTA />
+        <SmoothScroll>
+          {children}
+          <FloatingCTA />
+        </SmoothScroll>
       </body>
     </html>
   );

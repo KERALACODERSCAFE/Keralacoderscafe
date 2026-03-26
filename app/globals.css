@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap";
 
 @theme {
   --font-headline: var(--font-newsreader);
@@ -35,7 +36,6 @@
 @layer base {
   html {
     scroll-padding-top: 96px;
-    scroll-behavior: smooth;
   }
 
   body {
@@ -125,39 +125,25 @@
   }
 }
 
-@keyframes pulse-skeleton {
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
 
-  0%,
-  100% {
+  to {
     opacity: 1;
-  }
-
-  50% {
-    opacity: 0.5;
+    transform: translateY(0);
   }
 }
 
-@keyframes float-gentle {
-
-  0%,
-  100% {
-    transform: translateY(0px);
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
 
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes float-slow {
-
-  0%,
-  100% {
-    transform: translateY(0px) rotate(-2deg);
-  }
-
-  50% {
-    transform: translateY(-8px) rotate(1deg);
+  to {
+    opacity: 1;
   }
 }
 
@@ -167,11 +153,6 @@
 
 .animate-fade-in {
   animation: fadeIn 1.5s ease-out forwards;
-}
-
-.skeleton {
-  animation: pulse-skeleton 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  background: #1a1a1a;
 }
 
 .delay-100 {
@@ -199,14 +180,6 @@
   opacity: 0;
 }
 
-.animate-float-gentle {
-  animation: float-gentle 6s ease-in-out infinite;
-}
-
-.animate-float-slow {
-  animation: float-slow 7s ease-in-out infinite;
-}
-
 @keyframes gradientShift {
   0% {
     background-position: 0% 50%;
@@ -222,7 +195,29 @@
 }
 
 .chilanka-regular {
-  font-family: "Chilanka", cursive;
+  font-family: var(--font-chilanka), cursive;
   font-weight: 400;
   font-style: normal;
+}
+
+/* Lenis Smooth Scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
 }
