@@ -36,6 +36,51 @@ This is a "Coming Soon" landing page for our community, built with:
 
 - **GitHub Repository:** [atomrobic/Keralacoderscafe](https://github.com/atomrobic/Keralacoderscafe)
 - **WhatsApp Group:** [Join Here](https://chat.whatsapp.com/GisLp4Xp2Y8BkK8XlP2Xp2)
+- 
+🧑‍💻 How to Contribute (Submit PR)
+
+If you would like to make changes or improvements to this project, follow these steps:
+
+Fork the repository
+Click the Fork button on the top right of the GitHub repository.
+
+Clone your fork
+
+git clone https://github.com/YOUR-USERNAME/Keralacoderscafe.git
+cd Keralacoderscafe
+
+Create a new branch
+
+git checkout -b my-feature
+Make your changes
+UI improvements
+Bug fixes
+Add animations
+Update images
+Improve content
+
+Commit and push
+
+git add .
+git commit -m "Added new feature"
+git push origin my-feature
+Create Pull Request
+Go to GitHub
+Click Compare & Pull Request
+Submit PR
+🖼️ Updating Images
+
+If you want to update images:
+
+Add your image inside /public/images
+Use optimized images
+Then create a Pull Request
+👨‍💼 Admin & Review
+
+Project admins will review the Pull Request and merge if everything looks good.
+
+Group admins can be added as GitHub collaborators so they can review and merge PRs.
+
 
 ## 👥 Contributors
 
