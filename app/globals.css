@@ -101,6 +101,15 @@
   .hover-lift {
     transition: transform 0.1s ease, box-shadow 0.1s ease;
   }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 @keyframes fadeInUp {
