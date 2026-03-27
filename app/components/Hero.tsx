@@ -37,13 +37,13 @@ export default function Hero() {
             avatar: user.avatar_url,
             commits: user.contributions || 0,
           }));
-          
+
           setTopContributors(mapped);
         }
       })
       .catch((err) => console.error("Failed to fetch GitHub contributors:", err));
-  }, []);  return (
-    <header className="relative overflow-hidden px-6 pb-28 pt-44 md:px-12 lg:pb-36 lg:pt-56 bg-white border-b-4 border-black">
+  }, []); return (
+    <header className="relative overflow-clip px-6 pb-28 pt-44 md:px-12 lg:pb-36 lg:pt-56 bg-white border-b-4 border-black">
       {/* Geometric Background Elements */}
       <div className="absolute top-20 left-10 h-32 w-32 border-4 border-black bg-kcc-gold -z-10 rotate-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hidden lg:block" />
       <div className="absolute bottom-20 right-20 h-40 w-40 border-4 border-black bg-kcc-green -z-10 -rotate-6 shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hidden lg:block" />
@@ -118,10 +118,9 @@ export default function Hero() {
           </div>
 
           {/* ─── NEWSPAPER + STAMP COLLECTION ─── */}
-          <div className="relative mx-auto w-full max-w-[520px] animate-fade-in delay-200 flex flex-col gap-6 lg:self-start">
+          <div className="relative mx-auto w-full max-w-[520px] animate-fade-in delay-200 flex flex-col gap-6 lg:sticky lg:top-0 lg:self-start">
             <TerminalCard
-              command={`git clone https://github.com/Keralacoderscafe.git
-cd Keralacoderscafe
+              command={`cd Keralacoderscafe
 npm install
 npm run dev`}
               language="bash"
