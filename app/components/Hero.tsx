@@ -23,6 +23,9 @@ const defaultRotations = ["rotate-[-2deg]", "rotate-[1deg]", "rotate-[-1deg]", "
 
 export default function Hero() {
   const [topContributors, setTopContributors] = useState(fallbackContributors);
+  const [avatarIndex, setAvatarIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const fastAvatars = ["👨‍💻", "👩‍💻", "🚀", "💡"];
 
   useEffect(() => {
     fetch("https://api.github.com/repos/KERALACODERSCAFE/Keralacoderscafe/contributors?per_page=12")
@@ -42,7 +45,27 @@ export default function Hero() {
         }
       })
       .catch((err) => console.error("Failed to fetch GitHub contributors:", err));
-  }, []); return (
+
+    // Trigger animation for 3 seconds every 10 seconds
+    const burstInterval = setInterval(() => {
+      setIsAnimating(true);
+      setTimeout(() => setIsAnimating(false), 3000);
+    }, 10000);
+
+    return () => clearInterval(burstInterval);
+  }, []);
+
+  useEffect(() => {
+    let animInterval: NodeJS.Timeout;
+    if (isAnimating) {
+      animInterval = setInterval(() => {
+        setAvatarIndex((prev) => (prev + 1) % fastAvatars.length);
+      }, 150);
+    }
+    return () => clearInterval(animInterval);
+  }, [isAnimating, fastAvatars.length]);
+
+  return (
     <header className="relative overflow-clip px-6 pb-28 pt-44 md:px-12 lg:pb-36 lg:pt-56 bg-white border-b-4 border-black">
       {/* Geometric Background Elements */}
       <div className="absolute top-20 left-10 h-32 w-32 border-4 border-black bg-kcc-gold -z-10 rotate-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hidden lg:block" />
@@ -94,14 +117,6 @@ export default function Hero() {
               >
                 <Github className="h-5 w-5 stroke-[3]" />
                 View on GitHub
-              </Link>
-
-              <Link
-                href="/join"
-                className="inline-flex h-16 items-center justify-center gap-3 border-3 border-black bg-kcc-gold px-8 text-base font-black uppercase text-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
-              >
-                <MessageCircle className="h-5 w-5 stroke-[3]" />
-                Join the community
               </Link>
             </div>
 
@@ -180,7 +195,7 @@ npm run dev`}
                         </div>
 
                         {/* Name */}
-                        <div className="font-black uppercase text-[0.85rem] tracking-wide text-black leading-none truncate max-w-[80px] mx-auto">
+                        <div className="font-black uppercase text-[0.7rem] sm:text-[0.75rem] tracking-tight text-black leading-tight text-center break-words w-full px-1 mx-auto line-clamp-2" style={{ wordBreak: 'break-word' }}>
                           {person.name}
                         </div>
 
@@ -221,13 +236,13 @@ npm run dev`}
                         1st PR
                       </div>
                       <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center border-3 border-black bg-white font-black text-2xl text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,0.15)] group-hover:scale-110 transition-transform">
-                        +
+                        {isAnimating ? fastAvatars[avatarIndex] : "+"}
                       </div>
-                      <div className="font-black uppercase text-[0.85rem] tracking-wide text-black leading-none truncate max-w-[80px] mx-auto">
-                        YOU?
+                      <div className="font-black uppercase text-[0.6rem] tracking-tight text-black leading-tight max-w-[80px] mx-auto text-center">
+                        open source builder
                       </div>
-                      <div className="mt-1.5 text-[0.5rem] font-bold uppercase tracking-[0.25em] text-black/50">
-                        Contribute
+                      <div className="mt-1.5 text-[0.45rem] font-bold uppercase tracking-[0.05em] text-black/50 text-center leading-tight">
+                        contribute &<br />get featured
                       </div>
                     </div>
                   </div>
