@@ -35,15 +35,15 @@ export default function ProjectsPage() {
 
         {/* Header Section */}
         <section className="mt-12 mb-16 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="relative inline-block transform -rotate-2 bg-[#FF6B6B] border-4 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] animate-fade-in-up">
-            <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-black">
-              OPEN SOURCE
+          <div className="relative inline-block transform -rotate-2 bg-yellow-400 border-4 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] animate-fade-in-up">
+            <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-black leading-none">
+              COMMUNITY<br/>PROJECT
             </h1>
             <p className="text-xl md:text-2xl font-black uppercase tracking-tight text-black/70 mt-1">
-              Project Ideas
+              Active Focus
             </p>
             <div className="absolute -top-4 -right-4 bg-[#6dfe9c] border-2 border-black px-4 py-1 font-black text-sm rotate-12 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase">
-              7 Submissions
+              Featured Idea
             </div>
           </div>
 
@@ -61,84 +61,164 @@ export default function ProjectsPage() {
           </div>
         </section>
 
-        {/* Repos Grid */}
+        {/* Tier 1: Active Focus Project */}
         <section className="relative mt-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {REPOS.map((repo, i) => (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {REPOS.filter(repo => repo.id === 4).map((repo, i) => (
               <Link
                 key={repo.id}
                 href={`/events/${repo.id}`}
-                className="bg-white border-4 border-black p-5 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col gap-3 hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer no-underline text-inherit"
-                style={{
-                  rotate: i % 3 === 0 ? "0.5deg" : i % 3 === 1 ? "-0.5deg" : "0.2deg",
-                }}
+                className="col-span-1 lg:col-span-2 bg-white border-4 border-black p-8 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] flex flex-col md:flex-row gap-8 hover:-translate-y-2 hover:-translate-x-2 hover:shadow-[20px_20px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer no-underline text-inherit group"
+              >
+                <div className="w-full md:w-1/2 lg:w-1/3 bg-yellow-400 border-4 border-black relative overflow-hidden flex items-center justify-center p-8 group-hover:bg-[#6dfe9c] transition-colors">
+                  <div className="absolute -top-4 -left-4 w-12 h-12 bg-black rotate-45" />
+                  <span className="material-symbols-outlined text-7xl text-black">explore</span>
+                  <div className="absolute bottom-4 left-0 w-full text-center">
+                    <span className="bg-black text-white px-3 py-1 text-[10px] font-black uppercase tracking-widest">Featured Focus</span>
+                  </div>
+                </div>
+
+                <div className="flex-1 flex flex-col">
+                  <div className="flex items-start justify-between gap-2 mb-4">
+                    <div className="flex items-center gap-2">
+                      <FolderIcon />
+                      <span className="text-xs font-black text-black/40 uppercase">kcc / community spotlight</span>
+                    </div>
+                    <span className="inline-flex items-center gap-1.5 bg-green-100 border-2 border-green-400 text-green-800 px-3 py-1 text-xs font-black uppercase flex-shrink-0">
+                      <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse inline-block" />
+                      Active Building
+                    </span>
+                  </div>
+
+                  <h3 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-black leading-none mb-6 group-hover:text-yellow-500 transition-colors">
+                    {repo.name}
+                  </h3>
+
+                  <p className="text-lg md:text-xl text-black/70 font-bold leading-tight flex-1 mb-8">
+                    {repo.description}
+                  </p>
+
+                  <div className="flex flex-col md:flex-row items-end justify-between gap-6 border-t-4 border-black/10 pt-6">
+                    <div className="flex flex-wrap gap-2">
+                      {repo.topics.map((t) => (
+                        <span key={t} className="bg-black text-white px-3 py-1 text-[10px] font-black uppercase tracking-wider">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center gap-4 text-xs font-black text-black/40 uppercase">
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="w-4 h-4 rounded-full border-2 border-black inline-block flex-shrink-0"
+                          style={{ backgroundColor: repo.languageColor }}
+                        />
+                        {repo.language}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <PersonIcon />
+                        {repo.submittedBy}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* Tier 2: Upcoming Projects Spotlight */}
+        <section className="relative mt-32">
+          <div className="flex items-center gap-4 mb-12">
+            <h2 className="text-3xl font-black uppercase tracking-tighter bg-[#0070f3] text-white px-4 py-2 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+              Upcoming Project
+            </h2>
+            <div className="h-[4px] flex-1 bg-black/10" />
+          </div>
+
+          <div className="grid grid-cols-1 gap-8">
+            {REPOS.filter(repo => repo.id === 3).map((repo) => (
+              <div
+                key={repo.id}
+                className="bg-white border-4 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col md:flex-row gap-8 hover:-translate-y-1 transition-all border-dashed"
+              >
+                <div className="w-full md:w-48 h-48 bg-blue-50 border-4 border-black flex items-center justify-center relative overflow-hidden group">
+                  <span className="material-symbols-outlined text-6xl text-blue-500">medical_services</span>
+                   <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-blue-500 rotate-45" />
+                </div>
+
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="bg-blue-600 text-white px-2 py-0.5 text-[10px] font-black uppercase tracking-widest">Next in Line</span>
+                    <span className="text-xs font-black text-black/40 uppercase tracking-widest">Priority Submission</span>
+                  </div>
+                  <h3 className="text-3xl font-black uppercase tracking-tighter text-black mb-4">
+                    {repo.name}
+                  </h3>
+                  <p className="text-lg text-black/70 font-bold leading-tight mb-6">
+                    {repo.description}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {repo.topics.map(t => (
+                      <span key={t} className="border-2 border-black/10 px-3 py-1 text-[10px] font-black uppercase text-black/60">{t}</span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex flex-col justify-center items-center gap-4 p-6 bg-blue-50 border-l-4 border-black">
+                   <p className="text-[10px] font-black uppercase text-blue-800 text-center">Development <br/>Starting Soon</p>
+                   <button className="bg-black text-white px-6 py-2 text-xs font-black uppercase shadow-[4px_4px_0px_0px_rgba(0,112,243,1)] opacity-50 cursor-not-allowed">
+                     Pre-Alpha
+                   </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Tier 3: Community Ideas Grid */}
+        <section className="relative mt-32">
+          <div className="flex items-center gap-4 mb-12">
+            <h2 className="text-3xl font-black uppercase tracking-tighter bg-black text-white px-4 py-2 border-4 border-black shadow-[4px_4px_0px_0px_rgba(109,254,156,1)]">
+              Community Ideas
+            </h2>
+            <div className="h-[4px] flex-1 bg-black/10" />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-80">
+            {REPOS.filter(repo => repo.id !== 4 && repo.id !== 3).map((repo, i) => (
+              <div
+                key={repo.id}
+                className="bg-white border-4 border-black p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col gap-4 filter grayscale hover:grayscale-0 transition-all border-dashed"
               >
                 {/* Card Header */}
                 <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 opacity-40">
                     <FolderIcon />
-                    <span className="text-xs font-black text-black/40 uppercase">kcc /</span>
+                    <span className="text-[10px] font-black uppercase">Archive / kcc</span>
                   </div>
-                  <span className="inline-flex items-center gap-1.5 bg-amber-100 border border-amber-400 text-amber-800 px-2 py-0.5 text-[10px] font-black uppercase flex-shrink-0">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse inline-block" />
-                    In Progress
+                  <span className="bg-black/10 text-black/40 px-2 py-0.5 text-[8px] font-black uppercase tracking-widest">
+                    Idea Stage
                   </span>
                 </div>
 
-                {/* Repo name */}
-                <h3 className="text-lg font-black uppercase tracking-tight text-black leading-tight">
+                <h3 className="text-xl font-black uppercase tracking-tight text-black leading-none">
                   {repo.name}
                 </h3>
 
-                {/* Description */}
-                <p className="text-sm text-black/70 font-medium leading-snug flex-1">
+                <p className="text-xs text-black/60 font-bold leading-snug flex-1">
                   {repo.description}
                 </p>
 
-                {/* Topics */}
-                <div className="flex flex-wrap gap-1.5">
-                  {repo.topics.map((t) => (
-                    <span
-                      key={t}
-                      className="bg-[#e7e2d4] border border-black/20 px-2 py-0.5 text-[10px] font-black uppercase text-black/60"
-                    >
-                      {t}
-                    </span>
-                  ))}
+                <div className="border-t-2 border-black/10 pt-4 mt-2 flex items-center justify-between">
+                   <div className="flex gap-1">
+                      {repo.topics.slice(0, 2).map(t => (
+                        <span key={t} className="bg-black/5 text-black/40 px-1.5 py-0.5 text-[8px] font-black uppercase whitespace-nowrap">{t}</span>
+                      ))}
+                   </div>
+                   <span className="text-[8px] font-black text-black/20 uppercase tracking-tighter">Draft Submission</span>
                 </div>
-
-                {/* Action */}
-                {"link" in repo && repo.link && (
-                  <div className="mt-2">
-                    <a
-                      href={repo.link as string}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center w-full border-2 border-black bg-[#FFE66D] text-black px-3 py-1.5 text-xs font-black uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
-                    >
-                      View Document
-                    </a>
-                  </div>
-                )}
-
-                {/* Footer */}
-                <div className="border-t-2 border-black/10 pt-3 flex items-center justify-between gap-3 flex-wrap mt-2">
-                  <div className="flex items-center gap-3 text-xs font-black text-black/50 uppercase">
-                    <span className="flex items-center gap-1.5">
-                      <span
-                        className="w-3 h-3 rounded-full border border-black/20 inline-block flex-shrink-0"
-                        style={{ backgroundColor: repo.languageColor }}
-                      />
-                      {repo.language}
-                    </span>
-                    <span className="flex items-center gap-1 text-black/40">
-                      <PersonIcon />
-                      {repo.submittedBy === "Anonymous" ? "Anon" : repo.submittedBy.split(" ")[0]}
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-black text-black/30 uppercase">{repo.date}</span>
-                </div>
-              </Link>
+              </div>
             ))}
           </div>
         </section>
