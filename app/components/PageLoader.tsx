@@ -58,7 +58,7 @@ function ProjectPoster({ project, x, y }: { project: Project; x: number; y: numb
         position={[0, -0.8, 0.05]}
         fontSize={0.12}
         color="black"
-        opacity={0.6}
+        fillOpacity={0.6}
         maxWidth={POSTER_WIDTH - 0.6}
         textAlign="center"
       >
