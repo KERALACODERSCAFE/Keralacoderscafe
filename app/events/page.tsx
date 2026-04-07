@@ -37,7 +37,7 @@ export default function ProjectsPage() {
         <section className="mt-12 mb-16 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="relative inline-block transform -rotate-2 bg-yellow-400 border-4 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] animate-fade-in-up">
             <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-black leading-none">
-              COMMUNITY<br/>PROJECT
+              COMMUNITY<br />PROJECT
             </h1>
             <p className="text-xl md:text-2xl font-black uppercase tracking-tight text-black/70 mt-1">
               Active Focus
@@ -145,7 +145,7 @@ export default function ProjectsPage() {
               >
                 <div className="w-full md:w-48 h-48 bg-blue-50 border-4 border-black flex items-center justify-center relative overflow-hidden group">
                   <span className="material-symbols-outlined text-6xl text-blue-500">medical_services</span>
-                   <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-blue-500 rotate-45" />
+                  <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-blue-500 rotate-45" />
                 </div>
 
                 <div className="flex-1">
@@ -167,10 +167,10 @@ export default function ProjectsPage() {
                 </div>
 
                 <div className="flex flex-col justify-center items-center gap-4 p-6 bg-blue-50 border-l-4 border-black">
-                   <p className="text-[10px] font-black uppercase text-blue-800 text-center">Development <br/>Starting Soon</p>
-                   <button className="bg-black text-white px-6 py-2 text-xs font-black uppercase shadow-[4px_4px_0px_0px_rgba(0,112,243,1)] opacity-50 cursor-not-allowed">
-                     Pre-Alpha
-                   </button>
+                  <p className="text-[10px] font-black uppercase text-blue-800 text-center">Development <br />Starting Soon</p>
+                  <button className="bg-black text-white px-6 py-2 text-xs font-black uppercase shadow-[4px_4px_0px_0px_rgba(0,112,243,1)] opacity-50 cursor-not-allowed">
+                    Pre-Alpha
+                  </button>
                 </div>
               </div>
             ))}
@@ -178,7 +178,7 @@ export default function ProjectsPage() {
         </section>
 
         {/* Tier 3: Community Ideas Grid */}
-        <section className="relative mt-32">
+        <section className="relative mt-32   p-8 md:p-16 ">
           <div className="flex items-center gap-4 mb-12">
             <h2 className="text-3xl font-black uppercase tracking-tighter bg-black text-white px-4 py-2 border-4 border-black shadow-[4px_4px_0px_0px_rgba(109,254,156,1)]">
               Community Ideas
@@ -186,11 +186,11 @@ export default function ProjectsPage() {
             <div className="h-[4px] flex-1 bg-black/10" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-80">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {REPOS.filter(repo => repo.id !== 4 && repo.id !== 3).map((repo, i) => (
               <div
                 key={repo.id}
-                className="bg-white border-4 border-black p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col gap-4 filter grayscale hover:grayscale-0 transition-all border-dashed"
+                className="bg-white border-4 border-black p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col gap-4 hover:-translate-y-1 transition-all border-dashed"
               >
                 {/* Card Header */}
                 <div className="flex items-start justify-between gap-2">
@@ -212,14 +212,14 @@ export default function ProjectsPage() {
                 </p>
 
                 <div className="border-t-2 border-black/10 pt-4 mt-2 flex items-center justify-between">
-                   <div className="flex gap-1">
-                      {repo.topics.slice(0, 2).map(t => (
-                        <span key={t} className="bg-black/5 text-black/40 px-1.5 py-0.5 text-[8px] font-black uppercase whitespace-nowrap">{t}</span>
-                      ))}
-                   </div>
-                   <span className="text-[8px] font-black text-black/40 uppercase tracking-tighter border-b border-black/10 pb-0.5">
-                     Submitted by: {repo.submittedBy}
-                   </span>
+                  <div className="flex gap-1">
+                    {repo.topics.slice(0, 2).map(t => (
+                      <span key={t} className="bg-black/5 text-black/40 px-1.5 py-0.5 text-[8px] font-black uppercase whitespace-nowrap">{t}</span>
+                    ))}
+                  </div>
+                  <span className="text-[8px] font-black text-black/40 uppercase tracking-tighter border-b border-black/10 pb-0.5">
+                    Submitted by: {repo.submittedBy}
+                  </span>
                 </div>
               </div>
             ))}

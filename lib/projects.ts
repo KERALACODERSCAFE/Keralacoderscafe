@@ -15,6 +15,20 @@ export interface Project {
 
 export const REPOS: Project[] = [
   {
+    id: 4,
+    slug: "toddy-shop-finder-opensource-project",
+    name: "find-toddy-shop",
+    submittedBy: "Aravind",
+    description:
+      "A web and mobile app to discover authentic toddy shops across Kerala — with locations, food availability, quality info, and user reviews.",
+    problem: "No centralised digital platform for Kerala's traditional toddy shop culture.",
+    audience: "Food & culture explorers, tourists, locals",
+    language: "JavaScript",
+    languageColor: "#f1e05a",
+    topics: ["kerala", "maps", "food-culture"],
+    date: "Mar 23",
+  },
+  {
     id: 5,
     slug: "journal-tool",
     name: "journal-pub-tool",
@@ -100,20 +114,6 @@ export const REPOS: Project[] = [
     languageColor: "#3572A5",
     topics: ["healthcare", "pharma", "database"],
     date: "Mar 22",
-  },
-  {
-    id: 4,
-    slug: "toddy-shop-finder-opensource-project",
-    name: "find-toddy-shop",
-    submittedBy: "Aravind",
-    description:
-      "A web and mobile app to discover authentic toddy shops across Kerala — with locations, food availability, quality info, and user reviews.",
-    problem: "No centralised digital platform for Kerala's traditional toddy shop culture.",
-    audience: "Food & culture explorers, tourists, locals",
-    language: "JavaScript",
-    languageColor: "#f1e05a",
-    topics: ["kerala", "maps", "food-culture"],
-    date: "Mar 23",
   },
   {
     id: 8,
