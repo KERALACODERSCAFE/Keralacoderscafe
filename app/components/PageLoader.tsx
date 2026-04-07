@@ -123,7 +123,7 @@ export default function PageLoader() {
       setLoading(false);
       // Remove from DOM after transition
       setTimeout(() => setShouldRender(false), 800);
-    }, 10000);
+    }, 15000);
 
     return () => clearTimeout(timer);
   }, []);
