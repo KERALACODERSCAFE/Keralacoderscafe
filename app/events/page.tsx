@@ -217,7 +217,9 @@ export default function ProjectsPage() {
                         <span key={t} className="bg-black/5 text-black/40 px-1.5 py-0.5 text-[8px] font-black uppercase whitespace-nowrap">{t}</span>
                       ))}
                    </div>
-                   <span className="text-[8px] font-black text-black/20 uppercase tracking-tighter">Draft Submission</span>
+                   <span className="text-[8px] font-black text-black/40 uppercase tracking-tighter border-b border-black/10 pb-0.5">
+                     Submitted by: {repo.submittedBy}
+                   </span>
                 </div>
               </div>
             ))}

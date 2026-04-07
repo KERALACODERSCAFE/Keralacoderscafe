@@ -219,3 +219,167 @@ html.lenis body {
 .lenis.lenis-scrolling iframe {
   pointer-events: none;
 }
+
+/* ─── Community Dispatch System ────────────────────────────────── */
+
+.dispatch-stack {
+  @apply relative w-full;
+}
+
+.dispatch-card {
+  @apply relative border-4 border-black bg-[#EFFFFD] p-5 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rotate-1 sm:p-6 transition-all duration-300;
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(0,0,0,0.05) 32px);
+  background-size: 100% 32px;
+}
+
+.dispatch-card:hover {
+  @apply rotate-0 translate-x-[-2px] translate-y-[-2px];
+  box-shadow: 10px 10px 0px 0px rgba(0,0,0,1);
+}
+
+.update-item {
+  @apply flex gap-3 p-2 border-l-4 border-transparent transition-colors;
+}
+
+.update-item.live {
+  @apply border-[#FF6B6B] bg-[#FF6B6B]/5;
+}
+
+.update-item.completed {
+  @apply border-[#00FF85] bg-[#00FF85]/5;
+}
+
+.update-item.pending {
+  @apply border-[#FFE66D] bg-[#FFE66D]/5;
+}
+
+.status-dot {
+  @apply w-2 h-2 rounded-full mt-1 shrink-0;
+}
+
+.status-dot.live {
+  @apply bg-[#FF6B6B] animate-pulse shadow-[0_0_8px_rgba(255,107,107,0.5)];
+}
+
+.status-dot.completed {
+  @apply bg-[#00FF85];
+}
+
+.status-dot.pending {
+  @apply bg-[#FFE66D];
+}
+
+.update-content {
+  @apply flex-1 flex flex-col;
+}
+
+.update-title {
+  @apply text-[0.7rem] font-black uppercase leading-tight text-black tracking-tight;
+}
+
+.update-desc {
+  @apply text-[0.6rem] font-bold text-black/50 leading-tight mt-0.5;
+}
+
+/* Sprocket holes for telex paper effect */
+.dispatch-sprocket-left, .dispatch-sprocket-right {
+  @apply absolute top-0 bottom-0 flex flex-col justify-around py-4 pointer-events-none;
+}
+
+.dispatch-sprocket-left { @apply -left-2; }
+.dispatch-sprocket-right { @apply -right-2; }
+
+.sprocket-hole {
+  @apply w-4 h-4 rounded-full border-2 border-black bg-white;
+}
+
+/* ─── Gooey Swinging Bulb ─────────────────────── */
+
+.lamp-container {
+  @apply absolute left-1/2 top-full -translate-x-1/2 z-40 w-full pointer-events-none;
+}
+
+.gooey-lamp {
+  @apply relative w-[200px] text-center origin-top pointer-events-auto cursor-pointer;
+  animation: oscillaFilo .9s ease-in-out infinite alternate;
+}
+
+.lamp-cable {
+  @apply mx-auto w-[4px] h-[80px] bg-[#111] relative;
+}
+.lamp-cable::before {
+  content: "";
+  @apply absolute h-[15px] w-[8px] bg-[#111] bottom-0 left-1/2 -ml-[4px];
+}
+
+.lamp-bulb {
+  @apply w-[70px] mx-auto relative;
+}
+
+.bulb_cover {
+  @apply h-[45px] w-[40px] bg-[#111] mx-auto relative z-10 -mb-[1px];
+  border-radius: 50px 50px 0 0;
+}
+.bulb_cover::before {
+  content: "";
+  @apply absolute h-[25px] w-[2px] bg-[#50504f] rounded-full top-[15px] left-[13px];
+}
+
+.bulb_light {
+  @apply relative bg-neutral-800 h-[70px] rounded-full transition-colors duration-500 shadow-[inset_0_-5px_15px_rgba(0,0,0,0.5)];
+  filter: url('#goo');
+}
+.bulb_light::before {
+  content: "";
+  @apply absolute h-[35px] w-[35px] bg-neutral-800 rounded-full -z-10 transition-colors duration-500 shadow-[inset_0_5px_15px_rgba(0,0,0,0.5)];
+  top: -25px;
+  left: 17.5px;
+  filter: url('#goo');
+}
+
+.light_particles {
+  @apply absolute top-[0px] left-[0px] w-[200px] h-[200px] -mt-[25px] -ml-[65px] -z-10 opacity-0 transition-opacity duration-[400ms];
+}
+
+.particle {
+  @apply absolute h-[20px] w-[4px] bg-[#FFE66D] rounded-full;
+  top: 100px;
+  left: 100px;
+  box-shadow: 0 0 10px #FFE66D, 0 0 20px #FFE66D;
+}
+
+.particle-1 { transform: rotate(40deg) translateY(66px); }
+.particle-2 { transform: rotate(80deg) translateY(66px); }
+.particle-3 { transform: rotate(120deg) translateY(66px); }
+.particle-6 { transform: rotate(240deg) translateY(66px); }
+.particle-7 { transform: rotate(280deg) translateY(66px); }
+.particle-8 { transform: rotate(320deg) translateY(66px); }
+.particle-9 { transform: rotate(360deg) translateY(66px); }
+
+/* Interaction states */
+.bulb-on .dispatch-card {
+  @apply border-[#FFE66D] bg-black;
+  box-shadow: 0 0 30px rgba(255,230,109,0.8), 8px 8px 0px 0px rgba(0,0,0,1) !important;
+}
+
+/* Invert text colors for readability */
+.bulb-on .update-title { @apply text-white; }
+.bulb-on .update-desc { @apply text-white/70; }
+.bulb-on .text-black\/30 { @apply text-white/50; }
+.bulb-on .bg-black\/10 { @apply bg-white/20; }
+.bulb-on .bg-black.text-white { @apply bg-[#FFE66D] text-black; }
+.bulb-on .bulb_light {
+  @apply bg-[#FFE66D] shadow-[0_0_40px_rgba(255,230,109,0.8)];
+}
+.bulb-on .bulb_light::before {
+  @apply bg-[#FFE66D] shadow-none;
+}
+.bulb-on .light_particles {
+  @apply opacity-100;
+}
+
+@keyframes oscillaFilo {
+  from { transform: rotate(2deg); }
+  to { transform: rotate(-2deg); }
+}
+
