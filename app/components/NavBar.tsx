@@ -9,10 +9,9 @@ import KccCupMark from "./KccCupMark";
 
 const navLinks = [
   { name: "Home", href: "/", type: "scroll" },
-  { name: "Events", href: "/events", type: "link" },
+  { name: "Community", href: "/#about", type: "scroll" },
   { name: "Contributors", href: "/#contributors", type: "scroll" },
   { name: "Projects", href: "/#projects", type: "scroll" },
-  { name: "Community", href: "/#about", type: "scroll" },
 ];
 
 export default function NavBar() {
@@ -122,8 +121,8 @@ export default function NavBar() {
               <div className="h-8 w-8 sm:h-10 sm:w-10 shrink-0 group-hover:scale-105 transition-transform">
                 <KccCupMark className="h-full w-full" />
               </div>
-              <div className="text-sm sm:text-base lg:text-[1.1rem] font-bold tracking-tight text-black whitespace-nowrap">
-                Kerala coders cafe <span className="hidden xs:inline">Coders Cafe</span>
+              <div className="text-sm sm:text-base lg:text-[1.1rem] font-bold tracking-tight text-black whitespace-nowrap uppercase">
+                Kerala Coders Cafe
               </div>
             </Link>
 

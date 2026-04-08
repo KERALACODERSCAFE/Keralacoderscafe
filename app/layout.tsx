@@ -159,6 +159,10 @@ export default function RootLayout({
             __html: JSON.stringify(organizationLd),
           }}
         />
+        {/* Playwrite IE Font */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Playwrite+IE:wght@100..400&display=swap" rel="stylesheet" />
       </head>
 
       <body className="min-h-full bg-kcc-paper text-black antialiased">

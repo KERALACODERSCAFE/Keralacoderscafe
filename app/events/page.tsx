@@ -1,7 +1,33 @@
 "use client";
 
+import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { REPOS } from "@/lib/projects";
+
+function useInView(threshold = 0.15) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [threshold]);
+
+  return { ref, visible };
+}
 
 
 function GitHubIcon() {
@@ -29,13 +55,27 @@ function PersonIcon() {
 }
 
 export default function ProjectsPage() {
+  const header = useInView(0.1);
+  const activeFocus = useInView(0.1);
+  const upcoming = useInView(0.1);
+  const ideas = useInView(0.1);
+  const cta = useInView(0.1);
+
   return (
     <div className="min-h-screen bg-[#fef9ea] font-sans text-black neo-brutalist-grid selection:bg-[#FFE66D] selection:text-black">
       <main className="max-w-6xl mx-auto px-6 py-24 pb-32">
 
         {/* Header Section */}
-        <section className="mt-12 mb-16 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="relative inline-block transform -rotate-2 bg-yellow-400 border-4 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] animate-fade-in-up">
+        <section 
+          ref={header.ref}
+          className="mt-12 mb-16 flex flex-col md:flex-row items-center justify-between gap-8"
+          style={{
+            opacity: header.visible ? 1 : 0,
+            transform: header.visible ? "translateY(0)" : "translateY(40px)",
+            transition: "opacity 0.8s cubic-bezier(.22,1,.36,1), transform 0.8s cubic-bezier(.22,1,.36,1)",
+          }}
+        >
+          <div className="relative inline-block transform -rotate-2 bg-yellow-400 border-4 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
             <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-black leading-none">
               COMMUNITY<br />PROJECT
             </h1>
@@ -47,7 +87,7 @@ export default function ProjectsPage() {
             </div>
           </div>
 
-          <div className="max-w-md text-right md:text-left animate-fade-in-up delay-100">
+          <div className="max-w-md text-right md:text-left">
             <p className="text-xl font-bold uppercase leading-tight border-l-4 border-black pl-4">
               Real ideas from the KCC community. Submitted, reviewed, and now in progress.
             </p>
@@ -62,7 +102,15 @@ export default function ProjectsPage() {
         </section>
 
         {/* Tier 1: Active Focus Project */}
-        <section className="relative mt-20">
+        <section 
+          ref={activeFocus.ref}
+          className="relative mt-20"
+          style={{
+            opacity: activeFocus.visible ? 1 : 0,
+            transform: activeFocus.visible ? "translateY(0)" : "translateY(40px)",
+            transition: "opacity 0.8s cubic-bezier(.22,1,.36,1) 0.1s, transform 0.8s cubic-bezier(.22,1,.36,1) 0.1s",
+          }}
+        >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {REPOS.filter(repo => repo.id === 4).map((repo, i) => (
               <Link
@@ -129,7 +177,15 @@ export default function ProjectsPage() {
         </section>
 
         {/* Tier 2: Upcoming Projects Spotlight */}
-        <section className="relative mt-32">
+        <section 
+          ref={upcoming.ref}
+          className="relative mt-32"
+          style={{
+            opacity: upcoming.visible ? 1 : 0,
+            transform: upcoming.visible ? "translateY(0)" : "translateY(40px)",
+            transition: "opacity 0.8s cubic-bezier(.22,1,.36,1) 0.1s, transform 0.8s cubic-bezier(.22,1,.36,1) 0.1s",
+          }}
+        >
           <div className="flex items-center gap-4 mb-12">
             <h2 className="text-3xl font-black uppercase tracking-tighter bg-[#0070f3] text-white px-4 py-2 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
               Upcoming Project
@@ -178,7 +234,15 @@ export default function ProjectsPage() {
         </section>
 
         {/* Tier 3: Community Ideas Grid */}
-        <section className="relative mt-32   p-8 md:p-16 ">
+        <section 
+          ref={ideas.ref}
+          className="relative mt-32 p-8 md:p-16"
+          style={{
+            opacity: ideas.visible ? 1 : 0,
+            transform: ideas.visible ? "translateY(0)" : "translateY(40px)",
+            transition: "opacity 0.8s cubic-bezier(.22,1,.36,1) 0.1s, transform 0.8s cubic-bezier(.22,1,.36,1) 0.1s",
+          }}
+        >
           <div className="flex items-center gap-4 mb-12">
             <h2 className="text-3xl font-black uppercase tracking-tighter bg-black text-white px-4 py-2 border-4 border-black shadow-[4px_4px_0px_0px_rgba(109,254,156,1)]">
               Community Ideas
@@ -227,7 +291,15 @@ export default function ProjectsPage() {
         </section>
 
         {/* Submit idea CTA */}
-        <section className="mt-24 bg-black p-8 md:p-12 relative overflow-hidden border-4 border-black animate-fade-in">
+        <section 
+          ref={cta.ref}
+          className="mt-24 bg-black p-8 md:p-12 relative overflow-hidden border-4 border-black"
+          style={{
+            opacity: cta.visible ? 1 : 0,
+            transform: cta.visible ? "translateY(0)" : "translateY(40px)",
+            transition: "opacity 0.8s cubic-bezier(.22,1,.36,1) 0.1s, transform 0.8s cubic-bezier(.22,1,.36,1) 0.1s",
+          }}
+        >
           <div className="halftone-texture absolute inset-0 text-white/5 pointer-events-none" />
           <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
             <div className="flex-1">
