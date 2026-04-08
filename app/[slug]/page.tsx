@@ -73,9 +73,20 @@ function BespokeProjectDetail({ content }: { content: ProjectContent }) {
               {hero.intro}
             </p>
             <div className={`flex gap-4 ${!hero.img ? 'justify-center' : ''}`}>
-              <button className="bg-primary text-on-primary border-4 border-black px-6 md:px-10 py-3 md:py-5 text-lg md:text-2xl font-black uppercase shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all">
-                Try Prototype
-              </button>
+              {content.prototypeLink ? (
+                <a
+                  href={content.prototypeLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-primary text-on-primary border-4 border-black px-6 md:px-10 py-3 md:py-5 text-lg md:text-2xl font-black uppercase shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all text-center inline-block"
+                >
+                  Try Prototype
+                </a>
+              ) : (
+                <button className="bg-primary text-on-primary border-4 border-black px-6 md:px-10 py-3 md:py-5 text-lg md:text-2xl font-black uppercase shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all">
+                  Try Prototype
+                </button>
+              )}
             </div>
           </div>
           {(content.glbModel || hero.img) && (

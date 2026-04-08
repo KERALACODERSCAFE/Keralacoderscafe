@@ -20,6 +20,7 @@ export interface ProjectContent {
   coverImg?: string;
   /** iOS AR Quick Look — .usdz URL */
   usdzUrl?: string;
+  prototypeLink?: string;
 }
 
 export const PROJECT_DETAILS: Record<number, ProjectContent> = {
@@ -71,5 +72,6 @@ export const PROJECT_DETAILS: Record<number, ProjectContent> = {
     ],
     glbModel: "/models/toddy.glb",
     coverImg: "/toddy-cover.jpg",
+    prototypeLink: "https://reference-toddy.vercel.app/",
   },
 };
