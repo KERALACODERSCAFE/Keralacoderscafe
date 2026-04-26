@@ -28,11 +28,36 @@ export default function Hero() {
   const fastAvatars = ["👨‍💻", "👩‍💻", "🚀", "💡"];
 
   useEffect(() => {
-    fetch("https://api.github.com/repos/KERALACODERSCAFE/Keralacoderscafe/contributors?per_page=12")
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
-          const mapped = data.map((user, i) => ({
+    const REPOS_TO_FETCH = [
+      "https://api.github.com/repos/KERALACODERSCAFE/Keralacoderscafe/contributors?per_page=50",
+      "https://api.github.com/repos/KERALACODERSCAFE/Kerala-toddy-finder/contributors?per_page=50",
+    ];
+
+    Promise.allSettled(
+      REPOS_TO_FETCH.map((url) =>
+        fetch(url).then((r) => (r.ok ? r.json() : Promise.resolve([])))
+      )
+    )
+      .then((results) => {
+        const merged = new Map<number, { login: string; avatar_url: string; contributions: number }>();
+        for (const result of results) {
+          if (result.status !== "fulfilled") continue;
+          const list = Array.isArray(result.value) ? result.value : [];
+          for (const c of list) {
+            if (merged.has(c.id)) {
+              merged.get(c.id)!.contributions += c.contributions;
+            } else {
+              merged.set(c.id, { login: c.login, avatar_url: c.avatar_url, contributions: c.contributions });
+            }
+          }
+        }
+
+        const sorted = Array.from(merged.values()).sort(
+          (a, b) => b.contributions - a.contributions
+        );
+
+        if (sorted.length > 0) {
+          const mapped = sorted.map((user, i) => ({
             name: user.login,
             initial: user.login.substring(0, 2).toUpperCase(),
             color: defaultColors[i % defaultColors.length],
@@ -40,7 +65,6 @@ export default function Hero() {
             avatar: user.avatar_url,
             commits: user.contributions || 0,
           }));
-
           setTopContributors(mapped);
         }
       })

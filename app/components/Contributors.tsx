@@ -29,15 +29,36 @@ export default function Contributors() {
   useEffect(() => {
     async function fetchContributors() {
       try {
-        const res = await fetch(
-          "https://api.github.com/repos/KERALACODERSCAFE/Keralacoderscafe/contributors?per_page=12"
+        const REPOS_TO_FETCH = [
+          "https://api.github.com/repos/KERALACODERSCAFE/Keralacoderscafe/contributors?per_page=50",
+          "https://api.github.com/repos/KERALACODERSCAFE/Kerala-toddy-finder/contributors?per_page=50",
+        ];
+
+        const results = await Promise.allSettled(
+          REPOS_TO_FETCH.map((url) =>
+            fetch(url).then((r) => (r.ok ? r.json() : Promise.resolve([])))
+          )
         );
-        if (!res.ok) {
-          throw new Error("Failed to fetch contributors");
+
+        const merged = new Map<number, Contributor>();
+        for (const result of results) {
+          if (result.status !== "fulfilled") continue;
+          const list: Contributor[] = Array.isArray(result.value)
+            ? result.value
+            : [];
+          for (const c of list) {
+            if (merged.has(c.id)) {
+              merged.get(c.id)!.contributions += c.contributions;
+            } else {
+              merged.set(c.id, { ...c });
+            }
+          }
         }
 
-        const data = await res.json();
-        setContributors(Array.isArray(data) ? data : []);
+        const sorted = Array.from(merged.values()).sort(
+          (a, b) => b.contributions - a.contributions
+        );
+        setContributors(sorted);
       } catch (error) {
         console.error("Error fetching contributors:", error);
       } finally {
@@ -68,9 +89,19 @@ export default function Contributors() {
             </p>
           </div>
 
-          <div className="inline-flex items-center gap-3 self-start border-3 border-black bg-white px-5 py-2 text-xs font-black uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            <span className="h-3 w-3 border-2 border-black bg-emerald-500" />
-            LIVE FROM GITHUB
+          <div className="flex flex-col items-start gap-2 self-start">
+            <div className="inline-flex items-center gap-3 border-3 border-black bg-white px-5 py-2 text-xs font-black uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+              <span className="h-3 w-3 border-2 border-black bg-emerald-500" />
+              LIVE FROM GITHUB
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <span className="border-2 border-black bg-kcc-accent-yellow-soft/60 px-3 py-1 text-[10px] font-black uppercase tracking-widest shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                Keralacoderscafe
+              </span>
+              <span className="border-2 border-black bg-kcc-gold/60 px-3 py-1 text-[10px] font-black uppercase tracking-widest shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                Kerala-toddy-finder
+              </span>
+            </div>
           </div>
         </div>
 

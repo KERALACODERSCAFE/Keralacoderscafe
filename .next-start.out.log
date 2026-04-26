@@ -1,0 +1,19 @@
+
+> kcc@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.0 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.56.1:3000
+✓ Ready in 1424ms
+Creating turbopack project { dir: 'C:\\Users\\admin\\Keralacoderscafe', testMode: true }
+
+○ Compiling /[slug] ...
+ GET /toddy-shop-finder-opensource-project 200 in 5.4s
+ GET /events 200 in 7.9s (next.js: 7.0s, application-code: 907ms)
+ GET /toddy-shop-finder-opensource-project 200 in 12.9s (next.js: 11.1s, application-code: 1730ms)
+ GET /toddy-shop-finder-opensource-project 200 in 3.2s (next.js: 1043ms, application-code: 2.2s)
+ GET /manifest.webmanifest 200 in 2.1s (next.js: 2.0s, application-code: 74ms)
+ GET /events/4 200 in 2.5s (next.js: 2.4s, application-code: 141ms)
+✓ Compiled in 472ms
+✓ Compiled in 221ms

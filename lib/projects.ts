@@ -11,6 +11,7 @@ export interface Project {
   topics: string[];
   date: string;
   link?: string;
+  github?: string;
 }
 
 export const REPOS: Project[] = [
@@ -27,6 +28,7 @@ export const REPOS: Project[] = [
     languageColor: "#f1e05a",
     topics: ["kerala", "maps", "food-culture"],
     date: "Mar 23",
+    github: "https://github.com/KERALACODERSCAFE/Kerala-toddy-finder",
   },
   {
     id: 5,

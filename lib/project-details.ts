@@ -21,6 +21,7 @@ export interface ProjectContent {
   /** iOS AR Quick Look — .usdz URL */
   usdzUrl?: string;
   prototypeLink?: string;
+  github?: string;
 }
 
 export const PROJECT_DETAILS: Record<number, ProjectContent> = {
@@ -73,5 +74,6 @@ export const PROJECT_DETAILS: Record<number, ProjectContent> = {
     glbModel: "/models/toddy.glb",
     coverImg: "/toddy-cover.jpg",
     prototypeLink: "https://reference-toddy.vercel.app/",
+    github: "https://github.com/KERALACODERSCAFE/Kerala-toddy-finder",
   },
 };
