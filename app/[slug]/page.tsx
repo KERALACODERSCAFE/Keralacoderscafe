@@ -345,28 +345,30 @@ function LiveContributors() {
       <div className="bg-white border-4 border-black p-6 md:p-10 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] space-y-8">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-4">
-            <span className="text-4xl text-yellow-500 drop-shadow-[0_2px_10px_rgba(250,204,21,0.5)]">👑</span>
+            <svg className="w-10 h-10 md:w-12 md:h-12 text-black" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+            </svg>
             <h2 className="text-3xl md:text-5xl font-black text-black uppercase tracking-tighter">
               Leader Board
             </h2>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4">
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-black text-black/40 uppercase tracking-widest">filter:</span>
-              <div className="relative">
+          <div className="flex flex-nowrap items-center gap-2 sm:gap-4 w-full md:w-auto mt-4 md:mt-0">
+            <div className="flex items-center gap-2 flex-1 md:flex-none">
+              <span className="text-[10px] font-black text-black/40 uppercase tracking-widest hidden sm:inline">filter:</span>
+              <div className="relative flex-1 md:w-auto">
                 <input
                   type="text"
-                  placeholder="Input search word"
+                  placeholder="Search..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="bg-gray-50 text-black px-4 py-2 border-2 border-black rounded-full text-xs font-bold outline-none focus:ring-2 ring-yellow-400 transition-all w-48 sm:w-64"
+                  className="bg-gray-50 text-black px-3 py-2 border-2 border-black rounded-full text-xs font-bold outline-none focus:ring-2 ring-yellow-400 transition-all w-full md:w-48 lg:w-64"
                 />
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-black text-black/40 uppercase tracking-widest">sort:</span>
-              <select className="bg-gray-50 text-black px-4 py-2 border-2 border-black rounded-full text-xs font-bold outline-none">
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-[10px] font-black text-black/40 uppercase tracking-widest hidden sm:inline">sort:</span>
+              <select className="bg-gray-50 text-black px-3 py-2 border-2 border-black rounded-full text-xs font-bold outline-none">
                 <option>Commits</option>
                 <option>Impact</option>
               </select>
@@ -449,80 +451,27 @@ function LiveContributors() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex flex-col gap-8 bg-white border-4 border-black p-6 sm:p-10 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]">
-          {/* Page info */}
-          <div className="flex items-center justify-between border-b-4 border-black pb-4">
-            <div className="font-black uppercase text-base tracking-[0.2em]">
-              Dispatch <span className="text-yellow-500">#{currentPage}</span> / {totalPages}
-            </div>
-            <div className="font-bold uppercase text-[10px] tracking-widest opacity-40">
-              {startIndex + 1}-{Math.min(endIndex, filteredContributors.length)} OF {filteredContributors.length} MEMBERS
-            </div>
-          </div>
+        <div className="flex justify-center pt-8">
+          <div className="flex gap-2">
+            {Array.from({ length: Math.min(5, totalPages) }).map((_, i) => {
+              let pageNum = currentPage;
+              if (currentPage <= 3) pageNum = i + 1;
+              else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
+              else pageNum = currentPage - 2 + i;
 
-          {/* Pagination controls */}
-          <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between w-full">
-            {/* Previous */}
-            <button
-              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
-              className="group relative flex-1 sm:flex-none"
-            >
-              <div className="absolute inset-0 bg-black translate-x-1 translate-y-1 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform disabled:opacity-0" />
-              <div className="relative px-8 py-4 border-4 border-black font-black uppercase text-sm bg-white disabled:opacity-30 disabled:cursor-not-allowed transition-all group-active:translate-x-1 group-active:translate-y-1">
-                ← PREVIOUS
-              </div>
-            </button>
+              if (pageNum <= 0 || pageNum > totalPages) return null;
 
-            <div className="flex gap-2 justify-center">
-              {Array.from({ length: Math.min(5, totalPages) }).map((_, i) => {
-                let pageNum = currentPage;
-                if (currentPage <= 3) pageNum = i + 1;
-                else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
-                else pageNum = currentPage - 2 + i;
-
-                if (pageNum <= 0 || pageNum > totalPages) return null;
-
-                return (
-                  <button
-                    key={pageNum}
-                    onClick={() => setCurrentPage(pageNum)}
-                    className={`w-10 h-10 border-4 border-black font-black flex items-center justify-center transition-all ${currentPage === pageNum ? 'bg-yellow-400 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : 'bg-white hover:bg-black hover:text-white'
-                      }`}
-                  >
-                    {pageNum}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Next */}
-            <button
-              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-              disabled={currentPage === totalPages}
-              className="group relative flex-1 sm:flex-none"
-            >
-              <div className="absolute inset-0 bg-black translate-x-1 translate-y-1 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform disabled:opacity-0" />
-              <div className="relative px-8 py-4 border-4 border-black font-black uppercase text-sm bg-white disabled:opacity-30 disabled:cursor-not-allowed transition-all group-active:translate-x-1 group-active:translate-y-1">
-                NEXT →
-              </div>
-            </button>
-          </div>
-
-          {/* View All Button */}
-          <div className="flex justify-center pt-8">
-            <a
-              href="https://github.com/KERALACODERSCAFE/Keralacoderscafe/graphs/contributors"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative inline-flex items-center gap-6 px-16 py-6 bg-black text-white border-4 border-black overflow-hidden transition-all hover:bg-yellow-400 hover:text-black"
-            >
-              <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 skew-x-12" />
-              <span className="relative font-black uppercase text-base tracking-[0.4em]">ACCESS_GLOBAL_DATA</span>
-              <span className="material-symbols-outlined relative text-2xl group-hover:rotate-45 transition-transform">
-                analytics
-              </span>
-            </a>
+              return (
+                <button
+                  key={pageNum}
+                  onClick={() => setCurrentPage(pageNum)}
+                  className={`w-10 h-10 border-4 border-black font-black flex items-center justify-center transition-all ${currentPage === pageNum ? 'bg-yellow-400 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : 'bg-white hover:bg-black hover:text-white'
+                    }`}
+                >
+                  {pageNum}
+                </button>
+              );
+            })}
           </div>
         </div>
       )}
