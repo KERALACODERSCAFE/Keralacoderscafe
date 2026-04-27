@@ -121,6 +121,26 @@
     background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
     background-size: 4px 4px;
   }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+    border: 2px solid #000;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #000;
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #333;
+  }
 }
 
 @keyframes fadeInUp {

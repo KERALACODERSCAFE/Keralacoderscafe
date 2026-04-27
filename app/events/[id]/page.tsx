@@ -39,6 +39,129 @@ const TeamMember = ({ name, role, img, shadow }: { name: string; role: string; i
   </div>
 );
 
+/* ─── Project Activity Pulse ───────────────────────────────────── */
+
+function ProjectPulse({ repoUrl }: { repoUrl?: string }) {
+  const [activity, setActivity] = useState<number[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!repoUrl) {
+      setLoading(false);
+      return;
+    }
+
+    const repoPath = repoUrl.split("github.com/")[1];
+    if (!repoPath) {
+      setLoading(false);
+      return;
+    }
+
+    // Using stats/contributors for detailed weekly data as requested
+    fetch(`https://api.github.com/repos/${repoPath}/stats/contributors`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          // Initialize 52 weeks of zero activity
+          const weeklyStats = new Array(52).fill(0);
+          
+          // Data is an array of contributor stats
+          // Each item has a 'weeks' array of { w: timestamp, a: add, d: del, c: commit }
+          data.forEach((contributor: any) => {
+            if (contributor.weeks) {
+              // Get the last 52 weeks
+              const last52 = contributor.weeks.slice(-52);
+              last52.forEach((week: any, index: number) => {
+                if (index < 52) {
+                  weeklyStats[index] += week.c;
+                }
+              });
+            }
+          });
+          setActivity(weeklyStats);
+        }
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, [repoUrl]);
+
+  if (loading) {
+    return (
+      <div className="bg-white border-4 border-black p-6 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] animate-pulse">
+        <div className="h-4 w-48 bg-black/10 mb-4" />
+        <div className="grid grid-cols-13 gap-2 h-24 bg-black/5" />
+      </div>
+    );
+  }
+
+  if (activity.length === 0) return null;
+
+  const maxCommits = Math.max(...activity, 1);
+
+  // GitHub's classic color palette
+  const getGitColor = (count: number) => {
+    if (count === 0) return "#ebedf0";
+    const intensity = count / maxCommits;
+    if (intensity < 0.25) return "#9be9a8";
+    if (intensity < 0.5) return "#40c463";
+    if (intensity < 0.75) return "#30a14e";
+    return "#216e39";
+  };
+
+  return (
+    <div className="bg-white border-4 border-black p-6 md:p-10 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] space-y-8">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="space-y-1">
+          <h3 className="text-2xl font-black uppercase tracking-tighter flex items-center gap-3">
+            <span className="w-4 h-4 bg-[#216e39] rounded-full animate-pulse shadow-[0_0_10px_rgba(33,110,57,0.5)]" />
+            LIVE CONTRIBUTION HEATMAP
+          </h3>
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-40">Git contribution heatmap over 52 weeks</p>
+        </div>
+        <div className="flex items-center gap-2 bg-black/5 px-4 py-2 rounded-full">
+          <span className="text-[8px] font-black uppercase opacity-40 mr-1 tracking-widest">Intensity:</span>
+          {["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"].map((color, i) => (
+            <div 
+              key={i} 
+              className="w-4 h-4 border-2 border-black/10 rounded-sm" 
+              style={{ backgroundColor: color }} 
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="relative overflow-x-auto pb-4">
+        <div className="flex gap-[3px] min-w-[600px] h-24 items-end">
+          {activity.map((count, i) => {
+            return (
+              <div
+                key={i}
+                className="flex-1 border border-black/5 group relative transition-all duration-300 hover:scale-110 hover:z-10 cursor-pointer rounded-sm"
+                style={{ 
+                  height: count === 0 ? '15%' : `${15 + (count / maxCommits) * 85}%`,
+                  backgroundColor: getGitColor(count)
+                }}
+              >
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-20">
+                  <div className="bg-black text-white text-[10px] font-black px-3 py-2 whitespace-nowrap border-2 border-white shadow-2xl rounded-sm">
+                    {count} Commits {count > 10 ? '🔥' : count > 0 ? '✨' : '💤'}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        
+        <div className="flex justify-between mt-4 text-[10px] font-black uppercase opacity-30 tracking-[0.3em] border-t-2 border-black/5 pt-4">
+          <span>{new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}</span>
+          <span className="text-black opacity-100 italic">Live Velocity Data</span>
+          <span>Present Day</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Live Contributors (both repos) ────────────────────────────── */
 
 function LiveContributors() {
@@ -53,7 +176,9 @@ function LiveContributors() {
   useEffect(() => {
     // Responsive items per page
     const updateItemsPerPage = () => {
-      setItemsPerPage(window.innerWidth < 768 ? 2 : 3);
+      if (window.innerWidth < 640) setItemsPerPage(4);
+      else if (window.innerWidth < 1024) setItemsPerPage(8);
+      else setItemsPerPage(12);
     };
     updateItemsPerPage();
     window.addEventListener('resize', updateItemsPerPage);
@@ -62,7 +187,6 @@ function LiveContributors() {
 
   useEffect(() => {
     const REPOS_TO_FETCH = [
-      "https://api.github.com/repos/KERALACODERSCAFE/Keralacoderscafe/contributors?per_page=100",
       "https://api.github.com/repos/KERALACODERSCAFE/Kerala-toddy-finder/contributors?per_page=100",
     ];
 
@@ -125,13 +249,13 @@ function LiveContributors() {
         </div>
 
         {/* Loading skeleton for grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="bg-white border-4 border-black p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-              <div className="w-full aspect-square border-4 border-black bg-black/10 animate-pulse mb-4" />
-              <div className="space-y-2">
-                <div className="h-4 bg-black/20 rounded-sm animate-pulse" />
-                <div className="h-3 w-2/3 bg-black/10 rounded-sm animate-pulse" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className="bg-white border-2 border-black p-4 flex gap-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+              <div className="w-16 h-16 border-2 border-black bg-black/5 animate-pulse shrink-0" />
+              <div className="flex-1 space-y-2">
+                <div className="h-4 bg-black/10 rounded-sm animate-pulse" />
+                <div className="h-3 w-1/2 bg-black/5 rounded-sm animate-pulse" />
               </div>
             </div>
           ))}
@@ -152,160 +276,190 @@ function LiveContributors() {
   }
 
   const topContributor = filteredContributors[0];
-  const totalContributions = contributors.reduce((sum, c) => sum + c.contributions, 0);
 
   return (
-    <div className="space-y-8">
-      {/* Stats Banner */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <StatCard bg="bg-yellow-400" label="Total Contributors" value={contributors.length.toString()} />
-        <StatCard bg="bg-pink-400" label="Total Commits" value={totalContributions.toLocaleString()} />
-        <StatCard bg="bg-cyan-400" label="Top Contributor" value={topContributor?.login.slice(0, 10) || "N/A"} />
-        <StatCard bg="bg-lime-400" label="Showing Page" value={`${currentPage}/${totalPages}`} />
-      </div>
+    <div className="space-y-12">
+      {/* Leader Board Header & Filter */}
+      <div className="bg-white border-4 border-black p-6 md:p-10 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] space-y-8">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-4">
+            <span className="text-4xl text-yellow-500 drop-shadow-[0_2px_10px_rgba(250,204,21,0.5)]">👑</span>
+            <h2 className="text-3xl md:text-5xl font-black text-black uppercase tracking-tighter">
+              Leader Board
+            </h2>
+          </div>
 
-      {/* Controls */}
-      <div className="flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center">
-        {/* Search */}
-        <div className="relative flex-1 max-w-md">
-          <input
-            type="text"
-            placeholder="SEARCH CONTRIBUTORS..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-6 py-4 border-4 border-black font-black uppercase text-sm tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] focus:translate-x-0.5 focus:translate-y-0.5 transition-all outline-none"
-          />
-          <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-            search
-          </span>
-        </div>
-
-      </div>
-
-      {/* Results info */}
-      {searchTerm && (
-        <div className="bg-yellow-400 border-4 border-black px-6 py-3 font-black uppercase text-sm tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-          Found {filteredContributors.length} contributor{filteredContributors.length !== 1 ? "s" : ""} matching &quot;{searchTerm}&quot;
-        </div>
-      )}
-
-      {/* Contributors Grid */}
-      {currentContributors.length === 0 ? (
-        <div className="text-center py-20 bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          <div className="text-6xl mb-4">😔</div>
-          <div className="font-black uppercase tracking-widest opacity-50 text-xl">
-            No contributors found
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-black text-black/40 uppercase tracking-widest">filter:</span>
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Input search word"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="bg-gray-50 text-black px-4 py-2 border-2 border-black rounded-full text-xs font-bold outline-none focus:ring-2 ring-yellow-400 transition-all w-48 sm:w-64"
+                />
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-black text-black/40 uppercase tracking-widest">sort:</span>
+              <select className="bg-gray-50 text-black px-4 py-2 border-2 border-black rounded-full text-xs font-bold outline-none">
+                <option>Commits</option>
+                <option>Impact</option>
+              </select>
+            </div>
           </div>
         </div>
-      ) : (
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
-          {currentContributors.map((c, i) => {
-            const globalIndex = startIndex + i;
-            const isTopThree = globalIndex < 3;
-            const badgeColors = ["bg-yellow-400", "bg-gray-300", "bg-orange-400"];
 
-            return (
-              <a
-                key={c.login}
-                href={c.html_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative"
-              >
-                <div className={`bg-white border-4 border-black p-4 transition-all ${isTopThree
-                    ? "shadow-[8px_8px_0px_0px_rgba(255,200,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(255,200,0,1)]"
-                    : "shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
-                  } hover:-translate-y-1`}>
+        {/* Results info */}
+        {searchTerm && (
+          <div className="bg-yellow-400 border-2 border-black px-4 py-2 inline-block rounded-full font-black uppercase text-[10px] tracking-widest shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            Found {filteredContributors.length} results for &quot;{searchTerm}&quot;
+          </div>
+        )}
 
-                  {/* Rank badge for top 3 */}
-                  {isTopThree && (
-                    <div className={`absolute -top-3 -right-3 w-12 h-12 ${badgeColors[globalIndex]} border-4 border-black flex items-center justify-center font-black text-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rotate-12 group-hover:rotate-0 transition-transform`}>
-                      {globalIndex + 1}
-                    </div>
-                  )}
+        {/* Contributors List */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+          {currentContributors.length === 0 ? (
+            <div className="col-span-full text-center py-20 bg-black/5 border-2 border-black/10 rounded-xl">
+              <div className="text-6xl mb-4">🔍</div>
+              <div className="font-black uppercase tracking-widest text-black/20 text-xl">
+                NO_MATCH_FOUND
+              </div>
+            </div>
+          ) : (
+            currentContributors.map((c, i) => {
+              const globalIndex = startIndex + i;
+              const rank = globalIndex + 1;
+              
+              // Uniform background color as requested
+              const rankBg = "bg-white";
+
+              return (
+                <a
+                  key={c.login}
+                  href={c.html_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`group relative flex items-center gap-4 p-4 ${rankBg} border-4 border-black rounded-xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all`}
+                >
+                  {/* Rank Number */}
+                  <div className="w-8 text-center font-black text-black text-xl md:text-2xl opacity-30">
+                    {rank}
+                  </div>
 
                   {/* Avatar */}
-                  <div className="relative w-full aspect-square border-4 border-black overflow-hidden mb-4 group-hover:border-yellow-400 transition-colors">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={c.avatar_url}
-                      alt={c.login}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    {/* Overlay on hover */}
-                    <div className="absolute inset-0 bg-yellow-400/0 group-hover:bg-yellow-400/20 transition-colors" />
+                  <div className="relative shrink-0">
+                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-full border-4 border-black/10 overflow-hidden shadow-lg group-hover:scale-105 transition-transform">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={c.avatar_url} alt={c.login} className="w-full h-full object-cover" />
+                    </div>
                   </div>
 
                   {/* Info */}
-                  <div className="space-y-2">
-                    <h3 className="font-black uppercase text-sm md:text-base tracking-tighter group-hover:text-yellow-600 transition-colors truncate">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-black font-black text-base md:text-lg uppercase tracking-tighter truncate">
                       {c.login}
                     </h3>
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 h-2 bg-black/10 border-2 border-black">
-                        <div
-                          className="h-full bg-black transition-all duration-500"
-                          style={{ width: `${Math.min((c.contributions / topContributor.contributions) * 100, 100)}%` }}
-                        />
+                    <div className="flex items-center gap-4 mt-1">
+                      <div className="flex flex-col">
+                        <span className="text-[8px] font-black uppercase opacity-30">Commits</span>
+                        <span className="text-xs font-black">{c.contributions}</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[8px] font-black uppercase opacity-30">Impact</span>
+                        <span className="text-xs font-black">{Math.round((c.contributions / (topContributor?.contributions || 1)) * 100)}%</span>
                       </div>
                     </div>
-                    <p className="text-xs font-black uppercase tracking-widest opacity-60">
-                      {c.contributions.toLocaleString()} commits
-                    </p>
                   </div>
-                </div>
-              </a>
-            );
-          })}
+                  
+                  {/* Action Icon */}
+                  <div className="text-black/20 group-hover:text-black transition-colors">
+                    <span className="material-symbols-outlined text-xl">north_east</span>
+                  </div>
+                </a>
+              );
+            })
+          )}
         </div>
-      )}
+      </div>
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex flex-col gap-6 bg-white border-4 border-black p-4 sm:p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+        <div className="flex flex-col gap-8 bg-white border-4 border-black p-6 sm:p-10 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]">
           {/* Page info */}
-          <div className="font-black uppercase text-sm tracking-wider">
-            Page {currentPage} of {totalPages}
-            <span className="opacity-50 ml-2">
-              ({startIndex + 1}-{Math.min(endIndex, filteredContributors.length)} of {filteredContributors.length})
-            </span>
+          <div className="flex items-center justify-between border-b-4 border-black pb-4">
+            <div className="font-black uppercase text-base tracking-[0.2em]">
+              Dispatch <span className="text-yellow-500">#{currentPage}</span> / {totalPages}
+            </div>
+            <div className="font-bold uppercase text-[10px] tracking-widest opacity-40">
+              {startIndex + 1}-{Math.min(endIndex, filteredContributors.length)} OF {filteredContributors.length} MEMBERS
+            </div>
           </div>
 
           {/* Pagination controls */}
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-center w-full">
+          <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between w-full">
             {/* Previous */}
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="w-full sm:w-auto px-4 sm:px-8 py-3 sm:py-4 border-4 border-black font-black uppercase text-xs sm:text-sm text-center bg-white disabled:opacity-30 disabled:cursor-not-allowed shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+              className="group relative flex-1 sm:flex-none"
             >
-              ← Previous
+              <div className="absolute inset-0 bg-black translate-x-1 translate-y-1 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform disabled:opacity-0" />
+              <div className="relative px-8 py-4 border-4 border-black font-black uppercase text-sm bg-white disabled:opacity-30 disabled:cursor-not-allowed transition-all group-active:translate-x-1 group-active:translate-y-1">
+                ← PREVIOUS
+              </div>
             </button>
 
-            <div className="order-first sm:order-none font-black uppercase text-xs sm:text-sm tracking-widest px-2 sm:px-4 text-center">
-              Page {currentPage} / {totalPages}
+            <div className="flex gap-2 justify-center">
+              {Array.from({ length: Math.min(5, totalPages) }).map((_, i) => {
+                let pageNum = currentPage;
+                if (currentPage <= 3) pageNum = i + 1;
+                else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
+                else pageNum = currentPage - 2 + i;
+
+                if (pageNum <= 0 || pageNum > totalPages) return null;
+
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => setCurrentPage(pageNum)}
+                    className={`w-10 h-10 border-4 border-black font-black flex items-center justify-center transition-all ${currentPage === pageNum ? 'bg-yellow-400 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : 'bg-white hover:bg-black hover:text-white'
+                      }`}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
             </div>
 
             {/* Next */}
             <button
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="w-full sm:w-auto px-4 sm:px-8 py-3 sm:py-4 border-4 border-black font-black uppercase text-xs sm:text-sm text-center bg-white disabled:opacity-30 disabled:cursor-not-allowed shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+              className="group relative flex-1 sm:flex-none"
             >
-              Next →
+              <div className="absolute inset-0 bg-black translate-x-1 translate-y-1 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform disabled:opacity-0" />
+              <div className="relative px-8 py-4 border-4 border-black font-black uppercase text-sm bg-white disabled:opacity-30 disabled:cursor-not-allowed transition-all group-active:translate-x-1 group-active:translate-y-1">
+                NEXT →
+              </div>
             </button>
           </div>
-          
+
           {/* View All Button */}
-          <div className="flex justify-center">
-            <a 
+          <div className="flex justify-center pt-8">
+            <a
               href="https://github.com/KERALACODERSCAFE/Keralacoderscafe/graphs/contributors"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex w-full sm:w-auto justify-center items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-kcc-gold text-black border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all font-black uppercase text-xs sm:text-sm tracking-widest"
+              className="group relative inline-flex items-center gap-6 px-16 py-6 bg-black text-white border-4 border-black overflow-hidden transition-all hover:bg-yellow-400 hover:text-black"
             >
-              View all contributors
-              <span className="material-symbols-outlined text-xl">open_in_new</span>
+              <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 skew-x-12" />
+              <span className="relative font-black uppercase text-base tracking-[0.4em]">ACCESS_GLOBAL_DATA</span>
+              <span className="material-symbols-outlined relative text-2xl group-hover:rotate-45 transition-transform">
+                analytics
+              </span>
             </a>
           </div>
         </div>
@@ -397,40 +551,35 @@ function BespokeProjectDetail({ content }: { content: ProjectContent }) {
           )}
         </section>
 
-        {/* Vision & Progress */}
-        <section className="grid md:grid-cols-2 gap-6 md:gap-8">
-          <div className="bg-white border-4 border-black p-6 md:p-12 shadow-[8px_8px_0px_0px_rgba(0,74,34,1)] relative overflow-hidden">
-            <div className="absolute -top-3 -left-2 bg-black text-white px-4 py-2 font-black text-xs uppercase tracking-widest border-2 border-black z-10">Our Vision</div>
-            <h2 className="text-2xl md:text-5xl font-black uppercase mb-6 tracking-tighter pt-4 leading-none">The Trusted <span className="text-green-600 underline">Discovery</span> Platform</h2>
-            <p className="leading-relaxed font-bold text-lg opacity-80 mb-6">{vision}</p>
-          </div>
-          <div className="bg-yellow-400 border-4 border-black p-6 md:p-12 shadow-[8px_8px_0px_0px_rgba(0,106,52,1)] relative">
-            <div className="absolute -top-3 -left-2 bg-secondary text-white px-4 py-2 font-black text-xs uppercase tracking-widest border-2 border-black z-10">Project Progress</div>
-            <h2 className="text-2xl md:text-5xl font-black uppercase mb-6 tracking-tighter pt-4 leading-none">{progress.phase}</h2>
-            <p className="leading-relaxed opacity-75 font-bold mb-8">Platform is currently in community-vetting phase. Volunteers are mapping local shops and verifying hygiene standards across three districts.</p>
-            <div className="space-y-6">
-              {progress.stages.map((stage) => (
-                <div key={stage.label} className="space-y-2">
-                  <div className="flex justify-between items-center font-black uppercase text-[10px] md:text-xs tracking-widest">
-                    <span>{stage.label}</span>
-                    <span>{stage.percentage === 0 ? "Not Started" : `${stage.percentage}%`}</span>
-                  </div>
-                  <div className="h-4 bg-white border-2 border-black rounded-sm overflow-hidden flex">
-                    <div className="h-full bg-black transition-all duration-1000 shadow-[inset_-2px_0px_0px_0px_rgba(255,255,255,0.3)]" style={{ width: `${stage.percentage}%` }}></div>
-                  </div>
+        {/* Project Progress */}
+        <section className="bg-yellow-400 border-4 border-black p-6 md:p-12 shadow-[12px_12px_0px_0px_rgba(0,106,52,1)] relative">
+          <div className="absolute -top-3 -left-2 bg-secondary text-white px-4 py-2 font-black text-xs uppercase tracking-widest border-2 border-black z-10">Project Progress</div>
+          <h2 className="text-2xl md:text-5xl font-black uppercase mb-6 tracking-tighter pt-4 leading-none">{progress.phase}</h2>
+          <p className="leading-relaxed opacity-75 font-bold mb-8">Platform is currently in community-vetting phase. Volunteers are mapping local shops and verifying hygiene standards across three districts.</p>
+          <div className="space-y-6">
+            {progress.stages.map((stage) => (
+              <div key={stage.label} className="space-y-2">
+                <div className="flex justify-between items-center font-black uppercase text-[10px] md:text-xs tracking-widest">
+                  <span>{stage.label}</span>
+                  <span>{stage.percentage === 0 ? "Not Started" : `${stage.percentage}%`}</span>
                 </div>
-              ))}
-              <div className="pt-4 border-t-2 border-black/10">
-                <div className="flex justify-between items-center font-black uppercase text-sm tracking-tighter">
-                  <span>Overall Status</span>
-                  <span className="bg-black text-yellow-400 px-2">
-                    {Math.round(progress.stages.reduce((acc, s) => acc + s.percentage, 0) / progress.stages.length)}% Complete
-                  </span>
+                <div className="h-4 bg-white border-2 border-black rounded-sm overflow-hidden flex">
+                  <div className="h-full bg-black transition-all duration-1000 shadow-[inset_-2px_0px_0px_0px_rgba(255,255,255,0.3)]" style={{ width: `${stage.percentage}%` }}></div>
                 </div>
+              </div>
+            ))}
+            <div className="pt-4 border-t-2 border-black/10">
+              <div className="flex justify-between items-center font-black uppercase text-sm tracking-tighter">
+                <span>Overall Status</span>
+                <span className="bg-black text-yellow-400 px-2">
+                  {Math.round(progress.stages.reduce((acc, s) => acc + s.percentage, 0) / progress.stages.length)}% Complete
+                </span>
               </div>
             </div>
           </div>
         </section>
+
+        <ProjectPulse repoUrl={content.github} />
 
         {/* Features for Users */}
         <section>
@@ -442,47 +591,9 @@ function BespokeProjectDetail({ content }: { content: ProjectContent }) {
           </div>
         </section>
 
-        {/* Features for Owners */}
-        <section className="bg-white border-4 border-black p-10 md:p-20 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]">
-          <h2 className="text-2xl md:text-5xl font-black uppercase mb-12 tracking-tighter">For Business Owners</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            {ownerFeatures.map((f) => (
-              <div key={f.label} className="flex gap-6 items-start group">
-                <div className={`${f.bg} border-4 border-black p-3 group-hover:rotate-6 transition-transform`}>
-                  <span className="material-symbols-outlined text-4xl">{f.icon}</span>
-                </div>
-                <div className="space-y-2">
-                  <h3 className="font-black text-xl uppercase tracking-tight">{f.label.split(":")[0]}</h3>
-                  <p className="font-bold opacity-60 leading-tight">{f.label}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Why Platform */}
-        <section className="grid lg:grid-cols-2 gap-12 items-center">
-          <h2 className="text-3xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9]">Why this <br /> <span className="bg-red-400 px-3">Platform?</span></h2>
-          <div className="space-y-4">
-            {why.map((reason, idx) => (
-              <div key={idx} className="flex items-center gap-4 group">
-                <div className="w-12 h-12 bg-black text-white flex items-center justify-center font-black text-2xl border-2 border-black group-hover:bg-yellow-400 group-hover:text-black transition-all">{idx + 1}</div>
-                <p className="font-black uppercase text-lg md:text-2xl tracking-tighter group-hover:translate-x-2 transition-transform">{reason}</p>
-              </div>
-            ))}
-          </div>
-        </section>
 
         {/* Team — Live Contributors */}
-        <section>
-          <div className="mb-10 md:mb-16 text-center">
-            <h2 className="text-3xl md:text-6xl font-black uppercase tracking-tighter">Contribution Member List</h2>
-            <p className="font-bold uppercase tracking-widest opacity-60 mt-4 underline decoration-black underline-offset-4 decoration-2">Building Kerala&apos;s Digital Heritage</p>
-            <div className="mt-4 inline-flex items-center gap-3 border-2 border-black bg-white px-4 py-2 text-xs font-black uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-              <span className="h-3 w-3 border-2 border-black bg-emerald-500" />
-              LIVE FROM GITHUB
-            </div>
-          </div>
+        <section className="space-y-12">
           <LiveContributors />
         </section>
 
@@ -499,7 +610,7 @@ function BespokeProjectDetail({ content }: { content: ProjectContent }) {
               This project is not just a listing platform. It is a community-driven initiative to promote Kerala's traditional food culture, support local businesses, and help people discover the best local experiences.
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <a 
+              <a
                 href={content.github || "/join"}
                 target={content.github ? "_blank" : "_self"}
                 rel={content.github ? "noopener noreferrer" : ""}
@@ -533,7 +644,7 @@ function GenericProjectDetail({ project }: { project: Project }) {
           <a href="/events" className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 border-2 border-black font-black uppercase text-xs shadow-[4px_4px_0px_0px_rgba(255,230,109,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
             ← Back to Projects
           </a>
-          
+
           <div className="space-y-6">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-sm font-black uppercase tracking-widest">
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
@@ -585,7 +696,7 @@ function GenericProjectDetail({ project }: { project: Project }) {
         </section>
 
         {/* Contributors Section */}
-        <section className="pt-16 border-t-8 border-black">
+        <section className="pt-16 border-t-8 border-black space-y-12">
           <div className="mb-16 text-center space-y-4">
             <h2 className="text-4xl md:text-7xl font-black uppercase tracking-tighter">Community Effort</h2>
             <div className="inline-flex items-center gap-3 border-2 border-black bg-white px-4 py-2 text-xs font-black uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
@@ -593,6 +704,7 @@ function GenericProjectDetail({ project }: { project: Project }) {
               LIVE REPO STATS
             </div>
           </div>
+          <ProjectPulse repoUrl={project.github} />
           <LiveContributors />
         </section>
 
@@ -606,7 +718,7 @@ function GenericProjectDetail({ project }: { project: Project }) {
               Join the Kerala Coders Cafe community and help us build {project.name}. Whether you are a developer, designer, or researcher, your contribution matters.
             </p>
             <div className="flex justify-center">
-              <a 
+              <a
                 href={project.github || "/join"}
                 target={project.github ? "_blank" : "_self"}
                 rel={project.github ? "noopener noreferrer" : ""}

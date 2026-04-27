@@ -26,18 +26,203 @@ const FeatureCard = ({ icon, label, bg }: { icon: string; label: string; bg: str
   </div>
 );
 
-const TeamMember = ({ name, role, img, shadow }: { name: string; role: string; img: string; shadow: string }) => (
-  <div className="flex flex-col items-center gap-3 group">
-    <div className={`w-32 h-32 md:w-48 md:h-48 border-4 border-black rounded-full overflow-hidden ${shadow} group-hover:scale-105 transition-transform duration-300`}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={img} alt={name} className="w-full h-full object-cover" />
-    </div>
-    <div className="text-center">
-      <h3 className="text-xl md:text-2xl font-black uppercase group-hover:text-amber-500 transition-colors">{name}</h3>
-      <p className="text-xs font-bold uppercase tracking-widest opacity-60 mt-1">{role}</p>
-    </div>
+/* ─── Project Activity Pulse ───────────────────────────────────── */
+
+interface PunchCardData {
+  day: number;
+  hour: number;
+  count: number;
+}
+
+const getGitColor = (count: number, max: number) => {
+  if (count === 0) return "bg-[#ebedf0]";
+  const intensity = count / max;
+  if (intensity < 0.25) return "bg-[#9be9a8]";
+  if (intensity < 0.5) return "bg-[#40c463]";
+  if (intensity < 0.75) return "bg-[#30a14e]";
+  return "bg-[#216e39]";
+};
+
+const DayName = ({ name }: { name: string }) => (
+  <div className="text-[10px] font-black uppercase opacity-40 h-4 flex items-center min-w-[32px]">
+    {name}
   </div>
 );
+
+function ProjectPulse({ repoUrl }: { repoUrl?: string }) {
+  const [punchData, setPunchData] = useState<number[][]>([]); // [day][hour]
+  const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
+  const [isMock, setIsMock] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!repoUrl) {
+      setLoading(false);
+      return;
+    }
+
+    const repoPath = repoUrl.split("github.com/")[1];
+    if (!repoPath) {
+      setLoading(false);
+      return;
+    }
+
+    let retryCount = 0;
+    const fetchStats = async () => {
+      try {
+        const response = await fetch(`https://api.github.com/repos/${repoPath}/stats/punch_card`);
+        
+        if (response.status === 202 && retryCount < 3) {
+          retryCount++;
+          setTimeout(fetchStats, 3000);
+          return;
+        }
+
+        if (response.status === 403) {
+          // Rate limited - use mock data for demonstration
+          const mock = Array.from({ length: 7 }, () => 
+            Array.from({ length: 24 }, () => Math.floor(Math.random() * 20))
+          );
+          setPunchData(mock);
+          setIsMock(true);
+          setLoading(false);
+          return;
+        }
+
+        if (!response.ok) {
+          setLoading(false);
+          return;
+        }
+
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          const grid = Array.from({ length: 7 }, () => new Array(24).fill(0));
+          data.forEach(([day, hour, count]) => {
+            grid[day][hour] = count;
+          });
+          setPunchData(grid);
+          setIsMock(false);
+        }
+      } catch (err) {
+        console.error("Error fetching punch card:", err);
+        // Fallback to mock on any error for demo purposes
+        const mock = Array.from({ length: 7 }, () => 
+          Array.from({ length: 24 }, () => Math.floor(Math.random() * 15))
+        );
+        setPunchData(mock);
+        setIsMock(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, [repoUrl]);
+
+  if (loading) {
+    return (
+      <div className="bg-black text-white border-4 border-yellow-400 p-6 md:p-10 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] animate-pulse space-y-6">
+        <div className="h-8 w-64 bg-white/10" />
+        <div className="grid grid-cols-24 gap-1 h-32 bg-white/5" />
+      </div>
+    );
+  }
+
+  if (punchData.length === 0) {
+    return (
+      <div className="bg-black text-white border-4 border-yellow-400 p-10 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] text-center space-y-4">
+        <div className="text-4xl opacity-20 font-black">PUNCH_CARD_EMPTY</div>
+        <p className="text-[10px] font-bold uppercase tracking-widest opacity-40">No hourly activity data found for this repository.</p>
+      </div>
+    );
+  }
+
+  const maxCommits = Math.max(...punchData.flat(), 1);
+  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  return (
+    <div className="bg-black text-white border-4 border-yellow-400 p-6 md:p-10 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] space-y-8 relative overflow-hidden">
+      {isMock && (
+        <div className="absolute top-0 right-0 bg-red-500 text-white px-4 py-1 font-black text-[8px] uppercase tracking-widest z-20 shadow-[-4px_4px_0px_0px_rgba(0,0,0,1)] border-b-2 border-l-2 border-yellow-400">
+          Demo Mode: API Rate Limited
+        </div>
+      )}
+
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="space-y-1">
+          <h3 className="text-2xl font-black uppercase tracking-tighter flex items-center gap-3">
+            <span className="w-4 h-4 bg-yellow-400 rounded-full animate-pulse shadow-[0_0_10px_rgba(250,204,21,0.5)]" />
+            PEAK ACTIVITY PUNCH CARD
+          </h3>
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-50">Commit frequency by day and hour {isMock ? '(Demo Data)' : '(All time)'}</p>
+        </div>
+        <div className="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-full border border-white/10">
+          <span className="text-[8px] font-black uppercase opacity-50 mr-1 tracking-widest">Quiet</span>
+          {["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"].map((color, i) => (
+            <div 
+              key={i} 
+              className="w-4 h-4 border-2 border-black/50 rounded-sm" 
+              style={{ backgroundColor: color }} 
+            />
+          ))}
+          <span className="text-[8px] font-black uppercase opacity-50 ml-1 tracking-widest">Peak</span>
+        </div>
+      </div>
+
+      <div className="relative">
+        <div className="flex gap-4">
+          <div className="flex flex-col gap-1 pr-1">
+            {days.map(d => <DayName key={d} name={d} />)}
+          </div>
+
+          <div className="flex-1 overflow-x-auto pb-4 custom-scrollbar">
+            <div className="flex flex-col gap-1 min-w-max">
+              {punchData.map((dayHours, dayIndex) => (
+                <div key={dayIndex} className="flex gap-1">
+                  {dayHours.map((count, hourIndex) => (
+                    <div
+                      key={hourIndex}
+                      className={`w-6 h-4 md:w-8 md:h-6 rounded-sm border border-white/5 transition-all duration-300 hover:scale-110 hover:z-10 cursor-pointer ${getGitColor(count, maxCommits)}`}
+                      title={mounted ? `${count} commits at ${hourIndex}:00 on ${days[dayIndex]}` : undefined}
+                    >
+                      {count > (maxCommits * 0.7) && count > 0 && (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <span className="text-[8px] font-black text-black/50">!</span>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+            
+            <div className="flex gap-1 mt-4 text-[8px] font-black uppercase opacity-40 tracking-widest min-w-max pl-[4px]">
+              {Array.from({ length: 24 }).map((_, i) => (
+                <div key={i} className="w-6 md:w-8 text-center text-white">
+                  {i % 4 === 0 ? `${i}h` : ""}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div className="flex justify-between mt-4 text-[10px] font-black uppercase opacity-40 tracking-[0.3em] border-t-2 border-white/10 pt-4">
+        <span>Midnight (00:00)</span>
+        <div className="flex items-center gap-2">
+          <span className="text-yellow-400 opacity-100 font-black italic">
+            {isMock ? 'Waiting for GitHub API reset...' : 'Visualizing peak collaboration windows'}
+          </span>
+        </div>
+        <span>Night (23:00)</span>
+      </div>
+    </div>
+  );
+}
 
 /* ─── Live Contributors (both repos) ────────────────────────────── */
 
@@ -53,7 +238,9 @@ function LiveContributors() {
   useEffect(() => {
     // Responsive items per page
     const updateItemsPerPage = () => {
-      setItemsPerPage(window.innerWidth < 768 ? 2 : 3);
+      if (window.innerWidth < 640) setItemsPerPage(4);
+      else if (window.innerWidth < 1024) setItemsPerPage(8);
+      else setItemsPerPage(12);
     };
     updateItemsPerPage();
     window.addEventListener('resize', updateItemsPerPage);
@@ -62,7 +249,6 @@ function LiveContributors() {
 
   useEffect(() => {
     const REPOS_TO_FETCH = [
-      "https://api.github.com/repos/KERALACODERSCAFE/Keralacoderscafe/contributors?per_page=100",
       "https://api.github.com/repos/KERALACODERSCAFE/Kerala-toddy-finder/contributors?per_page=100",
     ];
 
@@ -118,17 +304,20 @@ function LiveContributors() {
   if (loading) {
     return (
       <div className="space-y-8">
+        {/* Loading skeleton for controls */}
         <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
           <div className="h-14 w-full md:w-96 bg-black/10 border-4 border-black animate-pulse" />
           <div className="h-14 w-48 bg-black/10 border-4 border-black animate-pulse" />
         </div>
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="bg-white border-4 border-black p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-              <div className="w-full aspect-square border-4 border-black bg-black/10 animate-pulse mb-4" />
-              <div className="space-y-2">
-                <div className="h-4 bg-black/20 rounded-sm animate-pulse" />
-                <div className="h-3 w-2/3 bg-black/10 rounded-sm animate-pulse" />
+
+        {/* Loading skeleton for grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className="bg-white border-2 border-black p-4 flex gap-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+              <div className="w-16 h-16 border-2 border-black bg-black/5 animate-pulse shrink-0" />
+              <div className="flex-1 space-y-2">
+                <div className="h-4 bg-black/10 rounded-sm animate-pulse" />
+                <div className="h-3 w-1/2 bg-black/5 rounded-sm animate-pulse" />
               </div>
             </div>
           ))}
@@ -149,141 +338,190 @@ function LiveContributors() {
   }
 
   const topContributor = filteredContributors[0];
-  const totalContributions = contributors.reduce((sum, c) => sum + c.contributions, 0);
 
   return (
-    <div className="space-y-8">
-      {/* Stats Banner */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <StatCard bg="bg-yellow-400" label="Total Contributors" value={contributors.length.toString()} />
-        <StatCard bg="bg-pink-400" label="Total Commits" value={totalContributions.toLocaleString()} />
-        <StatCard bg="bg-cyan-400" label="Top Contributor" value={topContributor?.login.slice(0, 10) || "N/A"} />
-        <StatCard bg="bg-lime-400" label="Showing Page" value={`${currentPage}/${totalPages}`} />
-      </div>
+    <div className="space-y-12">
+      {/* Leader Board Header & Filter */}
+      <div className="bg-white border-4 border-black p-6 md:p-10 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] space-y-8">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-4">
+            <span className="text-4xl text-yellow-500 drop-shadow-[0_2px_10px_rgba(250,204,21,0.5)]">👑</span>
+            <h2 className="text-3xl md:text-5xl font-black text-black uppercase tracking-tighter">
+              Leader Board
+            </h2>
+          </div>
 
-      {/* Controls */}
-      <div className="flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center">
-        <div className="relative flex-1 max-w-md">
-          <input
-            type="text"
-            placeholder="SEARCH CONTRIBUTORS..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-6 py-4 border-4 border-black font-black uppercase text-sm tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] focus:translate-x-0.5 focus:translate-y-0.5 transition-all outline-none"
-          />
-          <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-            search
-          </span>
-        </div>
-
-      </div>
-
-      {searchTerm && (
-        <div className="bg-yellow-400 border-4 border-black px-6 py-3 font-black uppercase text-sm tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-          Found {filteredContributors.length} contributor{filteredContributors.length !== 1 ? "s" : ""} matching &quot;{searchTerm}&quot;
-        </div>
-      )}
-
-      {currentContributors.length === 0 ? (
-        <div className="text-center py-20 bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          <div className="text-6xl mb-4">😔</div>
-          <div className="font-black uppercase tracking-widest opacity-50 text-xl">
-            No contributors found
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-black text-black/40 uppercase tracking-widest">filter:</span>
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Input search word"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="bg-gray-50 text-black px-4 py-2 border-2 border-black rounded-full text-xs font-bold outline-none focus:ring-2 ring-yellow-400 transition-all w-48 sm:w-64"
+                />
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-black text-black/40 uppercase tracking-widest">sort:</span>
+              <select className="bg-gray-50 text-black px-4 py-2 border-2 border-black rounded-full text-xs font-bold outline-none">
+                <option>Commits</option>
+                <option>Impact</option>
+              </select>
+            </div>
           </div>
         </div>
-      ) : (
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
-          {currentContributors.map((c, i) => {
-            const globalIndex = startIndex + i;
-            const isTopThree = globalIndex < 3;
-            const badgeColors = ["bg-yellow-400", "bg-gray-300", "bg-orange-400"];
 
-            return (
-              <a
-                key={c.login}
-                href={c.html_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative"
-              >
-                <div className={`bg-white border-4 border-black p-4 transition-all ${isTopThree
-                    ? "shadow-[8px_8px_0px_0px_rgba(255,200,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(255,200,0,1)]"
-                    : "shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
-                  } hover:-translate-y-1`}>
+        {/* Results info */}
+        {searchTerm && (
+          <div className="bg-yellow-400 border-2 border-black px-4 py-2 inline-block rounded-full font-black uppercase text-[10px] tracking-widest shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            Found {filteredContributors.length} results for &quot;{searchTerm}&quot;
+          </div>
+        )}
 
-                  {isTopThree && (
-                    <div className={`absolute -top-3 -right-3 w-12 h-12 ${badgeColors[globalIndex]} border-4 border-black flex items-center justify-center font-black text-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rotate-12 group-hover:rotate-0 transition-transform`}>
-                      {globalIndex + 1}
-                    </div>
-                  )}
+        {/* Contributors List */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+          {currentContributors.length === 0 ? (
+            <div className="col-span-full text-center py-20 bg-black/5 border-2 border-black/10 rounded-xl">
+              <div className="text-6xl mb-4">🔍</div>
+              <div className="font-black uppercase tracking-widest text-black/20 text-xl">
+                NO_MATCH_FOUND
+              </div>
+            </div>
+          ) : (
+            currentContributors.map((c, i) => {
+              const globalIndex = startIndex + i;
+              const rank = globalIndex + 1;
+              
+              // Uniform background color as requested
+              const rankBg = "bg-white";
 
-                  <div className="relative w-full aspect-square border-4 border-black overflow-hidden mb-4 group-hover:border-yellow-400 transition-colors">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={c.avatar_url}
-                      alt={c.login}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-yellow-400/0 group-hover:bg-yellow-400/20 transition-colors" />
+              return (
+                <a
+                  key={c.login}
+                  href={c.html_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`group relative flex items-center gap-4 p-4 ${rankBg} border-4 border-black rounded-xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all`}
+                >
+                  {/* Rank Number */}
+                  <div className="w-8 text-center font-black text-black text-xl md:text-2xl opacity-30">
+                    {rank}
                   </div>
 
-                  <div className="space-y-2">
-                    <h3 className="font-black uppercase text-sm md:text-base tracking-tighter group-hover:text-yellow-600 transition-colors truncate">
+                  {/* Avatar */}
+                  <div className="relative shrink-0">
+                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-full border-4 border-black/10 overflow-hidden shadow-lg group-hover:scale-105 transition-transform">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={c.avatar_url} alt={c.login} className="w-full h-full object-cover" />
+                    </div>
+                  </div>
+
+                  {/* Info */}
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-black font-black text-base md:text-lg uppercase tracking-tighter truncate">
                       {c.login}
                     </h3>
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 h-2 bg-black/10 border-2 border-black">
-                        <div
-                          className="h-full bg-black transition-all duration-500"
-                          style={{ width: `${Math.min((c.contributions / topContributor.contributions) * 100, 100)}%` }}
-                        />
+                    <div className="flex items-center gap-4 mt-1">
+                      <div className="flex flex-col">
+                        <span className="text-[8px] font-black uppercase opacity-30">Commits</span>
+                        <span className="text-xs font-black">{c.contributions}</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[8px] font-black uppercase opacity-30">Impact</span>
+                        <span className="text-xs font-black">{Math.round((c.contributions / (topContributor?.contributions || 1)) * 100)}%</span>
                       </div>
                     </div>
-                    <p className="text-xs font-black uppercase tracking-widest opacity-60">
-                      {c.contributions.toLocaleString()} commits
-                    </p>
                   </div>
-                </div>
-              </a>
-            );
-          })}
+                  
+                  {/* Action Icon */}
+                  <div className="text-black/20 group-hover:text-black transition-colors">
+                    <span className="material-symbols-outlined text-xl">north_east</span>
+                  </div>
+                </a>
+              );
+            })
+          )}
         </div>
-      )}
+      </div>
 
+      {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex flex-col gap-6 bg-white border-4 border-black p-4 sm:p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-center w-full">
+        <div className="flex flex-col gap-8 bg-white border-4 border-black p-6 sm:p-10 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]">
+          {/* Page info */}
+          <div className="flex items-center justify-between border-b-4 border-black pb-4">
+            <div className="font-black uppercase text-base tracking-[0.2em]">
+              Dispatch <span className="text-yellow-500">#{currentPage}</span> / {totalPages}
+            </div>
+            <div className="font-bold uppercase text-[10px] tracking-widest opacity-40">
+              {startIndex + 1}-{Math.min(endIndex, filteredContributors.length)} OF {filteredContributors.length} MEMBERS
+            </div>
+          </div>
+
+          {/* Pagination controls */}
+          <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between w-full">
+            {/* Previous */}
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="w-full sm:w-auto px-4 sm:px-8 py-3 sm:py-4 border-4 border-black font-black uppercase text-xs sm:text-sm text-center bg-white disabled:opacity-30 disabled:cursor-not-allowed shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+              className="group relative flex-1 sm:flex-none"
             >
-              ← Previous
+              <div className="absolute inset-0 bg-black translate-x-1 translate-y-1 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform disabled:opacity-0" />
+              <div className="relative px-8 py-4 border-4 border-black font-black uppercase text-sm bg-white disabled:opacity-30 disabled:cursor-not-allowed transition-all group-active:translate-x-1 group-active:translate-y-1">
+                ← PREVIOUS
+              </div>
             </button>
 
-            <div className="order-first sm:order-none font-black uppercase text-xs sm:text-sm tracking-widest px-2 sm:px-4 text-center">
-              Page {currentPage} / {totalPages}
+            <div className="flex gap-2 justify-center">
+              {Array.from({ length: Math.min(5, totalPages) }).map((_, i) => {
+                let pageNum = currentPage;
+                if (currentPage <= 3) pageNum = i + 1;
+                else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
+                else pageNum = currentPage - 2 + i;
+
+                if (pageNum <= 0 || pageNum > totalPages) return null;
+
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => setCurrentPage(pageNum)}
+                    className={`w-10 h-10 border-4 border-black font-black flex items-center justify-center transition-all ${currentPage === pageNum ? 'bg-yellow-400 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : 'bg-white hover:bg-black hover:text-white'
+                      }`}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
             </div>
 
+            {/* Next */}
             <button
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="w-full sm:w-auto px-4 sm:px-8 py-3 sm:py-4 border-4 border-black font-black uppercase text-xs sm:text-sm text-center bg-white disabled:opacity-30 disabled:cursor-not-allowed shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+              className="group relative flex-1 sm:flex-none"
             >
-              Next →
+              <div className="absolute inset-0 bg-black translate-x-1 translate-y-1 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform disabled:opacity-0" />
+              <div className="relative px-8 py-4 border-4 border-black font-black uppercase text-sm bg-white disabled:opacity-30 disabled:cursor-not-allowed transition-all group-active:translate-x-1 group-active:translate-y-1">
+                NEXT →
+              </div>
             </button>
           </div>
-          
+
           {/* View All Button */}
-          <div className="flex justify-center">
-            <a 
+          <div className="flex justify-center pt-8">
+            <a
               href="https://github.com/KERALACODERSCAFE/Keralacoderscafe/graphs/contributors"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex w-full sm:w-auto justify-center items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-kcc-gold text-black border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all font-black uppercase text-xs sm:text-sm tracking-widest"
+              className="group relative inline-flex items-center gap-6 px-16 py-6 bg-black text-white border-4 border-black overflow-hidden transition-all hover:bg-yellow-400 hover:text-black"
             >
-              View all contributors
-              <span className="material-symbols-outlined text-xl">open_in_new</span>
+              <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 skew-x-12" />
+              <span className="relative font-black uppercase text-base tracking-[0.4em]">ACCESS_GLOBAL_DATA</span>
+              <span className="material-symbols-outlined relative text-2xl group-hover:rotate-45 transition-transform">
+                analytics
+              </span>
             </a>
           </div>
         </div>
@@ -341,7 +579,7 @@ function BespokeProjectDetail({ content }: { content: ProjectContent }) {
                   href={content.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-white text-black border-4 border-black px-6 md:px-10 py-3 md:py-5 text-lg md:text-2xl font-black uppercase shadow-[8px_8px_0px_0px_rgba(255,200,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-[255,200,0,1] transition-all text-center inline-flex items-center gap-3"
+                  className="bg-white text-black border-4 border-black px-6 md:px-10 py-3 md:py-5 text-lg md:text-2xl font-black uppercase shadow-[8px_8px_0px_0px_rgba(255,200,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(255,200,0,1)] transition-all text-center inline-flex items-center gap-3"
                 >
                   <svg className="w-6 h-6 md:w-8 md:h-8 fill-current" viewBox="0 0 24 24">
                     <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
@@ -375,40 +613,35 @@ function BespokeProjectDetail({ content }: { content: ProjectContent }) {
           )}
         </section>
 
-        {/* Vision & Progress */}
-        <section className="grid md:grid-cols-2 gap-6 md:gap-8">
-          <div className="bg-white border-4 border-black p-6 md:p-12 shadow-[8px_8px_0px_0px_rgba(0,74,34,1)] relative overflow-hidden">
-            <div className="absolute -top-3 -left-2 bg-black text-white px-4 py-2 font-black text-xs uppercase tracking-widest border-2 border-black z-10">Our Vision</div>
-            <h2 className="text-2xl md:text-5xl font-black uppercase mb-6 tracking-tighter pt-4 leading-none">The Trusted <span className="text-green-600 underline">Discovery</span> Platform</h2>
-            <p className="leading-relaxed font-bold text-lg opacity-80 mb-6">{vision}</p>
-          </div>
-          <div className="bg-yellow-400 border-4 border-black p-6 md:p-12 shadow-[8px_8px_0px_0px_rgba(0,106,52,1)] relative">
-            <div className="absolute -top-3 -left-2 bg-secondary text-white px-4 py-2 font-black text-xs uppercase tracking-widest border-2 border-black z-10">Project Progress</div>
-            <h2 className="text-2xl md:text-5xl font-black uppercase mb-6 tracking-tighter pt-4 leading-none">{progress.phase}</h2>
-            <p className="leading-relaxed opacity-75 font-bold mb-8">Platform is currently in community-vetting phase. Volunteers are mapping local shops and verifying hygiene standards across three districts.</p>
-            <div className="space-y-6">
-              {progress.stages.map((stage) => (
-                <div key={stage.label} className="space-y-2">
-                  <div className="flex justify-between items-center font-black uppercase text-[10px] md:text-xs tracking-widest">
-                    <span>{stage.label}</span>
-                    <span>{stage.percentage === 0 ? "Not Started" : `${stage.percentage}%`}</span>
-                  </div>
-                  <div className="h-4 bg-white border-2 border-black rounded-sm overflow-hidden flex">
-                    <div className="h-full bg-black transition-all duration-1000 shadow-[inset_-2px_0px_0px_0px_rgba(255,255,255,0.3)]" style={{ width: `${stage.percentage}%` }}></div>
-                  </div>
+        {/* Project Progress */}
+        <section className="bg-yellow-400 border-4 border-black p-6 md:p-12 shadow-[12px_12px_0px_0px_rgba(0,106,52,1)] relative">
+          <div className="absolute -top-3 -left-2 bg-secondary text-white px-4 py-2 font-black text-xs uppercase tracking-widest border-2 border-black z-10">Project Progress</div>
+          <h2 className="text-2xl md:text-5xl font-black uppercase mb-6 tracking-tighter pt-4 leading-none">{progress.phase}</h2>
+          <p className="leading-relaxed opacity-75 font-bold mb-8">Platform is currently in community-vetting phase. Volunteers are mapping local shops and verifying hygiene standards across three districts.</p>
+          <div className="space-y-6">
+            {progress.stages.map((stage) => (
+              <div key={stage.label} className="space-y-2">
+                <div className="flex justify-between items-center font-black uppercase text-[10px] md:text-xs tracking-widest">
+                  <span>{stage.label}</span>
+                  <span>{stage.percentage === 0 ? "Not Started" : `${stage.percentage}%`}</span>
                 </div>
-              ))}
-              <div className="pt-4 border-t-2 border-black/10">
-                <div className="flex justify-between items-center font-black uppercase text-sm tracking-tighter">
-                  <span>Overall Status</span>
-                  <span className="bg-black text-yellow-400 px-2">
-                    {Math.round(progress.stages.reduce((acc, s) => acc + s.percentage, 0) / progress.stages.length)}% Complete
-                  </span>
+                <div className="h-4 bg-white border-2 border-black rounded-sm overflow-hidden flex">
+                  <div className="h-full bg-black transition-all duration-1000 shadow-[inset_-2px_0px_0px_0px_rgba(255,255,255,0.3)]" style={{ width: `${stage.percentage}%` }}></div>
                 </div>
+              </div>
+            ))}
+            <div className="pt-4 border-t-2 border-black/10">
+              <div className="flex justify-between items-center font-black uppercase text-sm tracking-tighter">
+                <span>Overall Status</span>
+                <span className="bg-black text-yellow-400 px-2">
+                  {Math.round(progress.stages.reduce((acc, s) => acc + s.percentage, 0) / progress.stages.length)}% Complete
+                </span>
               </div>
             </div>
           </div>
         </section>
+
+        <ProjectPulse repoUrl={content.github} />
 
         {/* Features for Users */}
         <section>
@@ -420,47 +653,14 @@ function BespokeProjectDetail({ content }: { content: ProjectContent }) {
           </div>
         </section>
 
-        {/* Features for Owners */}
-        <section className="bg-white border-4 border-black p-10 md:p-20 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]">
-          <h2 className="text-2xl md:text-5xl font-black uppercase mb-12 tracking-tighter">For Business Owners</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            {ownerFeatures.map((f) => (
-              <div key={f.label} className="flex gap-6 items-start group">
-                <div className={`${f.bg} border-4 border-black p-3 group-hover:rotate-6 transition-transform`}>
-                  <span className="material-symbols-outlined text-4xl">{f.icon}</span>
-                </div>
-                <div className="space-y-2">
-                  <h3 className="font-black text-xl uppercase tracking-tight">{f.label.split(":")[0]}</h3>
-                  <p className="font-bold opacity-60 leading-tight">{f.label}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Why Platform */}
-        <section className="grid lg:grid-cols-2 gap-12 items-center">
-          <h2 className="text-3xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9]">Why this <br /> <span className="bg-red-400 px-3">Platform?</span></h2>
-          <div className="space-y-4">
-            {why.map((reason, idx) => (
-              <div key={idx} className="flex items-center gap-4 group">
-                <div className="w-12 h-12 bg-black text-white flex items-center justify-center font-black text-2xl border-2 border-black group-hover:bg-yellow-400 group-hover:text-black transition-all">{idx + 1}</div>
-                <p className="font-black uppercase text-lg md:text-2xl tracking-tighter group-hover:translate-x-2 transition-transform">{reason}</p>
-              </div>
-            ))}
-          </div>
-        </section>
 
         {/* Team — Live Contributors */}
-        <section>
-          <div className="mb-10 md:mb-16 text-center">
+        <section className="space-y-12">
+          <div className="mb-10 md:mb-16 text-center space-y-4">
             <h2 className="text-3xl md:text-6xl font-black uppercase tracking-tighter">Contribution Member List</h2>
-            <p className="font-bold uppercase tracking-widest opacity-60 mt-4 underline decoration-black underline-offset-4 decoration-2">Building Kerala&apos;s Digital Heritage</p>
-            <div className="mt-4 inline-flex items-center gap-3 border-2 border-black bg-white px-4 py-2 text-xs font-black uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-              <span className="h-3 w-3 border-2 border-black bg-emerald-500" />
-              LIVE FROM GITHUB
-            </div>
+            <p className="font-bold uppercase tracking-widest opacity-60 underline decoration-black underline-offset-4 decoration-2">Building Kerala&apos;s Digital Heritage</p>
           </div>
+          
           <LiveContributors />
         </section>
 
@@ -474,7 +674,7 @@ function BespokeProjectDetail({ content }: { content: ProjectContent }) {
               Protecting Tradition
             </h2>
             <p className="text-lg md:text-3xl font-medium leading-relaxed opacity-90 border-l-4 border-yellow-400 pl-8 text-left italic">
-              This project is not just a listing platform. It is a community-driven initiative to promote Kerala’s traditional food culture, support local businesses, and help people discover the best local experiences.
+              This project is not just a listing platform. It is a community-driven initiative to promote Kerala's traditional food culture, support local businesses, and help people discover the best local experiences.
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <a 
@@ -492,6 +692,8 @@ function BespokeProjectDetail({ content }: { content: ProjectContent }) {
     </DiagonalGrid>
   );
 }
+
+/* ─── Generic Project Detail ─────────────────────────────────────── */
 
 function GenericProjectDetail({ project }: { project: Project }) {
   return (
@@ -561,7 +763,7 @@ function GenericProjectDetail({ project }: { project: Project }) {
         </section>
 
         {/* Contributors Section */}
-        <section className="pt-16 border-t-8 border-black">
+        <section className="pt-16 border-t-8 border-black space-y-12">
           <div className="mb-16 text-center space-y-4">
             <h2 className="text-4xl md:text-7xl font-black uppercase tracking-tighter">Community Effort</h2>
             <div className="inline-flex items-center gap-3 border-2 border-black bg-white px-4 py-2 text-xs font-black uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
@@ -569,6 +771,7 @@ function GenericProjectDetail({ project }: { project: Project }) {
               LIVE REPO STATS
             </div>
           </div>
+          <ProjectPulse repoUrl={project.github} />
           <LiveContributors />
         </section>
 
