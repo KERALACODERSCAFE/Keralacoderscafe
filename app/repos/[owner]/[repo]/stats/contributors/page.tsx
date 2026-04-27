@@ -35,7 +35,7 @@ export default function RepoStatsPage({ params }: { params: Promise<{ owner: str
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/stats/commit_activity`);
+        const response = await fetch(`/api/github?endpoint=repos/${owner}/${repo}/stats/commit_activity`);
         if (!response.ok) {
           if (response.status === 404) throw new Error("Repo not found");
           if (response.status === 202) {

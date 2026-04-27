@@ -74,7 +74,7 @@ function ProjectPulse({ repoUrl }: { repoUrl?: string }) {
     let retryCount = 0;
     const fetchStats = async () => {
       try {
-        const response = await fetch(`https://api.github.com/repos/${repoPath}/stats/punch_card`);
+        const response = await fetch(`/api/github?endpoint=repos/${repoPath}/stats/punch_card`);
         
         if (response.status === 202 && retryCount < 3) {
           retryCount++;
@@ -249,7 +249,7 @@ function LiveContributors() {
 
   useEffect(() => {
     const REPOS_TO_FETCH = [
-      "https://api.github.com/repos/KERALACODERSCAFE/Kerala-toddy-finder/contributors?per_page=100",
+      "/api/github?endpoint=repos/KERALACODERSCAFE/Kerala-toddy-finder/contributors?per_page=100",
     ];
 
     Promise.allSettled(
