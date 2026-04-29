@@ -483,6 +483,11 @@ function LiveContributors() {
 
 function BespokeProjectDetail({ content }: { content: ProjectContent }) {
   const { hero, userFeatures, ownerFeatures, why, team, progress, vision } = content;
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <DiagonalGrid className="bg-background text-on-background font-body min-h-screen">
@@ -563,30 +568,71 @@ function BespokeProjectDetail({ content }: { content: ProjectContent }) {
         </section>
 
         {/* Project Progress */}
-        <section className="bg-yellow-400 border-4 border-black p-6 md:p-12 shadow-[12px_12px_0px_0px_rgba(0,106,52,1)] relative">
-          <div className="absolute -top-3 -left-2 bg-secondary text-white px-4 py-2 font-black text-xs uppercase tracking-widest border-2 border-black z-10">Project Progress</div>
-          <h2 className="text-2xl md:text-5xl font-black uppercase mb-6 tracking-tighter pt-4 leading-none">{progress.phase}</h2>
-          <p className="leading-relaxed opacity-75 font-bold mb-8">Platform is currently in community-vetting phase. Volunteers are mapping local shops and verifying hygiene standards across three districts.</p>
-          <div className="space-y-6">
-            {progress.stages.map((stage) => (
-              <div key={stage.label} className="space-y-2">
-                <div className="flex justify-between items-center font-black uppercase text-[10px] md:text-xs tracking-widest">
-                  <span>{stage.label}</span>
-                  <span>{stage.percentage === 0 ? "Not Started" : `${stage.percentage}%`}</span>
+        <section className="bg-[#fcfcfc] border-4 border-black p-6 md:p-12 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] relative">
+          <div className="absolute -top-3 -left-2 bg-black text-white px-4 py-2 font-black text-xs uppercase tracking-widest border-2 border-black z-10">Project Progress</div>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-5xl font-serif text-[#333] pt-4 leading-none">Progress Bar Design</h2>
+          </div>
+          
+          <div className="space-y-2">
+            {progress.stages.map((stage, index) => {
+              const themes = [
+                { border: 'border-[#4a8fb9]', fill: 'bg-[#4a8fb9]', text: 'text-[#4a8fb9]', icon: 'visibility' },
+                { border: 'border-[#a8327b]', fill: 'bg-[#a8327b]', text: 'text-[#a8327b]', icon: 'tune' },
+                { border: 'border-[#4bb3bd]', fill: 'bg-[#4bb3bd]', text: 'text-[#4bb3bd]', icon: 'hourglass_empty' },
+                { border: 'border-[#e45a6c]', fill: 'bg-[#e45a6c]', text: 'text-[#e45a6c]', icon: 'headset_mic' },
+                { border: 'border-[#f09c3e]', fill: 'bg-[#f09c3e]', text: 'text-[#f09c3e]', icon: 'construction' },
+                { border: 'border-[#6c5ce7]', fill: 'bg-[#6c5ce7]', text: 'text-[#6c5ce7]', icon: 'code' },
+              ];
+              const theme = themes[index % themes.length];
+              const totalSegments = 40;
+              const filledSegments = Math.round((stage.percentage / 100) * totalSegments);
+
+              return (
+                <div key={stage.label}>
+                  <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2 md:gap-8 w-full py-4">
+                    {/* Mobile Header (Icon + Label + Percentage) */}
+                    <div className="flex items-center justify-between w-full md:w-64 shrink-0">
+                      <div className="flex items-center gap-3 md:gap-4">
+                        <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full ${theme.fill} text-white flex items-center justify-center shadow-[inset_0_-5px_10px_rgba(0,0,0,0.2)] border-2 border-[#fcfcfc] drop-shadow-md shrink-0`}>
+                          <span className="material-symbols-outlined text-base md:text-xl">{theme.icon}</span>
+                        </div>
+                        <span className={`font-serif text-base md:text-xl ${theme.text} leading-tight`}>{stage.label}</span>
+                      </div>
+                      {/* Percentage on Mobile Only */}
+                      <div className={`md:hidden font-serif text-lg font-bold ${theme.text}`}>
+                        {stage.percentage}%
+                      </div>
+                    </div>
+
+                    {/* Middle: Progress Bar */}
+                    <div className={`w-full md:flex-1 h-6 md:h-10 shrink-0 border-[3px] md:border-[4px] ${theme.border} rounded-lg md:rounded-xl flex items-center p-[2px] md:p-1 gap-[1px] md:gap-[2px] bg-white shadow-sm`}>
+                      {Array.from({ length: totalSegments }).map((_, i) => (
+                        <div 
+                          key={i} 
+                          className={`h-full flex-1 rounded-[1px] md:rounded-[2px] transition-all duration-700 ease-out ${
+                            i < (mounted ? filledSegments : 0) 
+                              ? theme.fill 
+                              : 'bg-[#d1d5db]'
+                          }`}
+                          style={{ transitionDelay: `${i * 10}ms` }}
+                        />
+                      ))}
+                    </div>
+
+                    {/* Right: Percentage on Desktop Only */}
+                    <div className={`hidden md:block w-16 text-right font-serif text-xl md:text-2xl ${theme.text} shrink-0`}>
+                      {stage.percentage}%
+                    </div>
+                  </div>
+                  
+                  {/* Dashed Separator */}
+                  {index < progress.stages.length - 1 && (
+                    <div className="border-b border-dashed border-gray-400 w-full mt-2 opacity-50" />
+                  )}
                 </div>
-                <div className="h-4 bg-white border-2 border-black rounded-sm overflow-hidden flex">
-                  <div className="h-full bg-black transition-all duration-1000 shadow-[inset_-2px_0px_0px_0px_rgba(255,255,255,0.3)]" style={{ width: `${stage.percentage}%` }}></div>
-                </div>
-              </div>
-            ))}
-            <div className="pt-4 border-t-2 border-black/10">
-              <div className="flex justify-between items-center font-black uppercase text-sm tracking-tighter">
-                <span>Overall Status</span>
-                <span className="bg-black text-yellow-400 px-2">
-                  {Math.round(progress.stages.reduce((acc, s) => acc + s.percentage, 0) / progress.stages.length)}% Complete
-                </span>
-              </div>
-            </div>
+              );
+            })}
           </div>
         </section>
 
