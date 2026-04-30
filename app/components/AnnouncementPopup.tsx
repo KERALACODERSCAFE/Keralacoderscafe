@@ -63,7 +63,7 @@ export default function AnnouncementPopup() {
         {/* Close Button */}
         <button
           onClick={handleClose}
-          className="absolute -top-4 -right-4 bg-white border-2 border-black p-1 hover:bg-red-400 transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-1 active:translate-y-1 active:shadow-none"
+          className="absolute -top-4 -right-4 bg-white border-2 border-black p-1 hover:bg-red-400 transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-1 active:translate-y-1 active:shadow-none z-10"
         >
           <X className="w-6 h-6" />
         </button>
