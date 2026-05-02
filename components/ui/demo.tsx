@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import { useState } from "react";
 
 /**
  * DiagonalGrid provides a sophisticated background layer with 

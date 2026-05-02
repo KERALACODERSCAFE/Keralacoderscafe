@@ -1,7 +1,6 @@
 "use client";
 
 import { use, useState, useEffect } from "react";
-import { notFound } from "next/navigation";
 import DiagonalGrid from "@/components/ui/demo";
 import BackgroundGlow from "@/components/ui/background-components";
 
