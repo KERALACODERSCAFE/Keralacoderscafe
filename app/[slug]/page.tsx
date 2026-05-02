@@ -239,8 +239,8 @@ function LiveContributors() {
   useEffect(() => {
     // Responsive items per page
     const updateItemsPerPage = () => {
-      if (window.innerWidth < 640) setItemsPerPage(4);
-      else if (window.innerWidth < 1024) setItemsPerPage(8);
+      if (window.innerWidth < 640) setItemsPerPage(10);
+      else if (window.innerWidth < 1024) setItemsPerPage(12);
       else setItemsPerPage(12);
     };
     updateItemsPerPage();
@@ -312,10 +312,10 @@ function LiveContributors() {
         </div>
 
         {/* Loading skeleton for grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="bg-[#1a1a1a] border-[3px] border-zinc-800 rounded-xl p-4 flex gap-4 shadow-none">
-              <div className="w-12 h-12 md:w-16 md:h-16 rounded-full border-4 border-zinc-700 bg-zinc-800 animate-pulse shrink-0" />
+            <div key={i} className="bg-[#1a1a1a] border-[3px] border-zinc-800 rounded-xl p-3 sm:p-2 md:p-4 flex gap-3 sm:gap-2 md:gap-4 shadow-none">
+              <div className="w-10 h-10 sm:w-8 sm:h-8 md:w-16 md:h-16 rounded-full border-4 border-zinc-700 bg-zinc-800 animate-pulse shrink-0" />
               <div className="flex-1 space-y-2 mt-2">
                 <div className="h-4 bg-zinc-700 rounded-sm animate-pulse w-3/4" />
                 <div className="h-3 w-1/2 bg-zinc-800 rounded-sm animate-pulse" />
@@ -385,7 +385,7 @@ function LiveContributors() {
         )}
 
         {/* Contributors List */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-4">
           {currentContributors.length === 0 ? (
             <div className="col-span-full text-center py-20 bg-black/5 border-2 border-black/10 rounded-xl">
               <div className="text-6xl mb-4">🔍</div>
@@ -414,16 +414,16 @@ function LiveContributors() {
                   href={c.html_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`group relative flex items-center gap-4 p-4 bg-[#1a1a1a] border-[3px] ${theme.border} rounded-xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all`}
+                  className={`group relative flex items-center gap-3 sm:gap-2 md:gap-4 p-3 sm:p-2 md:p-4 bg-[#1a1a1a] border-[3px] ${theme.border} rounded-xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all`}
                 >
                   {/* Rank Number */}
-                  <div className={`w-8 text-center font-black ${theme.text} text-xl md:text-2xl opacity-80`}>
+                  <div className={`w-8 sm:w-6 md:w-8 text-center font-black ${theme.text} text-xl sm:text-lg md:text-2xl opacity-80`}>
                     {rank}
                   </div>
 
                   {/* Avatar */}
                   <div className="relative shrink-0">
-                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-full border-[3px] border-black/50 overflow-hidden shadow-lg group-hover:scale-105 transition-transform">
+                    <div className="w-10 h-10 sm:w-8 sm:h-8 md:w-12 md:h-12 rounded-full border-[3px] border-black/50 overflow-hidden shadow-lg group-hover:scale-105 transition-transform">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={c.avatar_url} alt={c.login} className="w-full h-full object-cover" />
                     </div>
@@ -431,24 +431,24 @@ function LiveContributors() {
 
                   {/* Info */}
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-white font-black text-base md:text-lg uppercase tracking-tighter truncate">
+                    <h3 className="text-white font-black text-base sm:text-sm md:text-base uppercase tracking-tighter truncate">
                       {c.login}
                     </h3>
-                    <div className="flex items-center gap-4 mt-1">
+                    <div className="flex items-center gap-3 sm:gap-2 md:gap-4 mt-1">
                       <div className="flex flex-col">
-                        <span className={`text-[8px] font-black uppercase opacity-60 ${theme.text}`}>Commits</span>
-                        <span className="text-xs font-black text-white">{c.contributions}</span>
+                        <span className={`text-[8px] sm:text-[6px] md:text-[8px] font-black uppercase opacity-60 ${theme.text}`}>Commits</span>
+                        <span className="text-xs sm:text-[10px] md:text-xs font-black text-white">{c.contributions}</span>
                       </div>
                       <div className="flex flex-col">
-                        <span className={`text-[8px] font-black uppercase opacity-60 ${theme.text}`}>Impact</span>
-                        <span className="text-xs font-black text-white">{Math.round((c.contributions / (topContributor?.contributions || 1)) * 100)}%</span>
+                        <span className={`text-[8px] sm:text-[6px] md:text-[8px] font-black uppercase opacity-60 ${theme.text}`}>Impact</span>
+                        <span className="text-xs sm:text-[10px] md:text-xs font-black text-white">{Math.round((c.contributions / (topContributor?.contributions || 1)) * 100)}%</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Action Icon */}
                   <div className={`${theme.text} opacity-50 group-hover:opacity-100 transition-colors`}>
-                    <span className="material-symbols-outlined text-xl">north_east</span>
+                    <span className="material-symbols-outlined text-xl sm:text-lg md:text-xl">north_east</span>
                   </div>
                 </a>
               );
