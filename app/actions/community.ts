@@ -24,15 +24,24 @@ export async function getCommunityInvite(
   const task = whatsappGateTasks[taskKey];
   if (!task) return { error: "Invalid task." };
 
+  const submittedAnswers = Object.entries(answers);
+  const minimumAnswers = Math.min(3, task.questions.length);
+
+  if (submittedAnswers.length < minimumAnswers) {
+    return { error: "Please answer all questions." };
+  }
+
+  const questionsById = new Map(task.questions.map((q) => [q.id, q.answer]));
+
   // 3. Server-side Score Calculation (Safety First)
   let correctCount = 0;
-  task.questions.forEach((q) => {
-    if (answers[q.id] === q.answer) {
+  submittedAnswers.forEach(([questionId, answer]) => {
+    if (questionsById.get(questionId) === answer) {
       correctCount++;
     }
   });
 
-  if (correctCount === task.questions.length) {
+  if (correctCount === submittedAnswers.length) {
     // Perfect score! Reveal WhatsApp Link
     return {
       type: "whatsapp",

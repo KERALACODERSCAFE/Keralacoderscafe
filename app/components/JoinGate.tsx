@@ -3,21 +3,58 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, CheckCircle2, MessageCircle, ChevronRight, XCircle, Loader2, Send } from "lucide-react";
-import { whatsappGateTaskList, LanguageTask, majorStates } from "../data/whatsappGate";
+import { whatsappGateTaskList, majorStates } from "../data/whatsappGate";
+import type { LanguageQuestion, LanguageTask } from "../data/whatsappGate";
 import { getCommunityInvite } from "../actions/community";
 
 interface JoinGateProps {
   onStatusChange?: (isSubmitted: boolean) => void;
 }
 
+const QUESTIONS_PER_ATTEMPT = 3;
+
+function shuffleQuestions(questions: LanguageQuestion[]) {
+  const shuffled = [...questions];
+
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
+  return shuffled;
+}
+
+function pickRandomQuestions(
+  questions: LanguageQuestion[],
+  previousQuestions: LanguageQuestion[] = []
+) {
+  const previousIds = new Set(previousQuestions.map((question) => question.id));
+  const freshQuestions = questions.filter((question) => !previousIds.has(question.id));
+  const candidateQuestions =
+    freshQuestions.length >= QUESTIONS_PER_ATTEMPT ? freshQuestions : questions;
+
+  return shuffleQuestions(candidateQuestions).slice(
+    0,
+    Math.min(QUESTIONS_PER_ATTEMPT, candidateQuestions.length)
+  );
+}
+
 export default function JoinGate({ onStatusChange }: JoinGateProps) {
   const [selectedState, setSelectedState] = useState<string | null>(null);
   const [selectedTask, setSelectedTask] = useState<LanguageTask | null>(null);
+  const [activeQuestions, setActiveQuestions] = useState<LanguageQuestion[]>([]);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [inviteLink, setInviteLink] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [resultPopup, setResultPopup] = useState<"success" | "failure" | null>(null);
+
+  const startTask = (task: LanguageTask) => {
+    setSelectedTask(task);
+    setActiveQuestions(pickRandomQuestions(task.questions));
+    setAnswers({});
+    setError(null);
+  };
 
   const handleOptionSelect = (questionId: string, option: string) => {
     setAnswers((prev) => ({ ...prev, [questionId]: option }));
@@ -28,7 +65,6 @@ export default function JoinGate({ onStatusChange }: JoinGateProps) {
     const res = await getCommunityInvite(stateName);
     if ("link" in res) {
       setInviteLink(res.link || null);
-      setIsSubmitted(true);
       onStatusChange?.(true);
     }
     setIsSubmitting(false);
@@ -42,24 +78,31 @@ export default function JoinGate({ onStatusChange }: JoinGateProps) {
 
     if ("link" in res) {
       setInviteLink(res.link || null);
-      setIsSubmitted(true);
       onStatusChange?.(true);
+      setResultPopup("success");
     } else if ("error" in res) {
-      setError(res.error || "Verification failed.");
-      setIsSubmitted(true);
-      onStatusChange?.(true);
+      setError(res.error || "Verification failed. Try this new set.");
+      setAnswers({});
+      setActiveQuestions(pickRandomQuestions(selectedTask.questions, activeQuestions));
+      setResultPopup("failure");
     }
     setIsSubmitting(false);
+  };
+
+  const handleTryAgain = () => {
+    setResultPopup(null);
+    setError(null);
   };
 
   const reset = () => {
     setSelectedState(null);
     setSelectedTask(null);
+    setActiveQuestions([]);
     setAnswers({});
-    setIsSubmitted(false);
     onStatusChange?.(false);
     setInviteLink(null);
     setError(null);
+    setResultPopup(null);
   };
 
   // ─── STEP 0: Select State ───
@@ -160,7 +203,7 @@ export default function JoinGate({ onStatusChange }: JoinGateProps) {
             {whatsappGateTaskList.map((task) => (
               <button
                 key={task.key}
-                onClick={() => setSelectedTask(task)}
+                onClick={() => startTask(task)}
                 className="group flex flex-col border-3 border-black bg-white p-5 text-left transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:bg-kcc-gold hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
               >
                 <span className="mb-2 inline-block self-start border-2 border-black bg-kcc-green px-2 py-0.5 text-[0.65rem] font-black uppercase tracking-widest text-black">
@@ -177,60 +220,18 @@ export default function JoinGate({ onStatusChange }: JoinGateProps) {
     );
   }
 
-  // ─── STEP 3: Result ───
-  if (isSubmitted) {
-    const isSuccess = !!inviteLink;
-
-    return (
-      <div className="mx-auto max-w-xl px-6 py-20">
-        <div className={`border-4 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] ${isSuccess ? "bg-kcc-green" : "bg-white"}`}>
-          {isSuccess ? (
-            <div className="text-center">
-              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border-4 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]">
-                <CheckCircle2 className="h-10 w-10 text-black" />
-              </div>
-              <h2 className="text-3xl font-black uppercase text-black leading-tight">Verification Successful!</h2>
-              <p className="mt-4 text-lg font-bold text-black/80">
-                You're in! Join our verified Kerala WhatsApp community below.
-              </p>
-
-              <Link
-                href={inviteLink || "#"}
-                target="_blank"
-                rel="noopener"
-                className="mt-8 inline-flex h-16 w-full items-center justify-center gap-3 border-3 border-black bg-black px-8 text-lg font-black uppercase text-white shadow-[6px_6px_0px_0px_rgba(37,211,102,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[8px_8px_0px_0px_rgba(37,211,102,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
-              >
-                <MessageCircle className="h-5 w-5 stroke-[3]" />
-                Join (WhatsApp)
-              </Link>
-            </div>
-          ) : (
-            <div className="text-center">
-              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border-4 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]">
-                <XCircle className="h-10 w-10 text-red-500" />
-              </div>
-              <h2 className="text-3xl font-black uppercase text-black">Not quite right...</h2>
-              <p className="mt-4 text-lg font-bold text-black/80">
-                {error || "Verification failed. Please try again to unlock the link!"}
-              </p>
-
-              <button
-                onClick={reset}
-                className="mt-8 inline-flex h-14 w-full items-center justify-center gap-2 border-3 border-black bg-kcc-gold font-black uppercase text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] transition-all"
-              >
-                Try Again
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
-
   // ─── STEP 2: Answer Questions ───
   return (
     <div className="mx-auto max-w-2xl px-6 py-20">
-      <button onClick={() => setSelectedTask(null)} className="mb-8 inline-flex items-center gap-2 font-black uppercase tracking-tight hover:underline">
+      <button
+        onClick={() => {
+          setSelectedTask(null);
+          setActiveQuestions([]);
+          setAnswers({});
+          setError(null);
+        }}
+        className="mb-8 inline-flex items-center gap-2 font-black uppercase tracking-tight hover:underline"
+      >
         <ArrowLeft className="h-4 w-4" /> Change Language
       </button>
 
@@ -245,10 +246,15 @@ export default function JoinGate({ onStatusChange }: JoinGateProps) {
           <p className="mt-3 font-bold text-black/60 italic">
             Hint: {selectedTask.hint}
           </p>
+          {error && (
+            <p className="mt-4 border-2 border-red-500 bg-red-50 px-4 py-3 text-sm font-black uppercase text-red-700">
+              Here are three new random questions.
+            </p>
+          )}
         </div>
 
         <div className="space-y-10">
-          {selectedTask.questions.map((q, idx) => (
+          {activeQuestions.map((q, idx) => (
             <div key={q.id}>
               <h3 className="flex gap-3 text-xl font-black text-black">
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center border-2 border-black bg-kcc-gold text-sm shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
@@ -276,13 +282,70 @@ export default function JoinGate({ onStatusChange }: JoinGateProps) {
 
         <button
           onClick={handleSubmit}
-          disabled={Object.keys(answers).length < selectedTask.questions.length || isSubmitting}
+          disabled={Object.keys(answers).length < activeQuestions.length || isSubmitting}
           className="mt-12 inline-flex h-16 w-full items-center justify-center gap-3 border-3 border-black bg-black px-8 text-xl font-black uppercase text-white shadow-[6px_6px_0px_0px_rgba(0,0,0,0.1)] transition-all enabled:shadow-[6px_6px_0px_0px_rgba(0,229,255,1)] enabled:hover:translate-x-[-2px] enabled:hover:translate-y-[-2px] enabled:hover:shadow-[8px_8px_0px_0px_rgba(0,229,255,1)] disabled:opacity-50"
         >
           {isSubmitting ? <Loader2 className="animate-spin" /> : "Check Answers"} <ChevronRight className="h-5 w-5 stroke-[4]" />
         </button>
       </div>
+
+      {resultPopup && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 px-5">
+          <div
+            className={`w-full max-w-xl border-4 border-black p-8 text-center shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] ${
+              resultPopup === "success" ? "bg-kcc-green" : "bg-white"
+            }`}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="join-result-title"
+          >
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border-4 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]">
+              {resultPopup === "success" ? (
+                <CheckCircle2 className="h-10 w-10 text-black" />
+              ) : (
+                <XCircle className="h-10 w-10 text-red-500" />
+              )}
+            </div>
+
+            {resultPopup === "success" ? (
+              <>
+                <h2 id="join-result-title" className="text-3xl font-black uppercase text-black leading-tight">
+                  Verification Successful!
+                </h2>
+                <p className="mt-4 text-lg font-bold text-black/80">
+                  You&apos;re in! Join our verified Kerala WhatsApp community below.
+                </p>
+
+                <Link
+                  href={inviteLink || "#"}
+                  target="_blank"
+                  rel="noopener"
+                  className="mt-8 inline-flex h-16 w-full items-center justify-center gap-3 border-3 border-black bg-black px-8 text-lg font-black uppercase text-white shadow-[6px_6px_0px_0px_rgba(37,211,102,1)] transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[8px_8px_0px_0px_rgba(37,211,102,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                >
+                  <MessageCircle className="h-5 w-5 stroke-[3]" />
+                  Join (WhatsApp)
+                </Link>
+              </>
+            ) : (
+              <>
+                <h2 id="join-result-title" className="text-3xl font-black uppercase text-black">
+                  Not quite right...
+                </h2>
+                <p className="mt-4 text-lg font-bold text-black/80">
+                  {error || "Verification failed. Please try again to unlock the link!"}
+                </p>
+
+                <button
+                  onClick={handleTryAgain}
+                  className="mt-8 inline-flex h-14 w-full items-center justify-center gap-2 border-3 border-black bg-kcc-gold font-black uppercase text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[-1px] hover:translate-y-[-1px]"
+                >
+                  Try Again
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-
