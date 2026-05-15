@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Github, MessageCircle } from "lucide-react";
 import ColourfulText from "./ColourfulText";
+import { heroMalayalam } from "../../lib/fonts";
 import { useState, useEffect, useRef } from "react";
 
 const highlights = [
@@ -105,7 +106,12 @@ export default function Hero() {
               </span>
 
               <h1 className="mt-2 max-w-[850px] text-[clamp(3.5rem,10vw,7.5rem)] font-black leading-[0.88] tracking-[-0.05em] text-black uppercase">
-                <ColourfulText text="Kerala" /> <br className="hidden sm:block" />
+                <ColourfulText
+                  text="കേരള"
+                  lang="ml"
+                  className={`${heroMalayalam.className} inline-block text-[0.98em] font-extrabold tracking-[-0.045em]`}
+                />{" "}
+                <br className="hidden sm:block" />
                 Coders
                 <span className="ml-2 bg-kcc-gold px-4 py-2 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] sm:ml-4 inline-block -rotate-2">
                   Cafe

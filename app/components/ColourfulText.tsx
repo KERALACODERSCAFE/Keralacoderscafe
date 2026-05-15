@@ -47,30 +47,48 @@ export default function ColourfulText({
     return () => clearInterval(intervalId)
   }, [colors, interval])
 
-  const characters = React.useMemo(() => text.split(""), [text])
+  const characters = React.useMemo(() => {
+    if (typeof Intl !== "undefined" && typeof Intl.Segmenter === "function") {
+      const segmenter = new Intl.Segmenter(undefined, { granularity: "grapheme" })
+      return Array.from(segmenter.segment(text), ({ segment }) => segment)
+    }
+
+    return Array.from(text)
+  }, [text])
 
   return (
-    <span data-slot="colourful-text" ref={localRef} {...(props as any)}>
-      {characters.map((char, index) => (
-        <motion.span
-          animate={{
-            color: currentColors[index % currentColors.length],
-            y: [0, -3, 0],
-            scale: [1, 1.01, 1],
-            filter: ["blur(0px)", "blur(5px)", "blur(0px)"],
-            opacity: [1, 0.8, 1],
-          }}
-          className="inline-block whitespace-pre will-change-transform will-change-opacity will-change-filter"
-          initial={{ y: 0 }}
-          key={`${char}-${count}-${index}`}
-          transition={{
-            duration: animationDuration,
-            delay: index * staggerDelay,
-          }}
-        >
-          {char}
-        </motion.span>
-      ))}
+    <span data-slot="colourful-text" ref={localRef} {...props}>
+      <motion.span
+        animate={{
+          y: [0, -4, 0],
+          scale: [1, 1.02, 1],
+          filter: ["blur(0px)", "blur(1px)", "blur(0px)"],
+        }}
+        className="inline-block will-change-transform will-change-filter"
+        initial={{ y: 0 }}
+        transition={{ duration: animationDuration + 0.1 }}
+      >
+        {characters.map((char, index) => (
+          <motion.span
+            animate={{
+              color: currentColors[index % currentColors.length],
+              y: [0, -3, 0],
+              scale: [1, 1.01, 1],
+              filter: ["blur(0px)", "blur(5px)", "blur(0px)"],
+              opacity: [1, 0.8, 1],
+            }}
+            className="inline-block whitespace-pre will-change-transform will-change-opacity will-change-filter"
+            initial={{ y: 0 }}
+            key={`${char}-${count}-${index}`}
+            transition={{
+              duration: animationDuration,
+              delay: index * staggerDelay,
+            }}
+          >
+            {char}
+          </motion.span>
+        ))}
+      </motion.span>
     </span>
   )
 }
