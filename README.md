@@ -10,7 +10,7 @@ A modern "Coming Soon" landing page for the Kerala Coders community.
 - Data: GitHub API for dynamic contributor listing
 
 ## Getting Started
-1. Clone: `git clone https://github.com/atomrobic/Keralacoderscafe.git && cd Keralacoderscafe`
+1. Clone: `git clone https://github.com/KERALACODERSCAFE/Keralacoderscafe.git && cd Keralacoderscafe`
 2. Install dependencies: `npm install`
 3. Run dev server: `npm run dev`
 4. Open: http://localhost:3000

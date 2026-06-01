@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useLenis } from "lenis/react";
 import KccCupMark from "./KccCupMark";
 
@@ -18,6 +18,7 @@ const navLinks = [
 
 export default function NavBar() {
   const pathname = usePathname();
+  const router = useRouter();
   const lenis = useLenis();
   const [activeSection, setActiveSection] = useState(() => {
     const defaultLink = navLinks.find(link => link.href === pathname);
@@ -72,19 +73,15 @@ export default function NavBar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    if (pathname !== "/") {
-      const activeLink = navLinks.find(link => link.href === pathname);
-      if (activeLink) {
-        setActiveSection(activeLink.name);
-      }
-    }
-  }, [pathname]);
+  const displayedActiveSection =
+    pathname === "/"
+      ? activeSection
+      : navLinks.find((link) => link.href === pathname)?.name ?? activeSection;
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string, name: string) => {
     if (href.startsWith("/#") && pathname !== "/") {
       e.preventDefault();
-      window.location.href = href;
+      router.push(href);
       return;
     }
 
@@ -135,7 +132,7 @@ export default function NavBar() {
                   <Link
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href, link.name)}
-                    className={`text-[10px] sm:text-xs font-bold uppercase tracking-tight transition-colors whitespace-nowrap ${activeSection === link.name
+                    className={`text-[10px] sm:text-xs font-bold uppercase tracking-tight transition-colors whitespace-nowrap ${displayedActiveSection === link.name
                       ? "text-black border-b-2 border-black"
                       : "text-black/60 hover:text-black"
                       }`}

@@ -39,3 +39,5 @@ export const memberProjectsData = [
     email: "rishnudev@gmail.com"
   }
 ];
+
+export type MemberProject = (typeof memberProjectsData)[number];

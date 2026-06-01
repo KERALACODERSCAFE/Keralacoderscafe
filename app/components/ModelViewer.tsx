@@ -14,6 +14,7 @@ import {
   Suspense,
   Component,
   ReactNode,
+  type ElementRef,
   useState,
   useRef,
   useEffect,
@@ -23,11 +24,15 @@ import { RotateCw, RefreshCw, Play } from "lucide-react";
 /* ─── Hooks ────────────────────────────────────────────────────── */
 
 function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window === "undefined"
+      ? false
+      : window.matchMedia("(max-width: 768px)").matches
+  );
+
   useEffect(() => {
     const check = () =>
       setIsMobile(window.matchMedia("(max-width: 768px)").matches);
-    check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
@@ -36,22 +41,28 @@ function useIsMobile() {
 
 /** Detect iOS vs Android for AR link selection */
 function useARPlatform() {
-  const [platform, setPlatform] = useState<"ios" | "android" | "none">("none");
-  useEffect(() => {
+  return useState<"ios" | "android" | "none">(() => {
+    if (typeof navigator === "undefined") return "none";
+
     const ua = navigator.userAgent;
-    if (/iPad|iPhone|iPod/.test(ua)) setPlatform("ios");
-    else if (/Android/.test(ua)) setPlatform("android");
-  }, []);
-  return platform;
+    if (/iPad|iPhone|iPod/.test(ua)) return "ios";
+    if (/Android/.test(ua)) return "android";
+    return "none";
+  })[0];
 }
 
 /* ─── Error Boundary ───────────────────────────────────────────── */
 
+type ErrorBoundaryProps = {
+  children: ReactNode;
+  fallback: (error: Error) => ReactNode;
+};
+
 class ErrorBoundary extends Component<
-  { children: ReactNode; fallback: (error: Error) => ReactNode },
+  ErrorBoundaryProps,
   { hasError: boolean; error: Error | null }
 > {
-  constructor(props: any) {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false, error: null };
   }
@@ -253,7 +264,7 @@ export default function ModelViewer({
   usdzUrl?: string;
   title?: string;
 }) {
-  const orbitRef = useRef<any>(null);
+  const orbitRef = useRef<ElementRef<typeof OrbitControls> | null>(null);
   const isMobile = useIsMobile();
   const arPlatform = useARPlatform();
   const [autoRotate, setAutoRotate] = useState(true);

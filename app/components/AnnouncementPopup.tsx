@@ -80,7 +80,7 @@ export default function AnnouncementPopup() {
           </div>
 
           <p className="text-lg font-bold leading-tight text-black/80">
-            Our latest community-driven project is officially live. Help us map Kerala's authentic toddy shops, share quality ratings, and preserve our culinary heritage.
+            Our latest community-driven project is officially live. Help us map Kerala&apos;s authentic toddy shops, share quality ratings, and preserve our culinary heritage.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 pt-4">

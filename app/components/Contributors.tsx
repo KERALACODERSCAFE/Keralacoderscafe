@@ -13,15 +13,6 @@ interface Contributor {
   contributions: number;
 }
 
-const accentClasses = [
-  "bg-white",
-  "bg-kcc-accent-yellow-soft/55",
-  "bg-kcc-accent-green-soft/60",
-  "bg-white",
-  "bg-kcc-accent-green-soft/45",
-  "bg-kcc-accent-yellow-soft/45",
-];
-
 export default function Contributors() {
   const [contributors, setContributors] = useState<Contributor[]>([]);
   const [loading, setLoading] = useState(true);

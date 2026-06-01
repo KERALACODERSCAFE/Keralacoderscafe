@@ -26,7 +26,7 @@ function useInView(threshold = 0.15) {
     return () => observer.disconnect();
   }, [threshold]);
 
-  return { ref, visible };
+  return [ref, visible] as const;
 }
 
 
@@ -47,11 +47,11 @@ function PersonIcon() {
 }
 
 export default function ProjectsPage() {
-  const header = useInView(0.1);
-  const activeFocus = useInView(0.1);
-  const upcoming = useInView(0.1);
-  const ideas = useInView(0.1);
-  const cta = useInView(0.1);
+  const [headerRef, headerVisible] = useInView(0.1);
+  const [activeFocusRef, activeFocusVisible] = useInView(0.1);
+  const [upcomingRef, upcomingVisible] = useInView(0.1);
+  const [ideasRef, ideasVisible] = useInView(0.1);
+  const [ctaRef, ctaVisible] = useInView(0.1);
 
   return (
     <div className="min-h-screen bg-[#fef9ea] font-sans text-black neo-brutalist-grid selection:bg-[#FFE66D] selection:text-black">
@@ -59,11 +59,11 @@ export default function ProjectsPage() {
 
         {/* Header Section */}
         <section 
-          ref={header.ref}
+          ref={headerRef}
           className="mt-12 mb-16 flex flex-col md:flex-row items-center justify-between gap-8"
           style={{
-            opacity: header.visible ? 1 : 0,
-            transform: header.visible ? "translateY(0)" : "translateY(40px)",
+            opacity: headerVisible ? 1 : 0,
+            transform: headerVisible ? "translateY(0)" : "translateY(40px)",
             transition: "opacity 0.8s cubic-bezier(.22,1,.36,1), transform 0.8s cubic-bezier(.22,1,.36,1)",
           }}
         >
@@ -95,11 +95,11 @@ export default function ProjectsPage() {
 
         {/* Tier 1: Active Focus Project */}
         <section 
-          ref={activeFocus.ref}
+          ref={activeFocusRef}
           className="relative mt-20"
           style={{
-            opacity: activeFocus.visible ? 1 : 0,
-            transform: activeFocus.visible ? "translateY(0)" : "translateY(40px)",
+            opacity: activeFocusVisible ? 1 : 0,
+            transform: activeFocusVisible ? "translateY(0)" : "translateY(40px)",
             transition: "opacity 0.8s cubic-bezier(.22,1,.36,1) 0.1s, transform 0.8s cubic-bezier(.22,1,.36,1) 0.1s",
           }}
         >
@@ -170,11 +170,11 @@ export default function ProjectsPage() {
 
         {/* Tier 2: Upcoming Projects Spotlight */}
         <section 
-          ref={upcoming.ref}
+          ref={upcomingRef}
           className="relative mt-32"
           style={{
-            opacity: upcoming.visible ? 1 : 0,
-            transform: upcoming.visible ? "translateY(0)" : "translateY(40px)",
+            opacity: upcomingVisible ? 1 : 0,
+            transform: upcomingVisible ? "translateY(0)" : "translateY(40px)",
             transition: "opacity 0.8s cubic-bezier(.22,1,.36,1) 0.1s, transform 0.8s cubic-bezier(.22,1,.36,1) 0.1s",
           }}
         >
@@ -227,11 +227,11 @@ export default function ProjectsPage() {
 
         {/* Tier 3: Community Ideas Grid */}
         <section 
-          ref={ideas.ref}
+          ref={ideasRef}
           className="relative mt-32 p-8 md:p-16"
           style={{
-            opacity: ideas.visible ? 1 : 0,
-            transform: ideas.visible ? "translateY(0)" : "translateY(40px)",
+            opacity: ideasVisible ? 1 : 0,
+            transform: ideasVisible ? "translateY(0)" : "translateY(40px)",
             transition: "opacity 0.8s cubic-bezier(.22,1,.36,1) 0.1s, transform 0.8s cubic-bezier(.22,1,.36,1) 0.1s",
           }}
         >
@@ -284,11 +284,11 @@ export default function ProjectsPage() {
 
         {/* Submit idea CTA */}
         <section 
-          ref={cta.ref}
+          ref={ctaRef}
           className="mt-24 bg-black p-8 md:p-12 relative overflow-hidden border-4 border-black"
           style={{
-            opacity: cta.visible ? 1 : 0,
-            transform: cta.visible ? "translateY(0)" : "translateY(40px)",
+            opacity: ctaVisible ? 1 : 0,
+            transform: ctaVisible ? "translateY(0)" : "translateY(40px)",
             transition: "opacity 0.8s cubic-bezier(.22,1,.36,1) 0.1s, transform 0.8s cubic-bezier(.22,1,.36,1) 0.1s",
           }}
         >

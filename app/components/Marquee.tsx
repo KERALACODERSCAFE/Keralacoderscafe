@@ -35,13 +35,9 @@ const Marquee: React.FC<MarqueeProps> = ({
   theme = "dark",
   mt = "mt-[100px] lg:mt-[72px]",
   mb = "mb-[100px]",
-  variant = "default",
-  slantedHeight = "100px",
-  clipPath = "polygon(0 0, 200% 30%, 100% 75%, 0 45%)",
   Icon = Star,
   textSize = "text-2xl md:text-4xl",
   iconSize = "w-8 h-8 md:w-6 md:h-12",
-  rotate,
 }) => {
   const skillsElementRef = useRef<HTMLDivElement>(null);
 

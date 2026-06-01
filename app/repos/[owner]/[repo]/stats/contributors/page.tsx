@@ -1,6 +1,7 @@
 "use client";
 
 import { use, useState, useEffect } from "react";
+import Link from "next/link";
 import DiagonalGrid from "@/components/ui/demo";
 import BackgroundGlow from "@/components/ui/background-components";
 
@@ -50,8 +51,8 @@ export default function RepoStatsPage({ params }: { params: Promise<{ owner: str
         } else {
           setError("Invalid data received");
         }
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : "Failed to fetch data");
       } finally {
         setLoading(false);
       }
@@ -66,10 +67,10 @@ export default function RepoStatsPage({ params }: { params: Promise<{ owner: str
         <div className="bg-white border-4 border-black p-10 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] text-center space-y-6 max-w-md">
           <div className="text-6xl">⚠️</div>
           <h1 className="text-3xl font-black uppercase tracking-tighter">Oops! {error}</h1>
-          <p className="font-bold opacity-60">We couldn't find the repository stats for {owner}/{repo}.</p>
-          <a href="/" className="inline-block bg-yellow-400 border-2 border-black px-6 py-2 font-black uppercase text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+          <p className="font-bold opacity-60">We couldn&apos;t find the repository stats for {owner}/{repo}.</p>
+          <Link href="/" className="inline-block bg-yellow-400 border-2 border-black px-6 py-2 font-black uppercase text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
             Go Home
-          </a>
+          </Link>
         </div>
       </div>
     );

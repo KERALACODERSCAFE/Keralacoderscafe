@@ -48,7 +48,7 @@ export default function CursorFollower() {
       }
     };
 
-    const handleGlobalClick = (e: MouseEvent) => {
+    const handleGlobalClick = () => {
       // We only drop it if it's not already placed.
       // If it IS placed, picking it up is handled by the bottle's own onClick
       if (!isPlacedRef.current) {

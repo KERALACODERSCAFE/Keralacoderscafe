@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Github, Code, Mail, Linkedin, User } from "lucide-react";
 import { GridPattern } from "./GridPattern";
@@ -90,7 +89,7 @@ export default function Teams() {
             </h2>
 
             <blockquote className="font-hand text-3xl md:text-4xl text-black font-semibold leading-relaxed border-l-8 border-kcc-accent pl-6 my-8 italic">
-              "Build in public. Learn from peers. Ship real products."
+              &quot;Build in public. Learn from peers. Ship real products.&quot;
             </blockquote>
 
             <div className="relative w-full max-w-[680px] mt-6 border-3 border-black bg-[#FDFBF7] p-6 md:p-10 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rotate-[-0.5deg] hover:rotate-0 transition-transform duration-300 overflow-hidden">

@@ -1,6 +1,7 @@
 "use client";
 
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { use, useState, useEffect } from "react";
 import { REPOS, Project } from "@/lib/projects";
 import { PROJECT_DETAILS, ProjectContent } from "@/lib/project-details";
@@ -29,12 +30,6 @@ const FeatureCard = ({ icon, label, bg }: { icon: string; label: string; bg: str
 
 /* ─── Project Activity Pulse ───────────────────────────────────── */
 
-interface PunchCardData {
-  day: number;
-  hour: number;
-  count: number;
-}
-
 const getGitColor = (count: number, max: number) => {
   if (count === 0) return "bg-[#ebedf0]";
   const intensity = count / max;
@@ -57,7 +52,8 @@ function ProjectPulse({ repoUrl }: { repoUrl?: string }) {
   const [isMock, setIsMock] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    const frame = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   useEffect(() => {
@@ -239,9 +235,8 @@ function LiveContributors() {
   useEffect(() => {
     // Responsive items per page
     const updateItemsPerPage = () => {
-      if (window.innerWidth < 640) setItemsPerPage(10);
-      else if (window.innerWidth < 1024) setItemsPerPage(12);
-      else setItemsPerPage(12);
+      setItemsPerPage(window.innerWidth < 640 ? 10 : 12);
+      setCurrentPage(1);
     };
     updateItemsPerPage();
     window.addEventListener('resize', updateItemsPerPage);
@@ -296,11 +291,6 @@ function LiveContributors() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentContributors = filteredContributors.slice(startIndex, endIndex);
-
-  // Reset to page 1 when search/sort/resize changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, itemsPerPage]);
 
   if (loading) {
     return (
@@ -362,7 +352,10 @@ function LiveContributors() {
                   type="text"
                   placeholder="Search..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    setCurrentPage(1);
+                  }}
                   className="bg-[#1a1a1a] text-white px-3 py-2 border-2 border-yellow-400 rounded-full text-xs font-bold outline-none focus:ring-2 ring-yellow-400 transition-all w-full md:w-48 lg:w-64 placeholder:text-zinc-500"
                 />
               </div>
@@ -490,11 +483,12 @@ function LiveContributors() {
 /* ─── Bespoke Project Detail ─────────────────────────────────────── */
 
 function BespokeProjectDetail({ content }: { content: ProjectContent }) {
-  const { hero, userFeatures, ownerFeatures, why, team, progress, vision } = content;
+  const { hero, userFeatures, progress } = content;
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    const frame = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   return (
@@ -692,7 +686,7 @@ function BespokeProjectDetail({ content }: { content: ProjectContent }) {
               Protecting Tradition
             </h2>
             <p className="text-lg md:text-3xl font-medium leading-relaxed opacity-90 border-l-4 border-yellow-400 pl-8 text-left italic">
-              This project is not just a listing platform. It is a community-driven initiative to promote Kerala's traditional food culture, support local businesses, and help people discover the best local experiences.
+              This project is not just a listing platform. It is a community-driven initiative to promote Kerala&apos;s traditional food culture, support local businesses, and help people discover the best local experiences.
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <a
@@ -726,9 +720,9 @@ function GenericProjectDetail({ project }: { project: Project }) {
       <div className="relative px-4 md:px-6 pt-24 md:pt-32 pb-16 md:pb-24 max-w-7xl mx-auto space-y-16 md:space-y-24">
         {/* Header Section */}
         <header className="space-y-8">
-          <a href="/events" className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 border-2 border-black font-black uppercase text-xs shadow-[4px_4px_0px_0px_rgba(255,230,109,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+          <Link href="/events" className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 border-2 border-black font-black uppercase text-xs shadow-[4px_4px_0px_0px_rgba(255,230,109,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
             ← Back to Projects
-          </a>
+          </Link>
 
           <div className="space-y-6">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-sm font-black uppercase tracking-widest">

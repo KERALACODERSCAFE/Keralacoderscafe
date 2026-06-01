@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import Footer from "../components/Footer";
 import ProjectCard from "../components/ProjectCard";
 import { memberProjectsData } from "@/lib/member-projects-data";
-import { GridPattern } from "../components/GridPattern";
-import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Community Projects",

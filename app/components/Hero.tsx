@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight, Github, MessageCircle } from "lucide-react";
+import { ArrowUpRight, Github } from "lucide-react";
 import ColourfulText from "./ColourfulText";
 import { heroMalayalam } from "../../lib/fonts";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 const highlights = [
   "From 1-day beginners to 10+ years experienced developers",
@@ -23,10 +23,7 @@ const defaultRotations = ["sm:rotate-[-2deg]", "sm:rotate-[1deg]", "sm:rotate-[-
 
 export default function Hero() {
   const [topContributors, setTopContributors] = useState(fallbackContributors);
-  const [avatarIndex, setAvatarIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
   const [isBulbOn, setIsBulbOn] = useState(false);
-  const fastAvatars = ["👨‍💻", "👩‍💻", "🚀", "💡"];
 
   useEffect(() => {
     const REPOS_TO_FETCH = [
@@ -71,24 +68,7 @@ export default function Hero() {
       })
       .catch((err) => console.error("Failed to fetch GitHub contributors:", err));
 
-    // Trigger animation for 3 seconds every 10 seconds
-    const burstInterval = setInterval(() => {
-      setIsAnimating(true);
-      setTimeout(() => setIsAnimating(false), 3000);
-    }, 10000);
-
-    return () => clearInterval(burstInterval);
   }, []);
-
-  useEffect(() => {
-    let animInterval: NodeJS.Timeout;
-    if (isAnimating) {
-      animInterval = setInterval(() => {
-        setAvatarIndex((prev) => (prev + 1) % fastAvatars.length);
-      }, 150);
-    }
-    return () => clearInterval(animInterval);
-  }, [isAnimating, fastAvatars.length]);
 
   return (
     <header className="relative overflow-clip px-6 pb-28 pt-12 md:px-12 lg:pb-36 lg:pt-20 bg-white border-b-4 border-black">
@@ -388,7 +368,7 @@ export default function Hero() {
                       <div className="absolute top-[30px] right-[110px] w-max z-50 animate-in fade-in slide-in-from-right-4 duration-500 pointer-events-none">
                         <div className="relative bg-[#1a1a1a] text-[#FFE66D] px-4 py-2 border-2 border-[#FFE66D] font-black text-[0.6rem] uppercase tracking-widest shadow-[-4px_4px_0_0_#FFE66D] text-right leading-tight">
                           <div className="absolute top-1/2 -right-2 -translate-y-1/2 w-4 h-4 bg-[#1a1a1a] border-t-2 border-r-2 border-[#FFE66D] rotate-45 transform origin-center"></div>
-                          "Competition alla….<br />collaboration aanu power"
+                          &quot;Competition alla….<br />collaboration aanu power&quot;
                         </div>
                       </div>
 
@@ -396,7 +376,7 @@ export default function Hero() {
                       <div className="absolute top-[80px] left-[110px] w-max z-50 animate-in fade-in slide-in-from-left-4 duration-500 pointer-events-none hidden sm:block">
                         <div className="relative bg-[#1a1a1a] text-[#FFE66D] px-4 py-2 border-2 border-[#FFE66D] font-black text-[0.6rem] uppercase tracking-widest shadow-[4px_4px_0_0_#FFE66D] text-left leading-tight">
                           <div className="absolute top-1/2 -left-2 -translate-y-1/2 w-4 h-4 bg-[#1a1a1a] border-b-2 border-l-2 border-[#FFE66D] rotate-45 transform origin-center"></div>
-                          "Copy paste alla…<br />understand & build.”
+                          &quot;Copy paste alla…<br />understand &amp; build.&quot;
                         </div>
                       </div>
                     </>

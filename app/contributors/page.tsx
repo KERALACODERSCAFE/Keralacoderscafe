@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 
@@ -13,15 +12,6 @@ interface Contributor {
   html_url: string;
   contributions: number;
 }
-
-const accentClasses = [
-  "bg-white",
-  "bg-kcc-accent-yellow-soft/55",
-  "bg-kcc-accent-green-soft/60",
-  "bg-white",
-  "bg-kcc-accent-green-soft/45",
-  "bg-kcc-accent-yellow-soft/45",
-];
 
 export default function ContributorsPage() {
   const [contributors, setContributors] = useState<Contributor[]>([]);

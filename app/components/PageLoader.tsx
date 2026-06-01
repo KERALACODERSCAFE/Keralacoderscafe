@@ -14,7 +14,19 @@ const CONFIG = {
 const PS = { h: 40, w: 27, pad: 2, cols: 11, rows: 10, resIdx: 2 };
 const START_Y = -PS.h - PS.pad;
 
-const fetchWithCache = async (key: string, url: string) => {
+type TmdbAsset = {
+  poster_path?: string | null;
+};
+
+type TmdbResponse = {
+  images?: {
+    secure_base_url?: string;
+    poster_sizes?: string[];
+  };
+  results?: TmdbAsset[];
+};
+
+const fetchWithCache = async (key: string, url: string): Promise<TmdbResponse> => {
   if (typeof window === 'undefined') return { results: [] };
   try {
     const cached = localStorage.getItem(key);
@@ -39,7 +51,7 @@ const PageLoader: React.FC = () => {
 
   useEffect(() => {
     if (typeof window === 'undefined' || window.location.hash || localStorage.getItem('kcc_loader_seen')) return;
-    setIsVisible(true);
+    const showFrame = requestAnimationFrame(() => setIsVisible(true));
     const startTime = Date.now();
     let animId: number, scrollTimeout: NodeJS.Timeout, isScrolling = false;
 
@@ -50,7 +62,8 @@ const PageLoader: React.FC = () => {
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    containerRef.current?.appendChild(renderer.domElement);
+    const container = containerRef.current;
+    container?.appendChild(renderer.domElement);
 
     const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
     camera.rotation.x = 0.6;
@@ -77,7 +90,7 @@ const PageLoader: React.FC = () => {
       try {
         const config = await fetchWithCache('tmdb_config', `${CONFIG.apiUrl}/configuration?api_key=${CONFIG.apiKey}`);
         const base = config.images?.secure_base_url || 'https://image.tmdb.org/t/p/';
-        const size = config.images?.poster_sizes[PS.resIdx] || 'w342';
+        const size = config.images?.poster_sizes?.[PS.resIdx] || 'w342';
 
         const endpoints = ['tv/1', 'tv/2', 'movie/1', 'movie/2'];
         const results = await Promise.all(endpoints.map((ep, i) =>
@@ -85,7 +98,7 @@ const PageLoader: React.FC = () => {
             .then(d => { setProgress(Math.round(25 + (i + 1) * 18.75)); return d.results || []; })
         ));
 
-        const assets = results.flat().filter((a: any) => a.poster_path).sort(() => 0.5 - Math.random()).slice(0, PS.cols * PS.rows);
+        const assets = results.flat().filter((a) => a.poster_path).sort(() => 0.5 - Math.random()).slice(0, PS.cols * PS.rows);
 
         // Single Geometry for all posters
         const shape = new THREE.Shape();
@@ -98,7 +111,7 @@ const PageLoader: React.FC = () => {
         const texLoader = new THREE.TextureLoader();
 
         let rowGroup: THREE.Group;
-        assets.forEach((asset: any, i) => {
+        assets.forEach((asset, i) => {
           if (i % PS.cols === 0) {
             rowGroup = new THREE.Group();
             rowGroup.position.y = (i / PS.cols) * (PS.h + PS.pad);
@@ -161,19 +174,25 @@ const PageLoader: React.FC = () => {
     const timer = setTimeout(handleDismiss, CONFIG.loaderTimeout);
 
     return () => {
+      cancelAnimationFrame(showFrame);
       clearTimeout(timer); clearTimeout(scrollTimeout); cancelAnimationFrame(animId);
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('wheel', onWheel); window.removeEventListener('keydown', onKey);
 
-      scene.traverse((obj: any) => {
-        if (obj.geometry) obj.geometry.dispose();
-        if (obj.material) {
-          Array.isArray(obj.material) ? obj.material.forEach((m: any) => m.dispose()) : obj.material.dispose();
-          if (obj.material.map) obj.material.map.dispose();
+      scene.traverse((obj) => {
+        if (obj instanceof THREE.Mesh) {
+          obj.geometry.dispose();
+          const materials = Array.isArray(obj.material) ? obj.material : [obj.material];
+
+          materials.forEach((material) => {
+            const texturedMaterial = material as THREE.Material & { map?: THREE.Texture };
+            texturedMaterial.map?.dispose();
+            material.dispose();
+          });
         }
       });
       renderer.dispose();
-      containerRef.current?.removeChild(renderer.domElement);
+      container?.removeChild(renderer.domElement);
     };
   }, []);
 

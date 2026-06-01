@@ -1,7 +1,3 @@
-"use client";
-
-import { useState, useEffect } from "react";
-
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import ProjectCard from "./ProjectCard";
@@ -10,13 +6,6 @@ import { cn } from "@/lib/utils";
 import { memberProjectsData } from "@/lib/member-projects-data";
 
 export default function MemberProjects() {
-
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setIsLoading(false);
-  }, []);
-
   return (
     <section id="community-projects" className="scroll-mt-24 px-6 py-28 md:px-12 bg-[#FDFBF7] border-t-[3px] border-black relative overflow-hidden">
 
@@ -69,18 +58,9 @@ export default function MemberProjects() {
 
         {/* Project Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {isLoading ? (
-            // Skeleton Loaders
-            Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="bg-concrete shadow-concrete rounded-sm p-4 h-[400px] animate-pulse">
-                <div className="w-full h-full bg-black/10 rounded-sm"></div>
-              </div>
-            ))
-          ) : (
-            memberProjectsData.map((project) => (
-              <ProjectCard key={project.id} project={project} />
-            ))
-          )}
+          {memberProjectsData.map((project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
         </div>
 
         {/* Action Buttons Row */}

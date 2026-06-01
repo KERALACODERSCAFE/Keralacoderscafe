@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { REPOS, Project } from "@/lib/projects";
+import { REPOS } from "@/lib/projects";
 
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -26,23 +26,23 @@ function useInView(threshold = 0.15) {
     return () => observer.disconnect();
   }, [threshold]);
 
-  return { ref, visible };
+  return [ref, visible] as const;
 }
 
 export default function Projects() {
-  const heading = useInView(0.2);
-  const cards = useInView(0.1);
+  const [headingRef, headingVisible] = useInView(0.2);
+  const [cardsRef, cardsVisible] = useInView(0.1);
 
   return (
     <section id="projects" className="scroll-mt-24 px-6 py-28 md:px-12 bg-white border-t-4 border-black">
       <div className="mx-auto max-w-[1280px]">
         <div className="grid gap-20 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
           <div
-            ref={heading.ref}
+            ref={headingRef}
             className="lg:sticky lg:top-32 lg:self-start"
             style={{
-              opacity: heading.visible ? 1 : 0,
-              transform: heading.visible ? "translateX(0)" : "translateX(-40px)",
+              opacity: headingVisible ? 1 : 0,
+              transform: headingVisible ? "translateX(0)" : "translateX(-40px)",
               transition: "opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1)",
             }}
           >
@@ -71,7 +71,7 @@ export default function Projects() {
             </div>
           </div>
 
-          <div ref={cards.ref} className="flex md:grid overflow-x-auto md:overflow-visible gap-6 snap-x snap-mandatory scrollbar-hide pb-12 md:pb-0 px-2 md:px-0">
+          <div ref={cardsRef} className="flex md:grid overflow-x-auto md:overflow-visible gap-6 snap-x snap-mandatory scrollbar-hide pb-12 md:pb-0 px-2 md:px-0">
             {/* 01: Featured Dynamic Toddy Shop Project */}
             {(() => {
               const toddy = REPOS.find(r => r.id === 4);
@@ -81,8 +81,8 @@ export default function Projects() {
                   <article
                     className="border-8 border-kcc-gold bg-white p-8 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[16px_16px_0px_0px_rgba(255,230,109,1)] h-full relative overflow-hidden"
                     style={{
-                      opacity: cards.visible ? 1 : 0,
-                      transform: cards.visible ? "translateY(0) rotate(-1deg)" : "translateY(60px) rotate(2deg)",
+                      opacity: cardsVisible ? 1 : 0,
+                      transform: cardsVisible ? "translateY(0) rotate(-1deg)" : "translateY(60px) rotate(2deg)",
                       transition: `opacity 0.6s cubic-bezier(.22,1,.36,1) 0.1s, transform 0.6s cubic-bezier(.22,1,.36,1) 0.1s`,
                     }}
                   >
@@ -147,8 +147,8 @@ export default function Projects() {
                 key={project.title}
                 className="shrink-0 w-[88vw] md:w-full snap-center border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] opacity-60 grayscale-[0.5]"
                 style={{
-                  opacity: cards.visible ? 0.6 : 0,
-                  transform: cards.visible ? "translateY(0)" : "translateY(60px)",
+                  opacity: cardsVisible ? 0.6 : 0,
+                  transform: cardsVisible ? "translateY(0)" : "translateY(60px)",
                   transition: `opacity 0.6s cubic-bezier(.22,1,.36,1) ${(index + 1) * 0.15}s, transform 0.6s cubic-bezier(.22,1,.36,1) ${(index + 1) * 0.15}s`,
                 }}
               >

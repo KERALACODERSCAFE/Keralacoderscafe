@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { ExternalLink, Github, Mail } from "lucide-react";
+import type { MemberProject } from "@/lib/member-projects-data";
 
-export default function ProjectCard({ project }: { project: any }) {
+export default function ProjectCard({ project }: { project: MemberProject }) {
   return (
     <div className="group relative flex flex-col h-full bg-[#F2E8D9] border-[3px] sm:border-[4px] border-black rounded-2xl sm:rounded-3xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:-translate-y-1 sm:hover:-translate-y-2 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] sm:hover:shadow-[14px_14px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
       

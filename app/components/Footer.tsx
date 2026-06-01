@@ -4,19 +4,25 @@ import Link from "next/link";
 import { Github, MessageCircle, Mail, Twitter } from "lucide-react";
 import { useLenis } from "lenis/react";
 
-const exploreLinks = [
+type FooterLink = {
+  label: string;
+  href: string;
+  highlight?: boolean;
+};
+
+const exploreLinks: FooterLink[] = [
   { label: "Home", href: "/" },
   { label: "About", href: "#about" },
   { label: "Projects", href: "#projects" },
 ];
 
-const communityLinks = [
+const communityLinks: FooterLink[] = [
   { label: "Contributors", href: "#contributors" },
   { label: "Guidelines", href: "#guidelines" },
   { label: "Join", href: "/join" },
 ];
 
-const resourcesLinks = [
+const resourcesLinks: FooterLink[] = [
   { label: "GitHub", href: "https://github.com/KERALACODERSCAFE/Keralacoderscafe" },
   { label: "WhatsApp", href: "/join" },
   { label: "X", href: "https://x.com/Keralacoders" },
@@ -103,7 +109,7 @@ export default function Footer() {
               <div className="flex flex-col gap-4">
                 {exploreLinks.map((link) => (
                   <Link key={link.label} href={link.href}
-                    onClick={(e) => handleQuickLinkClick(e as any, link.href)}
+                    onClick={(e) => handleQuickLinkClick(e, link.href)}
                     className="text-sm font-bold text-white/70 hover:text-white transition-colors">
                     {link.label}
                   </Link>
@@ -117,7 +123,7 @@ export default function Footer() {
               <div className="flex flex-col gap-4">
                 {communityLinks.map((link) => (
                   <Link key={link.label} href={link.href}
-                    onClick={(e) => handleQuickLinkClick(e as any, link.href)}
+                    onClick={(e) => handleQuickLinkClick(e, link.href)}
                     className="text-sm font-bold text-white/70 hover:text-white transition-colors">
                     {link.label}
                   </Link>
@@ -134,12 +140,12 @@ export default function Footer() {
                     target={link.href.startsWith("http") ? "_blank" : undefined}
                     rel={link.href.startsWith("http") ? "noopener" : undefined}
                     className={`text-sm font-bold transition-colors flex items-center gap-2 ${
-                      (link as any).highlight 
+                      link.highlight 
                         ? "text-[#00D9C0] hover:text-[#00D9C0]/80" 
                         : "text-white/70 hover:text-white"
                     }`}>
                     {link.label}
-                    {(link as any).highlight && (
+                    {link.highlight && (
                       <span className="px-1.5 py-0.5 rounded bg-[#00D9C0] text-black text-[10px] font-black uppercase tracking-wider leading-none shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]">
                         Hire Us
                       </span>
