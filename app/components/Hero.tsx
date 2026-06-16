@@ -113,7 +113,7 @@ export default function Hero() {
                 />{" "}
                 <br className="hidden sm:block" />
                 Coders
-                <span className="ml-2 bg-kcc-gold px-4 py-2 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] sm:ml-4 inline-block -rotate-2">
+                <span className="ml-2 bg-kcc-gold px-4 py-2 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] sm:ml-4 inline-block -rotate-2 transition-transform duration-200 hover:rotate-2 hover:scale-105 cursor-default">
                   Cafe
                 </span>
               </h1>
@@ -131,7 +131,7 @@ export default function Hero() {
               {highlights.map((item) => (
                 <div
                   key={item}
-                  className="border-2 border-black bg-white px-4 py-2 text-sm font-black uppercase tracking-tight shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                  className="border-2 border-black bg-white px-4 py-2 text-sm font-black uppercase tracking-tight shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:bg-kcc-paper"
                 >
                   {item}
                 </div>

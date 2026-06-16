@@ -71,7 +71,13 @@ export default function Contributors() {
 
   return (
     <section id="contributors" className="scroll-mt-24 px-6 py-28 md:px-12 border-t-4 border-black">
-      <div className="mx-auto max-w-[1280px]">
+      <style>{`
+      .group:hover .rank-badge {
+        background-color: #a5ffd6 !important;
+        background-image: none !important;
+      }`}
+      </style>
+       <div className="mx-auto max-w-[1280px]">
         <div className="flex flex-col gap-12 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-[750px]">
             <span className="inline-block border-2 border-black bg-kcc-green px-3 py-1 text-xs font-black uppercase tracking-widest shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] mb-6">
@@ -123,7 +129,7 @@ export default function Contributors() {
                   href={contributor.html_url}
                   target="_blank"
                   rel="noopener"
-                  className="group relative bg-concrete p-5 rounded-sm shadow-[10px_10px_20px_rgba(0,0,0,0.5)] border-2 border-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-[12px_12px_25px_rgba(0,0,0,0.6)] flex flex-col h-full overflow-hidden"
+                  className="group relative bg-white p-5 rounded-sm shadow-[10px_10px_20px_rgba(0,0,0,0.5)] border-2 border-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-[12px_12px_25px_rgba(0,0,0,0.6)] flex flex-col h-full overflow-hidden"
                 >
                   {/* Rivets on outer concrete shell */}
                   <div className="rivet top-2 left-2"></div>
@@ -149,8 +155,8 @@ export default function Contributors() {
                       </div>
                     </div>
 
-                    <div className="shrink-0 bg-metal border border-black/30 shadow-metal px-3 py-1 text-xs font-black uppercase tracking-widest text-stamped text-black/80 rounded-sm">
-                      #{String(index + 1).padStart(2, "0")}
+                    <div className="shrink-0 bg-metal border border-black/30 shadow-metal px-3 py-1 text-xs font-black uppercase tracking-widest text-stamped text-black/80 rounded-sm rank-badge">
+                    #{String(index + 1).padStart(2, "0")}
                     </div>
                   </div>
 
