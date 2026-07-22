@@ -1,0 +1,591 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { 
+  ArrowLeft, 
+  Calendar, 
+  User, 
+  Clock, 
+  BookOpen,
+  ArrowRight,
+  Bookmark,
+  Twitter,
+  Linkedin,
+  Copy,
+  Check,
+  Lightbulb
+} from "lucide-react";
+import NavBar from "../../components/NavBar";
+import Footer from "../../components/Footer";
+
+interface Category {
+  id: number;
+  name: string;
+  slug: string;
+}
+
+interface TagType {
+  id: number;
+  name: string;
+  slug: string;
+}
+
+interface AuthorType {
+  name: string;
+  title: string | null;
+}
+
+interface BlogDetail {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  cover_image: string | null;
+  author_name?: string;
+  author?: AuthorType;
+  category: Category;
+  tags: TagType[];
+  published_at: string | null;
+  updated_at?: string;
+}
+
+interface BlogDetailClientProps {
+  blog: BlogDetail | null;
+}
+
+interface ToCItem {
+  id: string;
+  text: string;
+  level: number;
+}
+
+export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
+  const router = useRouter();
+  const [toc, setToC] = useState<ToCItem[]>([]);
+  const [activeId, setActiveId] = useState<string>("");
+  const [isSaved, setIsSaved] = useState(false);
+  const [shareCopied, setShareCopied] = useState(false);
+
+  const isImageInContent = (() => {
+    if (!blog || !blog.cover_image || !blog.content) return false;
+    if (blog.content.includes(blog.cover_image)) return true;
+    try {
+      const urlParts = blog.cover_image.split("/");
+      const filename = urlParts[urlParts.length - 1];
+      if (filename && filename.length > 4 && blog.content.includes(filename)) {
+        return true;
+      }
+    } catch {
+      // fallback
+    }
+    return false;
+  })();
+
+  // Parse Table of Contents and inject IDs
+  useEffect(() => {
+    if (!blog) return;
+
+    // Wait a brief tick for the content to render in DOM
+    const timer = setTimeout(() => {
+      const container = document.getElementById("blog-content-body");
+      if (!container) return;
+
+      const headings = container.querySelectorAll("h1, h2, h3");
+      const items: ToCItem[] = [];
+
+      headings.forEach((heading, idx) => {
+        const text = heading.textContent || "";
+        const slugged = text
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/(^-|-$)/g, "");
+        const id = slugged || `heading-${idx}`;
+        heading.id = id;
+
+        items.push({
+          id,
+          text,
+          level: heading.tagName === "H1" ? 1 : heading.tagName === "H2" ? 2 : 3
+        });
+      });
+
+      setToC(items);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [blog]);
+
+  // Scroll Spy to highlight active section
+  useEffect(() => {
+    if (toc.length === 0) return;
+
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 200;
+
+      // Find the heading that is closest to the top of the viewport
+      let currentActive = "";
+      for (const item of toc) {
+        const element = document.getElementById(item.id);
+        if (element) {
+          const top = element.offsetTop;
+          if (scrollPosition >= top) {
+            currentActive = item.id;
+          }
+        }
+      }
+
+      // Default to first item if scrolled to top
+      if (!currentActive && toc.length > 0) {
+        currentActive = toc[0].id;
+      }
+
+      setActiveId(currentActive);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    // Initial trigger
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [toc]);
+
+  if (!blog) {
+    return (
+      <>
+        <NavBar />
+        <main className="min-h-screen bg-[#F8FAFC] text-black pt-32 pb-24 px-6 md:px-12 flex items-center justify-center">
+          <div className="mx-auto max-w-lg w-full border border-slate-100 bg-white p-8 md:p-12 rounded-[2.5rem] shadow-sm text-center">
+            <h1 className="text-3xl font-black uppercase text-red-500 mb-4">404 - Not Found</h1>
+            <p className="font-semibold text-slate-500 mb-8 text-xs sm:text-sm">
+              We couldn't retrieve details for this blog article. It may have expired or been removed.
+            </p>
+            <Link 
+              href="/blog"
+              className="no-underline inline-flex items-center gap-2 bg-[#00B9A5] text-white px-6 py-3 font-bold rounded-xl shadow-sm text-xs"
+            >
+              <ArrowLeft className="w-4 h-4" /> Back to Publication
+            </Link>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setShareCopied(true);
+    setTimeout(() => setShareCopied(false), 2000);
+  };
+
+  const handleTocClick = (e: React.MouseEvent<HTMLAnchorElement>, index: number) => {
+    e.preventDefault();
+    const container = document.getElementById("blog-content-body");
+    if (!container) return;
+
+    const headings = container.querySelectorAll("h1, h2, h3");
+    const targetHeading = headings[index];
+    if (targetHeading) {
+      const yOffset = -120; // sticky header padding offset
+      const y = targetHeading.getBoundingClientRect().top + window.scrollY + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
+
+  const formatDate = (dateStr: string | null) => {
+    if (!dateStr) return "Recently";
+    try {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric"
+      });
+    } catch {
+      return "Recently";
+    }
+  };
+
+  const readingTime = (() => {
+    const words = (blog.content || "").replace(/<[^>]*>/g, "").split(/\s+/).length;
+    const minutes = Math.max(1, Math.ceil(words / 225));
+    return `${minutes} min read`;
+  })();
+
+  return (
+    <>
+      <NavBar />
+      
+      <main className="min-h-screen bg-white text-black pt-32 pb-24 px-6 md:px-12 relative isolate">
+        <div className="mx-auto max-w-[1200px] relative z-10">
+          
+          {/* Back link & Top share actions row */}
+          <div className="mb-10 flex items-center justify-between border-b border-slate-100 pb-5">
+            <Link 
+              href="/blog"
+              className="no-underline inline-flex items-center gap-1.5 text-slate-650 hover:text-[#00B9A5] font-bold transition-colors text-xs"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" /> Back to all articles
+            </Link>
+            
+            <div className="flex items-center gap-4 text-xs font-semibold text-slate-400 select-none">
+              <span>Share this article</span>
+              <div className="flex items-center gap-2">
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(blog.title)}&url=${encodeURIComponent(typeof window !== "undefined" ? window.location.href : "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-7 h-7 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:text-black hover:border-black transition-colors bg-white cursor-pointer"
+                  title="Share on Twitter"
+                >
+                  <Twitter className="w-3.5 h-3.5" />
+                </a>
+                <a
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(typeof window !== "undefined" ? window.location.href : "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-7 h-7 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:text-black hover:border-black transition-colors bg-white cursor-pointer"
+                  title="Share on LinkedIn"
+                >
+                  <Linkedin className="w-3.5 h-3.5" />
+                </a>
+                <button
+                  onClick={handleCopyLink}
+                  className="w-7 h-7 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:text-black hover:border-black transition-colors bg-white cursor-pointer"
+                  title="Copy link"
+                >
+                  {shareCopied ? <Check className="w-3.5 h-3.5 text-green-600" /> : <Copy className="w-3.5 h-3.5" />}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Two-Column Responsive Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-12 items-start">
+            
+            {/* Sidebar (Left Column) - Table of Contents & CTA */}
+            <aside className="hidden lg:flex flex-col gap-6 sticky top-28 w-[240px] shrink-0 self-start">
+              {toc.length > 0 && (
+                <div>
+                  <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">
+                    On this page
+                  </h3>
+                  <nav className="flex flex-col gap-3">
+                    {toc.map((item, index) => (
+                      <a
+                        key={item.id}
+                        href={`#${item.id}`}
+                        onClick={(e) => handleTocClick(e, index)}
+                        className={cn(
+                          "text-xs transition-colors hover:text-[#00B9A5] leading-relaxed block w-full pl-3.5 border-l",
+                          activeId === item.id
+                            ? "text-[#00B9A5] font-bold border-[#00B9A5]"
+                            : "text-slate-500 font-medium border-slate-100"
+                        )}
+                        style={{ paddingLeft: `${item.level === 3 ? "24px" : "14px"}` }}
+                      >
+                        {item.text}
+                      </a>
+                    ))}
+                  </nav>
+                </div>
+              )}
+
+              {/* Callout Info Card */}
+              <div className="bg-[#E6F9F6] border border-teal-100 rounded-2xl p-5 shadow-sm">
+                <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-[#00B9A5] shadow-xs mb-3">
+                  <Lightbulb className="w-4 h-4" />
+                </div>
+                <h4 className="text-xs font-bold text-slate-800 leading-snug">
+                  Master the fundamentals. Crack the interviews.
+                </h4>
+                <p className="text-[10px] text-slate-500 font-semibold mt-1">
+                  Strong basics = Confident developer.
+                </p>
+              </div>
+            </aside>
+
+            {/* Main Content Area (Right Column) */}
+            <div className="w-full">
+              {/* Category pill */}
+              {blog.category && (
+                <span className="text-xs font-bold text-[#00B9A5] tracking-wider uppercase block mb-3">
+                  {blog.category.name}
+                </span>
+              )}
+
+              {/* Article Main Heading */}
+              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 leading-tight mb-4">
+                {blog.title}
+              </h1>
+
+              {/* Excerpt */}
+              <p className="text-base md:text-lg text-slate-600 leading-relaxed font-normal mb-6">
+                {blog.excerpt}
+              </p>
+
+              {/* Author & Meta Row */}
+              <div className="flex flex-wrap items-center justify-between gap-4 py-5 border-y border-slate-100 mb-8">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center shrink-0">
+                    <User className="w-4 h-4 text-slate-500" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-slate-900 leading-none">
+                      By Community Member
+                    </div>
+                    <div className="flex items-center gap-1.5 text-[10px] text-slate-400 font-semibold mt-1.5">
+                      <span>{formatDate(blog.published_at)}</span>
+                      <span>•</span>
+                      <span>{readingTime}</span>
+                      <span>•</span>
+                      <span className="text-[#00B9A5]">Technical</span>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setIsSaved(!isSaved)}
+                  className={cn(
+                    "flex items-center gap-1.5 border rounded-lg px-3 py-1.5 text-xs font-bold transition-all shadow-xs cursor-pointer",
+                    isSaved
+                      ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                      : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                  )}
+                >
+                  <Bookmark className={cn("w-3.5 h-3.5", isSaved ? "fill-emerald-700" : "")} />
+                  {isSaved ? "Saved" : "Save for later"}
+                </button>
+              </div>
+
+
+              {/* Cover image wrapper (only if not already embedded in body) */}
+              {blog.cover_image && !isImageInContent && (
+                <div className="w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 shadow-xs mb-10 max-h-[460px] select-none">
+                  <img
+                    src={blog.cover_image}
+                    alt={blog.title}
+                    className="w-full h-full object-cover max-h-[460px]"
+                  />
+                </div>
+              )}
+
+              <div className="prose-blog-container mb-12">
+                <style dangerouslySetInnerHTML={{ __html: `
+                  .prose-blog-container {
+                    font-family: var(--font-newsreader), Georgia, serif;
+                    font-size: 1.125rem;
+                    line-height: 1.85;
+                    color: #1e293b;
+                  }
+                  .prose-blog-container p {
+                    margin-bottom: 1.75rem;
+                    font-weight: 400;
+                    color: #1e293b;
+                    line-height: 1.85;
+                    font-size: 1.125rem;
+                  }
+                  .prose-blog-container a {
+                    color: #00B9A5;
+                    text-decoration: underline;
+                    text-decoration-thickness: 1.5px;
+                    text-underline-offset: 3px;
+                    font-weight: 700;
+                    transition: color 0.15s ease;
+                  }
+                  .prose-blog-container a:hover {
+                    color: #008f80;
+                  }
+                  .prose-blog-container a::after {
+                    content: " ↗";
+                    font-size: 0.85em;
+                    display: inline-block;
+                    margin-left: 2px;
+                    vertical-align: middle;
+                  }
+                  .prose-blog-container h1, 
+                  .prose-blog-container h2, 
+                  .prose-blog-container h3 {
+                    font-family: var(--font-manrope), sans-serif;
+                    font-weight: 700;
+                    color: #0f172a;
+                    letter-spacing: -0.02em;
+                    line-height: 1.3;
+                    scroll-margin-top: 120px;
+                  }
+                  .prose-blog-container h1 {
+                    font-size: 1.8rem;
+                    margin-top: 2.75rem;
+                    margin-bottom: 1.25rem;
+                  }
+                  .prose-blog-container h2 {
+                    font-size: 1.5rem;
+                    margin-top: 2.25rem;
+                    margin-bottom: 1rem;
+                  }
+                  .prose-blog-container h3 {
+                    font-size: 1.25rem;
+                    font-weight: 600;
+                    margin-top: 1.75rem;
+                    margin-bottom: 0.75rem;
+                  }
+                  .prose-blog-container ul {
+                    list-style-type: none;
+                    padding-left: 0.5rem;
+                    margin-bottom: 1.75rem;
+                  }
+                  .prose-blog-container ol {
+                    list-style-type: decimal;
+                    padding-left: 1.25rem;
+                    margin-bottom: 1.75rem;
+                  }
+                  .prose-blog-container ul li {
+                    position: relative;
+                    padding-left: 1.5rem;
+                    margin-bottom: 0.75rem;
+                    color: #334155;
+                    line-height: 1.8;
+                    font-weight: 400;
+                    font-size: 1.1rem;
+                  }
+                  .prose-blog-container ul li::before {
+                    content: "•";
+                    color: #00B9A5;
+                    font-weight: 900;
+                    font-size: 1.25rem;
+                    position: absolute;
+                    left: 0.25rem;
+                    top: -0.1rem;
+                  }
+                  .prose-blog-container ol li {
+                    margin-bottom: 0.75rem;
+                    color: #334155;
+                    line-height: 1.8;
+                    font-weight: 400;
+                    font-size: 1.1rem;
+                    padding-left: 0.5rem;
+                  }
+                  .prose-blog-container strong {
+                    font-weight: 700;
+                    color: #0f172a;
+                  }
+                  .prose-blog-container pre {
+                    background-color: #0b0f19;
+                    color: #e2e8f0;
+                    padding: 1.25rem;
+                    border: 1px solid #1e293b;
+                    border-radius: 1rem;
+                    overflow-x: auto;
+                    margin: 2rem 0;
+                    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+                    font-size: 0.9rem;
+                    line-height: 1.6;
+                  }
+                  .prose-blog-container code {
+                    background-color: #f1f5f9;
+                    color: #d1123f;
+                    padding: 0.2rem 0.4rem;
+                    border-radius: 0.35rem;
+                    font-size: 0.85em;
+                    font-weight: 600;
+                    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+                  }
+                  .prose-blog-container pre code {
+                    background-color: transparent;
+                    color: inherit;
+                    padding: 0;
+                    border-radius: 0;
+                    border: none;
+                    font-size: inherit;
+                    font-weight: 400;
+                  }
+                  .prose-blog-container blockquote {
+                    border-left: 4px solid #00B9A5;
+                    padding-left: 1.5rem;
+                    font-style: italic;
+                    color: #334155;
+                    margin: 2rem 0;
+                    font-weight: 400;
+                    font-size: 1.15rem;
+                    line-height: 1.7;
+                    background-color: #f8fafc;
+                    padding-top: 1rem;
+                    padding-bottom: 1rem;
+                    border-top-right-radius: 0.75rem;
+                    border-bottom-right-radius: 0.75rem;
+                  }
+                  .prose-blog-container table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 2rem 0;
+                    font-size: 0.95rem;
+                    border: 1px solid #e2e8f0;
+                  }
+                  .prose-blog-container th {
+                    background-color: #f8fafc;
+                    border: 1px solid #e2e8f0;
+                    padding: 0.75rem 1rem;
+                    font-weight: 700;
+                    text-align: left;
+                    color: #1e293b;
+                  }
+                  .prose-blog-container td {
+                    border: 1px solid #e2e8f0;
+                    padding: 0.75rem 1rem;
+                    color: #334155;
+                  }
+                  .prose-blog-container tr:nth-child(even) td {
+                    background-color: #f8fafc;
+                  }
+                  .prose-blog-container hr {
+                    margin: 2.5rem 0;
+                    border: 0;
+                    border-top: 1px dashed #e2e8f0;
+                  }
+                `}} />
+                
+                <div 
+                  id="blog-content-body"
+                  className="max-w-none text-[#334155]"
+                  dangerouslySetInnerHTML={{ __html: blog.content }} 
+                />
+              </div>
+
+              {/* Bottom CTA block */}
+              <div className="border border-slate-100 bg-[#F5FBF9] rounded-2xl p-6 shadow-xs flex flex-col md:flex-row items-center justify-between gap-6 mt-10">
+                <div className="flex items-center gap-4">
+                  <div className="w-11 h-11 bg-white border border-slate-200 rounded-full flex items-center justify-center text-[#00B9A5] shadow-xs shrink-0">
+                    <BookOpen className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-md font-bold text-slate-900 leading-none">
+                      Enjoyed this article?
+                    </h3>
+                    <p className="font-semibold text-slate-500 text-xs mt-1.5">
+                      Explore more technical deep dives and tutorials.
+                    </p>
+                  </div>
+                </div>
+                
+                <Link 
+                  href="/blog"
+                  className="no-underline inline-flex items-center gap-2 bg-[#00B9A5] hover:bg-[#009686] text-white px-5 py-2.5 font-bold rounded-xl shadow-xs text-xs transition-colors shrink-0"
+                >
+                  Browse more articles <ArrowRight className="w-4 h-4 text-white" />
+                </Link>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </main>
+
+      <Footer />
+    </>
+  );
+}

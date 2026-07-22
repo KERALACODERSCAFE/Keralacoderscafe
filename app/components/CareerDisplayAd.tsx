@@ -4,10 +4,25 @@ import { useEffect } from "react";
 
 export default function CareerDisplayAd() {
   useEffect(() => {
+    // Inject AdSense script dynamically to avoid hydration mismatches
+    const scriptId = "adsbygoogle-init";
+    let script = document.getElementById(scriptId) as HTMLScriptElement;
+    if (!script) {
+      script = document.createElement("script");
+      script.id = scriptId;
+      script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1003191780588952";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      document.head.appendChild(script);
+    }
+
     try {
       // @ts-ignore
       (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (err) {
+    } catch (err: any) {
+      if (err && err.message && err.message.includes("already have ads in them")) {
+        return;
+      }
       console.error("AdSense error:", err);
     }
   }, []);

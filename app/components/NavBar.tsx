@@ -12,6 +12,7 @@ const navLinks = [
   { name: "Contributors", href: "/#contributors", type: "scroll" },
   { name: "Projects", href: "/#projects", type: "scroll" },
   { name: "Careers", href: "/careers", type: "page" },
+  { name: "Blog", href: "/blog", type: "page" },
   { name: "Teams", href: "/teams", type: "page" },
   { name: "About", href: "/#footer", type: "scroll" },
 ];
