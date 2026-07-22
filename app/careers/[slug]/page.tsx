@@ -15,6 +15,7 @@ import {
 import NavBar from "../../components/NavBar";
 import Footer from "../../components/Footer";
 import ShareJobButton from "../../components/ShareJobButton";
+import CareerDisplayAd from "../../components/CareerDisplayAd";
 
 interface JobDetail {
   slug: string;
@@ -355,6 +356,9 @@ export default async function CareerDetailPage({ params }: PageProps) {
               </span>
             </div>
           </article>
+
+          {/* Ad slot in between Header Card and Description Card */}
+          <CareerDisplayAd />
 
           {/* Job Description Card */}
           <div className="border border-gray-100 bg-white p-8 rounded-[2rem] shadow-sm mb-6">
