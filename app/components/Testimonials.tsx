@@ -226,7 +226,7 @@ export default function Testimonials() {
         }
       `}} />
 
-      <section className="relative overflow-hidden bg-[#FAF9F5] border-t-4 border-black py-24 px-6 md:px-12" id="testimonials">
+      <section className="relative overflow-hidden bg-white border-t-4 border-black py-24 px-6 md:px-12" id="testimonials">
         <HexagonPattern
           radius={40}
           x={-1}
@@ -262,8 +262,8 @@ export default function Testimonials() {
               {/* Row 1: Scrolling Left */}
               <div className="w-full overflow-hidden py-4 relative">
                 {/* Horizontal Fade Gradients */}
-                <div className="absolute top-0 bottom-0 left-0 w-20 bg-gradient-to-r from-[#FAF9F5] to-transparent z-10 pointer-events-none" />
-                <div className="absolute top-0 bottom-0 right-0 w-20 bg-gradient-to-l from-[#FAF9F5] to-transparent z-10 pointer-events-none" />
+                <div className="absolute top-0 bottom-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+                <div className="absolute top-0 bottom-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
                 <div className="marquee-row-left">
                   {marqueeRow1.map((item, idx) => {
@@ -307,8 +307,8 @@ export default function Testimonials() {
               {/* Row 2: Scrolling Right */}
               <div className="w-full overflow-hidden py-4 relative">
                 {/* Horizontal Fade Gradients */}
-                <div className="absolute top-0 bottom-0 left-0 w-20 bg-gradient-to-r from-[#FAF9F5] to-transparent z-10 pointer-events-none" />
-                <div className="absolute top-0 bottom-0 right-0 w-20 bg-gradient-to-l from-[#FAF9F5] to-transparent z-10 pointer-events-none" />
+                <div className="absolute top-0 bottom-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+                <div className="absolute top-0 bottom-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
                 <div className="marquee-row-right">
                   {marqueeRow2.map((item, idx) => {
