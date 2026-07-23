@@ -86,8 +86,8 @@ export default function Footer() {
 
       {/* Cyan Banner */}
       <div
-        className="absolute top-[-20px] left-[-5%] w-[110%] bg-[#00D9C0] flex items-center z-10"
-        style={{ height: "110px", transform: "skewY(-4deg)", transformOrigin: "center" }}
+        className="absolute top-[-10px] left-[-5%] w-[110%] bg-[#00D9C0] flex items-center z-10 h-16 md:h-20"
+        style={{ transform: "skewY(-4deg)", transformOrigin: "center" }}
       >
         <FooterMarquee />
       </div>
@@ -340,9 +340,9 @@ function FooterMarquee() {
     <div className="flex items-center overflow-hidden w-full">
       <div className="flex gap-8 items-center whitespace-nowrap animate-marquee-footer">
         {repeated.map((q, i) => (
-          <span key={i} className="flex items-center gap-6 text-5xl md:text-7xl font-black tracking-tight text-black uppercase px-2">
+          <span key={i} className="flex items-center gap-6 text-2xl md:text-4xl font-black tracking-tight text-black uppercase px-2">
             {q}
-            <span className="text-4xl font-black">✱</span>
+            <span className="text-xl md:text-2.5xl font-black">✱</span>
           </span>
         ))}
       </div>
