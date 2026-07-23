@@ -45,38 +45,6 @@ export default function Mission() {
               creating a space where beginners feel supported, experienced
               developers feel energized, and useful things keep happening.
             </p>
-
-            <div className="mt-12 border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-              <div className="text-xs font-black uppercase tracking-[0.2em] text-black/50 mb-8 border-b-2 border-black pb-2 inline-block">
-                Why people stay
-              </div>
-              <div className="grid gap-8 sm:grid-cols-3">
-                <div className="border-2 border-black p-4 bg-kcc-gold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                  <div className="text-4xl font-black tracking-[-0.05em] text-black">
-                    700+
-                  </div>
-                  <div className="mt-2 text-xs font-black uppercase leading-tight text-black/70">
-                    active developers, learners, and builders
-                  </div>
-                </div>
-                <div className="border-2 border-black p-4 bg-kcc-green shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                  <div className="text-4xl font-black tracking-[-0.05em] text-black">
-                    30+
-                  </div>
-                  <div className="mt-2 text-xs font-black uppercase leading-tight text-black/70">
-                    contributors growing the community
-                  </div>
-                </div>
-                <div className="border-2 border-black p-4 bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                  <div className="text-4xl font-black tracking-[-0.05em] text-black">
-                    1 day
-                  </div>
-                  <div className="mt-2 text-xs font-black uppercase leading-tight text-black/70">
-                    to 10+ years of total shared experience
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
 
           <div className="grid gap-6">
