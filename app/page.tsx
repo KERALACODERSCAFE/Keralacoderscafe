@@ -6,6 +6,7 @@ import Projects from "./components/Projects";
 import MemberProjects from "./components/MemberProjects";
 import FeaturedBlogs from "./components/FeaturedBlogs";
 import Testimonials from "./components/Testimonials";
+import LinkedInEmbed from "./components/LinkedInEmbed";
 import Footer from "./components/Footer";
 
 export default function Home() {
@@ -19,6 +20,7 @@ export default function Home() {
       <MemberProjects />
       <FeaturedBlogs />
       <Testimonials />
+      <LinkedInEmbed />
       <Footer />
     </main>
   );
