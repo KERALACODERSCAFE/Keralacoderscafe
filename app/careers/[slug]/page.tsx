@@ -357,9 +357,6 @@ export default async function CareerDetailPage({ params }: PageProps) {
             </div>
           </article>
 
-          {/* Ad slot in between Header Card and Description Card */}
-          <CareerDisplayAd />
-
           {/* Job Description Card */}
           <div className="border border-gray-100 bg-white p-8 rounded-[2rem] shadow-sm mb-6">
             <div className="flex items-center gap-3 mb-4">
@@ -463,6 +460,11 @@ export default async function CareerDetailPage({ params }: PageProps) {
               </span>
               <ExternalLink className="h-4 w-4 text-white" />
             </a>
+          </div>
+
+          {/* Ad slot right above the footer */}
+          <div className="mt-8">
+            <CareerDisplayAd />
           </div>
 
         </div>
