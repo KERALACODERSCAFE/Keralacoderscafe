@@ -3,7 +3,6 @@ import Marquee from "./components/Marquee";
 import Mission from "./components/Mission";
 import Contributors from "./components/Contributors";
 import Projects from "./components/Projects";
-import Guidelines from "./components/Guidelines";
 import MemberProjects from "./components/MemberProjects";
 import FeaturedBlogs from "./components/FeaturedBlogs";
 import Testimonials from "./components/Testimonials";
@@ -17,7 +16,6 @@ export default function Home() {
       <Mission />
       <Contributors />
       <Projects />
-      <Guidelines />
       <MemberProjects />
       <FeaturedBlogs />
       <Testimonials />
