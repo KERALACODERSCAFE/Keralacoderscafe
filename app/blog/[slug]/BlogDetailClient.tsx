@@ -16,7 +16,9 @@ import {
   Linkedin,
   Copy,
   Check,
-  Lightbulb
+  Lightbulb,
+  Sun,
+  Moon
 } from "lucide-react";
 import NavBar from "../../components/NavBar";
 import Footer from "../../components/Footer";
@@ -69,6 +71,24 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
   const [activeId, setActiveId] = useState<string>("");
   const [isSaved, setIsSaved] = useState(false);
   const [shareCopied, setShareCopied] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    const isDark = document.documentElement.classList.contains("dark");
+    setTheme(isDark ? "dark" : "light");
+  }, []);
+
+  const toggleTheme = () => {
+    if (document.documentElement.classList.contains("dark")) {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("kcc_theme", "light");
+      setTheme("light");
+    } else {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("kcc_theme", "dark");
+      setTheme("dark");
+    }
+  };
 
   const isImageInContent = (() => {
     if (!blog || !blog.cover_image || !blog.content) return false;
@@ -217,29 +237,52 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
   })();
 
   return (
-    <>
+    <div className={cn("min-h-screen transition-colors duration-300", theme === "dark" ? "dark bg-[#090d16]" : "bg-white")}>
       <NavBar />
       
-      <main className="min-h-screen bg-white text-black pt-32 pb-24 px-6 md:px-12 relative isolate">
+      <main className="min-h-screen bg-white dark:bg-[#090d16] text-black dark:text-slate-100 pt-32 pb-24 px-6 md:px-12 relative isolate transition-colors duration-300">
         <div className="mx-auto max-w-[1200px] relative z-10">
           
+          {/* Theme Toggle Switch */}
+          <div className="flex justify-end mb-6">
+            <label className="relative inline-block text-[3.5px] sm:text-[4px] md:text-[4.5px] lg:text-[5px] cursor-pointer select-none">
+              <input
+                className="toggle-checkbox"
+                type="checkbox"
+                checked={theme === "dark"}
+                onChange={toggleTheme}
+                aria-label="Toggle Dark Mode"
+              />
+              <div className="toggle-slot">
+                <div className="sun-icon-wrapper">
+                  <Sun className="sun-icon" size="6em" />
+                </div>
+                <div className="toggle-button" />
+                <div className="moon-icon-wrapper">
+                  <Moon className="moon-icon" size="6em" />
+                </div>
+              </div>
+            </label>
+          </div>
+
+
           {/* Back link & Top share actions row */}
-          <div className="mb-10 flex items-center justify-between border-b border-slate-100 pb-5">
+          <div className="mb-10 flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-5">
             <Link 
               href="/blog"
-              className="no-underline inline-flex items-center gap-1.5 text-slate-650 hover:text-[#00B9A5] font-bold transition-colors text-xs"
+              className="no-underline inline-flex items-center gap-1.5 text-slate-650 dark:text-slate-400 hover:text-[#00B9A5] dark:hover:text-[#00B9A5] font-bold transition-colors text-xs"
             >
               <ArrowLeft className="w-3.5 h-3.5" /> Back to all articles
             </Link>
             
-            <div className="flex items-center gap-4 text-xs font-semibold text-slate-400 select-none">
+            <div className="flex items-center gap-4 text-xs font-semibold text-slate-400 dark:text-slate-500 select-none">
               <span>Share this article</span>
               <div className="flex items-center gap-2">
                 <a
                   href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(blog.title)}&url=${encodeURIComponent(typeof window !== "undefined" ? window.location.href : "")}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-7 h-7 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:text-black hover:border-black transition-colors bg-white cursor-pointer"
+                  className="w-7 h-7 rounded-full border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-black dark:hover:text-white hover:border-black dark:hover:border-white bg-white dark:bg-slate-900 cursor-pointer"
                   title="Share on Twitter"
                 >
                   <Twitter className="w-3.5 h-3.5" />
@@ -248,14 +291,14 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
                   href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(typeof window !== "undefined" ? window.location.href : "")}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-7 h-7 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:text-black hover:border-black transition-colors bg-white cursor-pointer"
+                  className="w-7 h-7 rounded-full border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-black dark:hover:text-white hover:border-black dark:hover:border-white bg-white dark:bg-slate-900 cursor-pointer"
                   title="Share on LinkedIn"
                 >
                   <Linkedin className="w-3.5 h-3.5" />
                 </a>
                 <button
                   onClick={handleCopyLink}
-                  className="w-7 h-7 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:text-black hover:border-black transition-colors bg-white cursor-pointer"
+                  className="w-7 h-7 rounded-full border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-black dark:hover:text-white hover:border-black dark:hover:border-white bg-white dark:bg-slate-900 cursor-pointer"
                   title="Copy link"
                 >
                   {shareCopied ? <Check className="w-3.5 h-3.5 text-green-600" /> : <Copy className="w-3.5 h-3.5" />}
@@ -264,6 +307,7 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
             </div>
           </div>
 
+
           {/* Two-Column Responsive Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-12 items-start">
             
@@ -271,7 +315,7 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
             <aside className="hidden lg:flex flex-col gap-6 sticky top-28 w-[240px] shrink-0 self-start">
               {toc.length > 0 && (
                 <div>
-                  <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">
+                  <h3 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4">
                     On this page
                   </h3>
                   <nav className="flex flex-col gap-3">
@@ -284,7 +328,7 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
                           "text-xs transition-colors hover:text-[#00B9A5] leading-relaxed block w-full pl-3.5 border-l",
                           activeId === item.id
                             ? "text-[#00B9A5] font-bold border-[#00B9A5]"
-                            : "text-slate-500 font-medium border-slate-100"
+                            : "text-slate-500 dark:text-slate-400 font-medium border-slate-100 dark:border-slate-800"
                         )}
                         style={{ paddingLeft: `${item.level === 3 ? "24px" : "14px"}` }}
                       >
@@ -296,14 +340,14 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
               )}
 
               {/* Callout Info Card */}
-              <div className="bg-[#E6F9F6] border border-teal-100 rounded-2xl p-5 shadow-sm">
-                <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-[#00B9A5] shadow-xs mb-3">
+              <div className="bg-[#E6F9F6] dark:bg-teal-950/20 border border-teal-100 dark:border-teal-900/40 rounded-2xl p-5 shadow-sm">
+                <div className="w-8 h-8 rounded-full bg-white dark:bg-teal-900/50 flex items-center justify-center text-[#00B9A5] shadow-xs mb-3">
                   <Lightbulb className="w-4 h-4" />
                 </div>
-                <h4 className="text-xs font-bold text-slate-800 leading-snug">
+                <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 leading-snug">
                   Master the fundamentals. Crack the interviews.
                 </h4>
-                <p className="text-[10px] text-slate-500 font-semibold mt-1">
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold mt-1">
                   Strong basics = Confident developer.
                 </p>
               </div>
@@ -319,26 +363,26 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
               )}
 
               {/* Article Main Heading */}
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 leading-tight mb-4">
+              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight mb-4">
                 {blog.title}
               </h1>
 
               {/* Excerpt */}
-              <p className="text-base md:text-lg text-slate-600 leading-relaxed font-normal mb-6">
+              <p className="text-base md:text-lg text-slate-600 dark:text-slate-350 leading-relaxed font-normal mb-6">
                 {blog.excerpt}
               </p>
 
               {/* Author & Meta Row */}
-              <div className="flex flex-wrap items-center justify-between gap-4 py-5 border-y border-slate-100 mb-8">
+              <div className="flex flex-wrap items-center justify-between gap-4 py-5 border-y border-slate-100 dark:border-slate-800 mb-8">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center shrink-0">
-                    <User className="w-4 h-4 text-slate-500" />
+                  <div className="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center shrink-0 border dark:border-slate-850">
+                    <User className="w-4 h-4 text-slate-500 dark:text-slate-400" />
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-slate-900 leading-none">
+                    <div className="text-xs font-bold text-slate-900 dark:text-slate-200 leading-none">
                       By Community Member
                     </div>
-                    <div className="flex items-center gap-1.5 text-[10px] text-slate-400 font-semibold mt-1.5">
+                    <div className="flex items-center gap-1.5 text-[10px] text-slate-400 dark:text-slate-500 font-semibold mt-1.5">
                       <span>{formatDate(blog.published_at)}</span>
                       <span>•</span>
                       <span>{readingTime}</span>
@@ -353,11 +397,11 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
                   className={cn(
                     "flex items-center gap-1.5 border rounded-lg px-3 py-1.5 text-xs font-bold transition-all shadow-xs cursor-pointer",
                     isSaved
-                      ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                      : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                      ? "border-emerald-200 dark:border-emerald-900/40 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400"
+                      : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
                   )}
                 >
-                  <Bookmark className={cn("w-3.5 h-3.5", isSaved ? "fill-emerald-700" : "")} />
+                  <Bookmark className={cn("w-3.5 h-3.5", isSaved ? "fill-emerald-700 dark:fill-emerald-400" : "")} />
                   {isSaved ? "Saved" : "Save for later"}
                 </button>
               </div>
@@ -546,26 +590,71 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
                     border: 0;
                     border-top: 1px dashed #e2e8f0;
                   }
+                  .dark .prose-blog-container {
+                    color: #cbd5e1;
+                  }
+                  .dark .prose-blog-container p {
+                    color: #cbd5e1;
+                  }
+                  .dark .prose-blog-container h1, 
+                  .dark .prose-blog-container h2, 
+                  .dark .prose-blog-container h3 {
+                    color: #ffffff;
+                  }
+                  .dark .prose-blog-container ul li,
+                  .dark .prose-blog-container ol li {
+                    color: #cbd5e1;
+                  }
+                  .dark .prose-blog-container strong {
+                    color: #ffffff;
+                  }
+                  .dark .prose-blog-container code {
+                    background-color: #1e293b;
+                    color: #fda4af;
+                  }
+                  .dark .prose-blog-container blockquote {
+                    color: #cbd5e1;
+                    background-color: #0f172a;
+                    border-left-color: #00B9A5;
+                  }
+                  .dark .prose-blog-container table,
+                  .dark .prose-blog-container th,
+                  .dark .prose-blog-container td {
+                    border-color: #334155;
+                  }
+                  .dark .prose-blog-container th {
+                    background-color: #0f172a;
+                    color: #ffffff;
+                  }
+                  .dark .prose-blog-container td {
+                    color: #cbd5e1;
+                  }
+                  .dark .prose-blog-container tr:nth-child(even) td {
+                    background-color: #0f172a;
+                  }
+                  .dark .prose-blog-container hr {
+                    border-top-color: #334155;
+                  }
                 `}} />
                 
                 <div 
                   id="blog-content-body"
-                  className="max-w-none text-[#334155]"
+                  className="max-w-none text-[#334155] dark:text-[#cbd5e1]"
                   dangerouslySetInnerHTML={{ __html: blog.content }} 
                 />
               </div>
 
               {/* Bottom CTA block */}
-              <div className="border border-slate-100 bg-[#F5FBF9] rounded-2xl p-6 shadow-xs flex flex-col md:flex-row items-center justify-between gap-6 mt-10">
+              <div className="border border-slate-100 dark:border-slate-800 bg-[#F5FBF9] dark:bg-slate-900/40 rounded-2xl p-6 shadow-xs flex flex-col md:flex-row items-center justify-between gap-6 mt-10">
                 <div className="flex items-center gap-4">
-                  <div className="w-11 h-11 bg-white border border-slate-200 rounded-full flex items-center justify-center text-[#00B9A5] shadow-xs shrink-0">
+                  <div className="w-11 h-11 bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-full flex items-center justify-center text-[#00B9A5] shadow-xs shrink-0">
                     <BookOpen className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-md font-bold text-slate-900 leading-none">
+                    <h3 className="text-md font-bold text-slate-900 dark:text-white leading-none">
                       Enjoyed this article?
                     </h3>
-                    <p className="font-semibold text-slate-500 text-xs mt-1.5">
+                    <p className="font-semibold text-slate-500 dark:text-slate-400 text-xs mt-1.5">
                       Explore more technical deep dives and tutorials.
                     </p>
                   </div>
@@ -586,6 +675,6 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

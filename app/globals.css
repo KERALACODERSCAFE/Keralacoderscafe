@@ -1,6 +1,36 @@
 @import "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap";
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
+.dark {
+  --color-kcc-bg: #090d16;
+  --color-kcc-surface: #0f172a;
+  --color-kcc-surface-elevated: #1e293b;
+  --color-kcc-text: #f8fafc;
+  --color-kcc-text-dim: #cbd5e1;
+  --color-kcc-border: #334155;
+  --color-kcc-paper: #090d16;
+  --color-kcc-ink: #ffffff;
+  
+  /* Neubrutalist Specific in Dark Mode */
+  --brutalist-shadow: 4px 4px 0px 0px rgba(255, 255, 255, 0.15);
+  --brutalist-shadow-lg: 8px 8px 0px 0px rgba(255, 255, 255, 0.15);
+  --brutalist-border: 3px solid #334155;
+}
+
+.dark body {
+  background-color: #090d16;
+  color: #f8fafc;
+}
+
+.dark ::selection {
+  background: #6941C6;
+  color: #ffffff;
+}
+
+
+
 @theme {
   --font-headline: var(--font-newsreader);
   --font-body: var(--font-manrope);
@@ -653,6 +683,98 @@ html.lenis body {
   transform: translateX(-55px);
   pointer-events: none;
 }
+
+/* Custom Theme Toggle Switch Styles */
+.toggle-checkbox {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.toggle-slot {
+  position: relative;
+  height: 10em;
+  width: 20em;
+  border: 0.2em solid #e4e7ec;
+  border-radius: 10em;
+  background-color: white;
+  box-shadow: 0px 0.5em 1.5em rgba(228, 231, 236, 0.4);
+  transition: background-color 250ms, border-color 250ms, box-shadow 250ms;
+}
+
+.dark .toggle-slot {
+  border-color: #1f2937;
+  box-shadow: 0px 0.5em 1.5em rgba(0, 0, 0, 0.4);
+}
+
+.toggle-checkbox:checked ~ .toggle-slot {
+  background-color: #374151;
+}
+
+.toggle-button {
+  transform: translate(11.8em, 1.8em);
+  position: absolute;
+  height: 6em;
+  width: 6em;
+  border-radius: 50%;
+  background-color: #ffeccf;
+  box-shadow: inset 0px 0px 0px 0.7em #ffbb52;
+  transition: background-color 250ms, border-color 250ms, transform 500ms cubic-bezier(.26,2,.46,.71);
+}
+
+.toggle-checkbox:checked ~ .toggle-slot .toggle-button {
+  background-color: #485367;
+  box-shadow: inset 0px 0px 0px 0.7em white;
+  transform: translate(1.8em, 1.8em);
+}
+
+.sun-icon {
+  position: absolute;
+  height: 6em;
+  width: 6em;
+  color: #ffbb52;
+}
+
+.sun-icon-wrapper {
+  position: absolute;
+  height: 6em;
+  width: 6em;
+  opacity: 1;
+  transform: translate(1.8em, 1.8em) rotate(15deg);
+  transform-origin: 50% 50%;
+  transition: opacity 150ms, transform 500ms cubic-bezier(.26,2,.46,.71);
+}
+
+.toggle-checkbox:checked ~ .toggle-slot .sun-icon-wrapper {
+  opacity: 0;
+  transform: translate(2.8em, 1.8em) rotate(0deg);
+}
+
+.moon-icon {
+  position: absolute;
+  height: 6em;
+  width: 6em;
+  color: white;
+}
+
+.moon-icon-wrapper {
+  position: absolute;
+  height: 6em;
+  width: 6em;
+  opacity: 0;
+  transform: translate(10.8em, 1.8em) rotate(0deg);
+  transform-origin: 50% 50%;
+  transition: opacity 150ms, transform 500ms cubic-bezier(.26,2.5,.46,.71);
+}
+
+.toggle-checkbox:checked ~ .toggle-slot .moon-icon-wrapper {
+  opacity: 1;
+  transform: translate(11.8em, 1.8em) rotate(-15deg);
+}
+
+
 
 
 

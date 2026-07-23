@@ -175,6 +175,24 @@ export default function RootLayout({
             `
           }}
         />
+        {/* Pre-render Dark Mode Script to prevent theme flash */}
+        <Script
+          id="kcc-theme-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                var path = window.location.pathname;
+                if (path.indexOf('/blog') === 0) {
+                  var theme = localStorage.getItem('kcc_theme');
+                  if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                  }
+                }
+              } catch (e) {}
+            `
+          }}
+        />
         <style
           dangerouslySetInnerHTML={{
             __html: `

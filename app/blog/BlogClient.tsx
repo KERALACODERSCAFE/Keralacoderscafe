@@ -12,7 +12,9 @@ import {
   Search,
   ChevronLeft,
   ChevronRight,
-  BookOpen
+  BookOpen,
+  Sun,
+  Moon
 } from "lucide-react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
@@ -49,6 +51,24 @@ interface BlogClientProps {
 export default function BlogClient({ initialBlogs, initialCategories }: BlogClientProps) {
   const router = useRouter();
   const [loadingSlug, setLoadingSlug] = useState<string | null>(null);
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    const isDark = document.documentElement.classList.contains("dark");
+    setTheme(isDark ? "dark" : "light");
+  }, []);
+
+  const toggleTheme = () => {
+    if (document.documentElement.classList.contains("dark")) {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("kcc_theme", "light");
+      setTheme("light");
+    } else {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("kcc_theme", "dark");
+      setTheme("dark");
+    }
+  };
 
   // States
   const [searchQuery, setSearchQuery] = useState("");
@@ -135,16 +155,39 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
   };
 
   return (
-    <>
+    <div className={cn("min-h-screen transition-colors duration-300", theme === "dark" ? "dark bg-[#090d16]" : "bg-white")}>
       <NavBar />
 
-      <main className="min-h-screen bg-white text-black pt-32 pb-24 px-6 md:px-12 relative overflow-hidden isolate">
+      <main className="min-h-screen bg-white dark:bg-[#090d16] text-black dark:text-slate-100 pt-32 pb-24 px-6 md:px-12 relative overflow-hidden isolate transition-colors duration-300">
         <div className="mx-auto max-w-[1200px] relative z-10">
           
+          {/* Theme Toggle Switch */}
+          <div className="flex justify-end mb-6">
+            <label className="relative inline-block text-[3.5px] sm:text-[4px] md:text-[4.5px] lg:text-[5px] cursor-pointer select-none">
+              <input
+                className="toggle-checkbox"
+                type="checkbox"
+                checked={theme === "dark"}
+                onChange={toggleTheme}
+                aria-label="Toggle Dark Mode"
+              />
+              <div className="toggle-slot">
+                <div className="sun-icon-wrapper">
+                  <Sun className="sun-icon" size="6em" />
+                </div>
+                <div className="toggle-button" />
+                <div className="moon-icon-wrapper">
+                  <Moon className="moon-icon" size="6em" />
+                </div>
+              </div>
+            </label>
+          </div>
+
+
           {/* Header block with purple label and dynamic subtitle */}
           <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-normal text-slate-900 leading-tight mb-4 font-editorial italic">The latest writings from our team</h1>
-            <p className="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed font-headline italic">Fresh perspectives on code, careers and technology.</p>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-normal text-slate-900 dark:text-white leading-tight mb-4 font-editorial italic">The latest writings from our team</h1>
+            <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed font-headline italic">Fresh perspectives on code, careers and technology.</p>
           </div>
 
           {/* Featured Banner Section */}
@@ -232,23 +275,23 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
             <aside className="flex flex-col gap-6 sticky top-28 shrink-0 self-start w-full lg:w-[240px]">
               
               {/* Search Bar */}
-              <div className="relative flex items-center bg-white border border-slate-200 rounded-lg px-3 py-2 shadow-sm">
-                <Search className="w-4 h-4 text-slate-400 shrink-0 mr-2" />
+              <div className="relative flex items-center bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 shadow-sm">
+                <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 shrink-0 mr-2" />
                 <input
                   type="text"
                   placeholder="Search articles..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full text-xs font-medium text-slate-850 placeholder-slate-400 outline-none bg-transparent"
+                  className="w-full text-xs font-medium text-slate-850 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-650 outline-none bg-transparent"
                 />
               </div>
 
               {/* Categories Navigation */}
               <div className="text-left">
-                <h3 className="text-xs font-bold text-[#6941C6] uppercase tracking-wider mb-3 lg:mb-4 select-none">
+                <h3 className="text-xs font-bold text-[#6941C6] dark:text-purple-400 uppercase tracking-wider mb-3 lg:mb-4 select-none">
                   Blog categories
                 </h3>
-                <div className="flex flex-row lg:flex-col gap-2 lg:gap-1 overflow-x-auto lg:overflow-x-visible scrollbar-hide border-none lg:border-l lg:border-slate-100 pb-2 lg:pb-0">
+                <div className="flex flex-row lg:flex-col gap-2 lg:gap-1 overflow-x-auto lg:overflow-x-visible scrollbar-hide border-none lg:border-l lg:border-slate-100 lg:dark:border-slate-800 pb-2 lg:pb-0">
                   {categoryTabs.map((cat) => {
                     const isActive = selectedCategory === cat;
                     return (
@@ -258,16 +301,17 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
                         className={cn(
                           "flex items-center justify-between text-left text-xs transition-all cursor-pointer whitespace-nowrap shrink-0",
                           // Mobile styles (pills)
-                          "px-3 py-1.5 rounded-full border border-slate-200 bg-white text-slate-600 font-medium",
-                          isActive && "border-[#6941C6] bg-[#F9F5FF] text-[#6941C6] font-bold",
+                          "px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 font-medium",
+                          isActive && "border-[#6941C6] dark:border-purple-400 bg-[#F9F5FF] dark:bg-purple-950/30 text-[#6941C6] dark:text-purple-400 font-bold",
                           // Desktop styles (standard vertical tabs)
-                          "lg:px-0 lg:pl-4 lg:pr-3 lg:py-2 lg:block lg:w-full lg:rounded-r-lg lg:border-l-2 lg:border-y-0 lg:border-r-0 lg:rounded-l-none"
+                          "lg:px-0 lg:pl-4 lg:pr-3 lg:py-2 lg:block lg:w-full lg:rounded-r-lg lg:border-l-2 lg:border-y-0 lg:border-r-0 lg:rounded-l-none lg:bg-transparent lg:dark:bg-transparent lg:border-slate-200 lg:dark:border-slate-800",
+                          isActive && "lg:border-l-2 lg:border-[#6941C6] lg:dark:border-purple-400 lg:bg-[#F9F5FF] lg:dark:bg-purple-950/30"
                         )}
                       >
                         <span>{cat}</span>
                         <span className={cn(
                           "text-[10px] font-bold px-2 py-0.5 rounded-full select-none ml-1.5 lg:ml-0",
-                          isActive ? "bg-[#F4EBFF] text-[#6941C6]" : "bg-slate-100 text-slate-500"
+                          isActive ? "bg-[#F4EBFF] dark:bg-purple-950/60 text-[#6941C6] dark:text-purple-300" : "bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400"
                         )}>
                           {getCountForCategory(cat)}
                         </span>
@@ -278,15 +322,15 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
               </div>
  
               {/* Second Sidebar Widget Card - Hidden on mobile */}
-              <div className="hidden lg:flex bg-white border border-slate-200 rounded-2xl p-5 shadow-sm text-left flex-col items-start gap-4">
-                <div className="w-8 h-8 rounded-lg bg-[#F9F5FF] border border-[#E9E3FC] flex items-center justify-center text-[#6941C6]">
+              <div className="hidden lg:flex bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-slate-850 rounded-2xl p-5 shadow-sm text-left flex-col items-start gap-4">
+                <div className="w-8 h-8 rounded-lg bg-[#F9F5FF] dark:bg-purple-950/40 border border-[#E9E3FC] dark:border-purple-900/40 flex items-center justify-center text-[#6941C6] dark:text-purple-400">
                   <BookOpen className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-slate-800 leading-snug">
+                  <h4 className="text-xs font-bold text-slate-800 dark:text-white leading-snug">
                     Love what you read?
                   </h4>
-                  <p className="text-[10px] text-slate-500 font-semibold mt-1 leading-normal">
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold mt-1 leading-normal">
                     Join our community of 5000+ developers and never miss an update.
                   </p>
                 </div>
@@ -303,9 +347,9 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
             {/* Articles Grid (Right Column) */}
             <div className="flex flex-col gap-12 w-full">
               {gridBlogs.length === 0 ? (
-                <div className="border-2 border-slate-200 bg-slate-50/30 p-12 rounded-xl text-center shadow-[4px_4px_0px_0px_rgba(0,0,0,0.03)] max-w-md mx-auto my-6">
-                  <span className="text-sm font-bold text-slate-700 mb-1.5 block">No more articles yet</span>
-                  <p className="text-[11px] text-slate-400 font-medium leading-relaxed max-w-xs mx-auto">
+                <div className="border-2 border-slate-200 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-900/10 p-12 rounded-xl text-center shadow-[4px_4px_0px_0px_rgba(0,0,0,0.03)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.01)] max-w-md mx-auto my-6">
+                  <span className="text-sm font-bold text-slate-700 dark:text-slate-350 mb-1.5 block">No more articles yet</span>
+                  <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium leading-relaxed max-w-xs mx-auto">
                     We couldn't find any other posts matching this category or query. Check back soon!
                   </p>
                 </div>
@@ -319,14 +363,14 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
                         key={blog.slug}
                         onClick={() => handleCardClick(blog.slug)}
                         className={cn(
-                          "group flex flex-col bg-white overflow-hidden cursor-pointer h-full relative",
+                          "group flex flex-col bg-white dark:bg-transparent overflow-hidden cursor-pointer h-full relative",
                           isLarge ? "col-span-1 md:col-span-3" : "col-span-1 md:col-span-2",
                           loadingSlug === blog.slug ? "opacity-75 cursor-wait" : ""
                         )}
                       >
                         {/* Cover image */}
                         <div className={cn(
-                          "relative overflow-hidden w-full bg-slate-50 shrink-0 rounded-2xl mb-4",
+                          "relative overflow-hidden w-full bg-slate-50 dark:bg-slate-900/80 shrink-0 rounded-2xl mb-4",
                           isLarge ? "h-56 md:h-64" : "h-40 md:h-44"
                         )}>
                           {blog.cover_image ? (
@@ -336,41 +380,41 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
                               className="w-full h-full object-cover group-hover:scale-[1.01] transition-transform duration-300"
                             />
                           ) : (
-                            <div className="w-full h-full bg-gradient-to-tr from-purple-50 via-indigo-50 to-white flex items-center justify-center overflow-hidden">
-                              <span className="text-2xl font-black opacity-10 tracking-widest text-slate-900">KCC BLOG</span>
+                            <div className="w-full h-full bg-gradient-to-tr from-purple-50 via-indigo-50 to-white dark:from-slate-900 dark:to-slate-800 flex items-center justify-center overflow-hidden">
+                              <span className="text-2xl font-black opacity-10 dark:opacity-5 tracking-widest text-slate-900 dark:text-white">KCC BLOG</span>
                             </div>
                           )}
                         </div>
 
                         {/* Category and read time info */}
-                        <div className="flex items-center gap-2 text-xs font-semibold text-[#6941C6] mb-2.5">
+                        <div className="flex items-center gap-2 text-xs font-semibold text-[#6941C6] dark:text-purple-400 mb-2.5">
                           {blog.category && <span>{blog.category.name}</span>}
                           {blog.category && !isLarge && <span>•</span>}
-                          {!isLarge && <span className="text-slate-405 font-medium">{getReadingTime(blog.excerpt)}</span>}
+                          {!isLarge && <span className="text-slate-450 dark:text-slate-500 font-medium">{getReadingTime(blog.excerpt)}</span>}
                         </div>
 
                         {/* Card Title */}
                         <h4 className={cn(
-                          "font-bold text-slate-900 group-hover:text-[#6941C6] transition-colors leading-snug mb-2 flex justify-between items-start gap-2",
+                          "font-bold text-slate-900 dark:text-white group-hover:text-[#6941C6] dark:group-hover:text-purple-400 transition-colors leading-snug mb-2 flex justify-between items-start gap-2",
                           isLarge ? "text-[16px] md:text-[17px]" : "text-[14px] md:text-[15px]"
                         )}>
                           <span>{blog.title}</span>
-                          <ArrowUpRight className="w-4 h-4 text-slate-400 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                          <ArrowUpRight className="w-4 h-4 text-slate-400 dark:text-slate-500 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                         </h4>
 
                         {/* Card Excerpt */}
-                        <p className="text-xs text-slate-550 leading-relaxed line-clamp-2 mb-4">
+                        <p className="text-xs text-slate-550 dark:text-slate-400 leading-relaxed line-clamp-2 mb-4">
                           {blog.excerpt}
                         </p>
 
                         {/* Author info */}
                         <div className="flex items-center gap-3 mt-auto">
-                          <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
-                            <User className="w-4 h-4 text-slate-450" />
+                          <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center border dark:border-slate-800">
+                            <User className="w-4 h-4 text-slate-450 dark:text-slate-500" />
                           </div>
                           <div>
-                            <div className="text-[11px] font-bold text-slate-900 leading-none">Community Member</div>
-                            <div className="text-[9px] text-slate-450 font-semibold mt-1">{formatDate(blog.published_at)}</div>
+                            <div className="text-[11px] font-bold text-slate-900 dark:text-slate-200 leading-none">Community Member</div>
+                            <div className="text-[9px] text-slate-450 dark:text-slate-500 font-semibold mt-1">{formatDate(blog.published_at)}</div>
                           </div>
                         </div>
                       </article>
@@ -381,11 +425,11 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
 
               {/* Clean Pagination Controls */}
               {totalPages > 1 && (
-                <div className="flex items-center justify-between border-t border-slate-200 pt-6 mt-6 select-none">
+                <div className="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-6 mt-6 select-none">
                   <button
                     onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
-                    className="flex h-9 items-center gap-2 border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 px-4 rounded-lg font-bold text-xs shadow-sm cursor-pointer disabled:opacity-40 disabled:hover:bg-white transition-colors"
+                    className="flex h-9 items-center gap-2 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 px-4 rounded-lg font-bold text-xs shadow-sm cursor-pointer disabled:opacity-40 disabled:hover:bg-white dark:disabled:hover:bg-slate-900 transition-colors"
                   >
                     <ChevronLeft className="w-3.5 h-3.5" /> Previous
                   </button>
@@ -398,8 +442,8 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
                         className={cn(
                           "w-9 h-9 rounded-lg flex items-center justify-center font-bold text-xs transition-colors cursor-pointer",
                           currentPage === pageNum
-                            ? "bg-purple-50 text-[#6941C6]"
-                            : "bg-white text-slate-650 hover:bg-slate-50"
+                            ? "bg-purple-50 dark:bg-purple-950/40 text-[#6941C6] dark:text-purple-300"
+                            : "bg-white dark:bg-slate-900 text-slate-650 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
                         )}
                       >
                         {pageNum}
@@ -410,7 +454,7 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
                   <button
                     onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
-                    className="flex h-9 items-center gap-2 border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 px-4 rounded-lg font-bold text-xs shadow-sm cursor-pointer disabled:opacity-40 disabled:hover:bg-white transition-colors"
+                    className="flex h-9 items-center gap-2 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 px-4 rounded-lg font-bold text-xs shadow-sm cursor-pointer disabled:opacity-40 disabled:hover:bg-white dark:disabled:hover:bg-slate-900 transition-colors"
                   >
                     Next <ChevronRight className="w-3.5 h-3.5" />
                   </button>
@@ -421,18 +465,18 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
           </div>
 
           {/* KCC Blog Submission Banner */}
-          <div className="relative rounded-3xl bg-[#F4F1FD] p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 max-w-5xl mx-auto mt-20 shadow-sm border border-[#E9E3FC]">
+          <div className="relative rounded-3xl bg-[#F4F1FD] dark:bg-slate-900/40 p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 max-w-5xl mx-auto mt-20 shadow-sm border border-[#E9E3FC] dark:border-slate-800">
             <div className="flex items-center gap-4 text-left">
-              <div className="w-12 h-12 bg-white border border-[#E9E3FC] rounded-full flex items-center justify-center text-[#6941C6] shadow-xs shrink-0">
+              <div className="w-12 h-12 bg-white dark:bg-slate-800 border border-[#E9E3FC] dark:border-slate-700 rounded-full flex items-center justify-center text-[#6941C6] dark:text-purple-400 shadow-xs shrink-0">
                 <svg className="w-5 h-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
                 </svg>
               </div>
               <div>
-                <h3 className="text-sm md:text-base font-bold text-slate-900 leading-tight">
+                <h3 className="text-sm md:text-base font-bold text-slate-900 dark:text-white leading-tight">
                   Share your story with the KCC Community
                 </h3>
-                <p className="text-xs text-slate-500 font-semibold mt-1">
+                <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold mt-1">
                   We welcome submissions from all members! Write about your current situation, developer lifestyle, IT experiences, or thoughts on AI. Simply send your draft to us via email to get featured.
                 </p>
               </div>
@@ -450,6 +494,6 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }
