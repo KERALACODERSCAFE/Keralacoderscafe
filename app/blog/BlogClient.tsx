@@ -12,9 +12,7 @@ import {
   Search,
   ChevronLeft,
   ChevronRight,
-  BookOpen,
-  Sun,
-  Moon
+  BookOpen
 } from "lucide-react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
@@ -51,24 +49,11 @@ interface BlogClientProps {
 export default function BlogClient({ initialBlogs, initialCategories }: BlogClientProps) {
   const router = useRouter();
   const [loadingSlug, setLoadingSlug] = useState<string | null>(null);
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const theme = "dark";
 
   useEffect(() => {
-    const isDark = document.documentElement.classList.contains("dark");
-    setTheme(isDark ? "dark" : "light");
+    document.documentElement.classList.add("dark");
   }, []);
-
-  const toggleTheme = () => {
-    if (document.documentElement.classList.contains("dark")) {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("kcc_theme", "light");
-      setTheme("light");
-    } else {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("kcc_theme", "dark");
-      setTheme("dark");
-    }
-  };
 
   // States
   const [searchQuery, setSearchQuery] = useState("");
@@ -86,6 +71,7 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
       ])
     ),
   ];
+  const composerCategories = categoryTabs.filter((c) => c !== "View all");
 
   // Reset pagination when filters change
   useEffect(() => {
@@ -161,27 +147,7 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
       <main className="min-h-screen bg-white dark:bg-[#090d16] text-black dark:text-slate-100 pt-32 pb-24 px-6 md:px-12 relative overflow-hidden isolate transition-colors duration-300">
         <div className="mx-auto max-w-[1200px] relative z-10">
           
-          {/* Theme Toggle Switch */}
-          <div className="flex justify-end mb-6">
-            <label className="relative inline-block text-[3.5px] sm:text-[4px] md:text-[4.5px] lg:text-[5px] cursor-pointer select-none">
-              <input
-                className="toggle-checkbox"
-                type="checkbox"
-                checked={theme === "dark"}
-                onChange={toggleTheme}
-                aria-label="Toggle Dark Mode"
-              />
-              <div className="toggle-slot">
-                <div className="sun-icon-wrapper">
-                  <Sun className="sun-icon" size="6em" />
-                </div>
-                <div className="toggle-button" />
-                <div className="moon-icon-wrapper">
-                  <Moon className="moon-icon" size="6em" />
-                </div>
-              </div>
-            </label>
-          </div>
+
 
 
           {/* Header block with purple label and dynamic subtitle */}
@@ -189,6 +155,8 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-normal text-slate-900 dark:text-white leading-tight mb-4 font-editorial italic">The latest writings from our team</h1>
             <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed font-headline italic">Fresh perspectives on code, careers and technology.</p>
           </div>
+
+
 
           {/* Featured Banner Section */}
           {showFeaturedHero && activeFeatured && (
@@ -342,6 +310,31 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
                 </a>
               </div>
 
+              {/* Blog Submission Sidebar Widget (Neubrutalist Style matching write-for-kcc) */}
+              <div className="border-4 border-black bg-[#FFE66D] p-5 text-left flex flex-col items-start gap-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.15)] text-black w-full rounded-none">
+                <div className="w-10 h-10 border-3 border-black bg-white flex items-center justify-center text-black shrink-0 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-none">
+                  <svg className="w-5 h-5 fill-none stroke-current stroke-[2.5]" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="text-sm font-black uppercase tracking-wider text-black">
+                    WRITE FOR KCC
+                  </h4>
+                  <p className="text-[11px] text-black/90 font-bold leading-normal mt-1">
+                    Share your knowledge, ideas, projects and opinions with our developer community.
+                  </p>
+                </div>
+                <a
+                  href="https://forms.gle/o9KYAahV5sEyH4sQ9"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full text-center border-3 border-black bg-black hover:bg-slate-900 text-white py-2.5 font-black uppercase text-xs flex justify-center items-center gap-1.5 cursor-pointer no-underline transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-none"
+                >
+                  SUBMIT YOUR BLOG <ArrowRight className="w-3.5 h-3.5 text-white" />
+                </a>
+              </div>
+
             </aside>
 
             {/* Articles Grid (Right Column) */}
@@ -464,31 +457,7 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
 
           </div>
 
-          {/* KCC Blog Submission Banner */}
-          <div className="relative rounded-3xl bg-[#F4F1FD] dark:bg-slate-900/40 p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 max-w-5xl mx-auto mt-20 shadow-sm border border-[#E9E3FC] dark:border-slate-800">
-            <div className="flex items-center gap-4 text-left">
-              <div className="w-12 h-12 bg-white dark:bg-slate-800 border border-[#E9E3FC] dark:border-slate-700 rounded-full flex items-center justify-center text-[#6941C6] dark:text-purple-400 shadow-xs shrink-0">
-                <svg className="w-5 h-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-sm md:text-base font-bold text-slate-900 dark:text-white leading-tight">
-                  Share your story with the KCC Community
-                </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold mt-1">
-                  We welcome submissions from all members! Write about your current situation, developer lifestyle, IT experiences, or thoughts on AI. Simply send your draft to us via email to get featured.
-                </p>
-              </div>
-            </div>
-            
-            <a
-              href="mailto:keralacoderscafe@gmail.com?subject=Blog%20Submission"
-              className="bg-[#6941C6] hover:bg-[#5330a6] text-white px-6 py-3 font-bold rounded-xl text-xs transition-colors shrink-0 flex items-center gap-1.5 no-underline cursor-pointer shadow-sm"
-            >
-              Submit via Email ✉️ <ArrowRight className="w-3.5 h-3.5" />
-            </a>
-          </div>
+
 
         </div>
       </main>
