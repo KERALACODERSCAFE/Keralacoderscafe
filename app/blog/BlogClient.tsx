@@ -326,7 +326,7 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
                   </p>
                 </div>
                 <a
-                  href="https://forms.gle/o9KYAahV5sEyH4sQ9"
+                  href="https://forms.gle/Z6wCFuYcbLdCyT1n9"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full text-center border-3 border-black bg-black hover:bg-slate-900 text-white py-2.5 font-black uppercase text-xs flex justify-center items-center gap-1.5 cursor-pointer no-underline transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-none"
