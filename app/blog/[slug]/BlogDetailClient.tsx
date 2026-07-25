@@ -230,14 +230,78 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
     }
   };
 
-  const readingTime = (() => {
+   const readingTime = (() => {
     const words = (blog.content || "").replace(/<[^>]*>/g, "").split(/\s+/).length;
     const minutes = Math.max(1, Math.ceil(words / 225));
     return `${minutes} min read`;
   })();
 
+  const processedContent = (() => {
+    if (!blog || !blog.content) return "";
+    
+    // 1. Inject mobile placeholders BEFORE each pre block
+    let html = blog.content.replace(
+      /<pre([\s\S]*?)>([\s\S]*?)<\/pre>/gi,
+      (match) => {
+        return `
+          <div class="my-6 p-6 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 bg-[#F8FAFC]/50 dark:bg-slate-900/20 flex flex-col items-center justify-center text-center gap-2 select-none md:hidden">
+            <div class="w-10 h-10 rounded-full bg-[#E6F9F6] dark:bg-teal-950/40 flex items-center justify-center text-[#00B9A5] mb-1">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+            </div>
+            <h4 class="text-sm font-bold text-slate-850 dark:text-slate-200 leading-snug">
+              Code View Available on Desktop
+            </h4>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium max-w-[280px]">
+              This code snippet is optimized for desktop view. Switch to a desktop screen to copy and inspect the code.
+            </p>
+          </div>
+          ${match}
+        `;
+      }
+    );
+
+    // 2. Hide all original pre blocks on mobile using Tailwind hidden md:block
+    html = html.replace(
+      /<pre([\s\S]*?)>/gi,
+      (match) => {
+        if (match.includes('class="') || match.includes("class='")) {
+          return match.replace(/class=["']/i, (cMatch) => `${cMatch}hidden md:block `);
+        } else {
+          return match.replace(/<pre/i, '<pre class="hidden md:block"');
+        }
+      }
+    );
+
+    // 3. Inject mobile placeholders BEFORE each table block
+    html = html.replace(
+      /<table([\s\S]*?)>([\s\S]*?)<\/table>/gi,
+      (match) => {
+        return `
+          <div class="my-6 p-6 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 bg-[#F8FAFC]/50 dark:bg-slate-900/20 flex flex-col items-center justify-center text-center gap-2 select-none md:hidden">
+            <div class="w-10 h-10 rounded-full bg-[#E6F9F6] dark:bg-teal-950/40 flex items-center justify-center text-[#00B9A5] mb-1">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+            </div>
+            <h4 class="text-sm font-bold text-slate-850 dark:text-slate-200 leading-snug">
+              Table View Available on Desktop
+            </h4>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium max-w-[280px]">
+              This comparison table is optimized for desktop view. Switch to a desktop screen to view it.
+            </p>
+          </div>
+          ${match}
+        `;
+      }
+    );
+
+    return html;
+  })();
+
   return (
-    <div className={cn("min-h-screen transition-colors duration-300", theme === "dark" ? "dark bg-[#090d16]" : "bg-white")}>
+    <div className={cn("min-h-screen transition-colors duration-300 overflow-x-hidden", theme === "dark" ? "dark bg-[#090d16]" : "bg-white")}>
       <NavBar />
       
       <main className="min-h-screen bg-white dark:bg-[#090d16] text-black dark:text-slate-100 pt-32 pb-24 px-6 md:px-12 relative isolate transition-colors duration-300">
@@ -321,7 +385,7 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
                   <nav className="flex flex-col gap-3">
                     {toc.map((item, index) => (
                       <a
-                        key={item.id}
+                        key={`${item.id}-${index}`}
                         href={`#${item.id}`}
                         onClick={(e) => handleTocClick(e, index)}
                         className={cn(
@@ -354,7 +418,7 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
             </aside>
 
             {/* Main Content Area (Right Column) */}
-            <div className="w-full">
+            <div className="w-full min-w-0 overflow-hidden">
               {/* Category pill */}
               {blog.category && (
                 <span className="text-xs font-bold text-[#00B9A5] tracking-wider uppercase block mb-3">
@@ -425,6 +489,7 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
                     font-size: 1.125rem;
                     line-height: 1.85;
                     color: #1e293b;
+                    max-width: 100%;
                   }
                   .prose-blog-container p {
                     margin-bottom: 1.75rem;
@@ -568,6 +633,10 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
                     margin: 2rem 0;
                     font-size: 0.95rem;
                     border: 1px solid #e2e8f0;
+                    display: block;
+                    overflow-x: auto;
+                    -webkit-overflow-scrolling: touch;
+                    max-width: 100%;
                   }
                   .prose-blog-container th {
                     background-color: #f8fafc;
@@ -635,12 +704,17 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
                   .dark .prose-blog-container hr {
                     border-top-color: #334155;
                   }
+                  @media (max-width: 768px) {
+                    .prose-blog-container table {
+                      display: none !important;
+                    }
+                  }
                 `}} />
                 
                 <div 
                   id="blog-content-body"
                   className="max-w-none text-[#334155] dark:text-[#cbd5e1]"
-                  dangerouslySetInnerHTML={{ __html: blog.content }} 
+                  dangerouslySetInnerHTML={{ __html: processedContent }} 
                 />
               </div>
 
