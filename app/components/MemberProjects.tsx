@@ -10,13 +10,17 @@ import { cn } from "@/lib/utils";
 import { memberProjectsData } from "@/lib/member-projects-data";
 import { getProjectVotes } from "@/app/actions/upvote";
 
-export default function MemberProjects() {
+export default function MemberProjects({ initialVotes }: { initialVotes?: Record<number, number> }) {
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [votesMap, setVotesMap] = useState<Record<number, number>>({});
+  const [isLoading, setIsLoading] = useState(!initialVotes || Object.keys(initialVotes).length === 0);
+  const [votesMap, setVotesMap] = useState<Record<number, number>>(initialVotes || {});
 
   useEffect(() => {
+    if (initialVotes && Object.keys(initialVotes).length > 0) {
+      return;
+    }
     async function loadVotes() {
+      setIsLoading(true);
       try {
         const votes = await getProjectVotes();
         setVotesMap(votes);
@@ -28,7 +32,7 @@ export default function MemberProjects() {
     }
     
     loadVotes();
-  }, []);
+  }, [initialVotes]);
 
   return (
     <section id="community-projects" className="scroll-mt-24 px-6 py-28 md:px-12 bg-[#FDFBF7] border-t-[3px] border-black relative overflow-hidden">

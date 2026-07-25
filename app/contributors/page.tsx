@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -143,7 +142,8 @@ export default function ContributorsPage() {
                         <div className="flex-1 flex items-center gap-1.5 sm:gap-3 p-1.5 sm:p-3 border-r border-black/20 overflow-hidden min-w-0">
                           <span className="font-black text-black/50 text-[10px] sm:text-xs w-3 sm:w-4 text-stamped shrink-0">#{index + 1}</span>
                           <div className="relative h-6 w-6 sm:h-10 sm:w-10 shrink-0 overflow-hidden rounded-sm shadow-[inset_0px_2px_5px_rgba(0,0,0,0.9)] bg-black/80">
-                            <Image src={contributor.avatar_url} alt={contributor.login} fill className="object-cover opacity-90" sizes="40px" />
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={`${contributor.avatar_url}&s=96`} alt={contributor.login} className="absolute inset-0 w-full h-full object-cover opacity-90" />
                           </div>
                           <span className="font-black text-black/80 text-[10px] sm:text-sm truncate text-stamped min-w-0">
                             {contributor.login}
@@ -204,12 +204,11 @@ export default function ContributorsPage() {
                         <div className="rivet -bottom-1 -left-1 scale-[0.6]"></div>
                         <div className="rivet -bottom-1 -right-1 scale-[0.6]"></div>
                         <div className="relative h-16 w-16 shrink-0 overflow-hidden shadow-[inset_0px_2px_5px_rgba(0,0,0,0.9)] bg-black/80">
-                          <Image
-                            src={contributor.avatar_url}
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={`${contributor.avatar_url}&s=128`}
                             alt={contributor.login}
-                            fill
-                            className="object-cover opacity-90 mix-blend-luminosity group-hover:mix-blend-normal transition duration-300"
-                            sizes="64px"
+                            className="absolute inset-0 w-full h-full object-cover opacity-90 mix-blend-luminosity group-hover:mix-blend-normal transition duration-300"
                           />
                         </div>
                       </div>

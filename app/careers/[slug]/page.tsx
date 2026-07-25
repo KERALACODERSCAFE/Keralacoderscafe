@@ -39,7 +39,7 @@ interface PageProps {
 async function getJobDetails(slug: string): Promise<JobDetail | null> {
   try {
     const res = await fetch(`https://api.interviewkit.online/api/jobs/${slug}/`, {
-      next: { revalidate: 60 } // cache for 1 minute
+      next: { revalidate: 3600 } // cache for 1 hour
     });
     if (!res.ok) return null;
     return await res.json();
@@ -74,6 +74,25 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: `Join ${job.company} as a ${cleanTitle}. Apply today on Kerala Coders Cafe.`,
     }
   };
+}
+
+export async function generateStaticParams() {
+  try {
+    const res = await fetch("https://api.interviewkit.online/api/jobs/", {
+      next: { revalidate: 3600 }
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    const allJobs = Array.isArray(data) ? data : [];
+    return allJobs
+      .filter((job: any) => job.slug)
+      .map((job: any) => ({
+        slug: job.slug,
+      }));
+  } catch (error) {
+    console.error("Error generating static params for careers:", error);
+    return [];
+  }
 }
 
 export default async function CareerDetailPage({ params }: PageProps) {

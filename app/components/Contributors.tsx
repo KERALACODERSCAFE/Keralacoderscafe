@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -151,12 +150,11 @@ export default function Contributors() {
                       className="group relative w-[240px] sm:w-[260px] h-[280px] sm:h-[310px] shrink-0 rounded-[20px] bg-[#EBEBEB] shadow-[0_8px_24px_rgba(0,0,0,0.07)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.16)] transition-all duration-500 hover:-translate-y-2 overflow-hidden snap-start flex flex-col justify-end cursor-pointer"
                     >
                       {/* Full-bleed avatar */}
-                      <Image
-                        src={contributor.avatar_url}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={`${contributor.avatar_url}&s=500`}
                         alt={contributor.login}
-                        fill
-                        className="object-cover object-top grayscale brightness-[0.97] group-hover:grayscale-0 group-hover:scale-[1.04] transition-all duration-700 ease-out"
-                        sizes="(max-width: 640px) 240px, 260px"
+                        className="absolute inset-0 w-full h-full object-cover object-top grayscale brightness-[0.97] group-hover:grayscale-0 group-hover:scale-[1.04] transition-all duration-700 ease-out"
                       />
 
                       {/* Bottom label – white pill with tan/amber border on hover */}

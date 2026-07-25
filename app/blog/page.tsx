@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 async function getBlogs() {
   try {
     const res = await fetch("https://api.interviewkit.online/api/blogs/", {
-      next: { revalidate: 60 } // Cache for 1 minute
+      next: { revalidate: 3600 } // Cache for 1 hour
     });
     if (!res.ok) throw new Error("Failed to fetch blogs");
     const data = await res.json();
@@ -28,7 +28,7 @@ async function getBlogs() {
 async function getCategories() {
   try {
     const res = await fetch("https://api.interviewkit.online/api/blogs/categories/", {
-      next: { revalidate: 60 } // Cache for 1 minute
+      next: { revalidate: 3600 } // Cache for 1 hour
     });
     if (!res.ok) throw new Error("Failed to fetch categories");
     const data = await res.json();

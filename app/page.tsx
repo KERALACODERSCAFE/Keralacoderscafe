@@ -8,8 +8,11 @@ import FeaturedBlogs from "./components/FeaturedBlogs";
 import Testimonials from "./components/Testimonials";
 import LinkedInEmbed from "./components/LinkedInEmbed";
 import Footer from "./components/Footer";
+import { getProjectVotes } from "@/app/actions/upvote";
 
-export default function Home() {
+export default async function Home() {
+  const votes = await getProjectVotes();
+
   return (
     <main className="relative z-10">
       <Marquee />
@@ -17,7 +20,7 @@ export default function Home() {
       <Mission />
       <Contributors />
       <Projects />
-      <MemberProjects />
+      <MemberProjects initialVotes={votes} />
       <FeaturedBlogs />
       <Testimonials />
       <LinkedInEmbed />

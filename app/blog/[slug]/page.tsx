@@ -8,7 +8,7 @@ interface PageProps {
 async function getBlogDetails(slug: string) {
   try {
     const res = await fetch(`https://api.interviewkit.online/api/blogs/${slug}/`, {
-      next: { revalidate: 60 } // cache for 1 minute
+      next: { revalidate: 3600 } // cache for 1 hour
     });
     if (!res.ok) return null;
     return await res.json();
@@ -44,6 +44,25 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       images: blog.cover_image ? [blog.cover_image] : ["https://www.keralacoderscafe.in/og-image.jpg"],
     }
   };
+}
+
+export async function generateStaticParams() {
+  try {
+    const res = await fetch("https://api.interviewkit.online/api/blogs/", {
+      next: { revalidate: 3600 }
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    const allBlogs = Array.isArray(data) ? data : (data.value || []);
+    return allBlogs
+      .filter((blog: any) => blog.slug && blog.published_at && new Date(blog.published_at) >= new Date("2026-07-01"))
+      .map((blog: any) => ({
+        slug: blog.slug,
+      }));
+  } catch (error) {
+    console.error("Error generating static params for blogs:", error);
+    return [];
+  }
 }
 
 export default async function BlogDetailPage({ params }: PageProps) {
