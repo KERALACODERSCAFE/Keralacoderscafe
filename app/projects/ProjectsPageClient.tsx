@@ -7,6 +7,16 @@ import { memberProjectsData } from "@/lib/member-projects-data";
 import { cn } from "@/lib/utils";
 import { getProjectVotes } from "@/app/actions/upvote";
 import { TrendingUp, Sparkles } from "lucide-react";
+import Image from "next/image";
+
+const memes = [
+  { src: "https://res.cloudinary.com/ddtpurhae/image/upload/v1785135582/photo_2026-07-27_11-45-05_cjh0ie.jpg",  alt: "KCC Community", rotate: "-rotate-3", top: "top-6",  left: "left-[1%]" },
+  { src: "https://res.cloudinary.com/ddtpurhae/image/upload/v1785135582/photo_2026-07-27_11-45-05_2_xqlats.jpg", alt: "KCC Meetup", rotate: "rotate-2",  top: "top-3",  left: "left-[17%]" },
+  { src: "https://res.cloudinary.com/ddtpurhae/image/upload/v1785135582/photo_2026-07-27_11-45-05_3_r00rhn.jpg", alt: "Tech Discussion", rotate: "-rotate-1", top: "top-8",  left: "left-[33%]" },
+  { src: "https://res.cloudinary.com/ddtpurhae/image/upload/v1785135582/photo_2026-07-27_12-29-25_bzsw83.jpg",  alt: "Networking", rotate: "rotate-3",  top: "top-4",  left: "left-[50%]" },
+  { src: "https://res.cloudinary.com/ddtpurhae/image/upload/v1785135583/photo_2026-07-27_12-29-29_r0vigp.jpg",  alt: "Group Photo", rotate: "-rotate-2", top: "top-7",  left: "left-[66%]" },
+  { src: "https://res.cloudinary.com/ddtpurhae/image/upload/v1785135582/photo_2026-07-27_11-45-04_wip9qk.jpg",  alt: "Event", rotate: "rotate-1",  top: "top-2",  left: "left-[82%]" },
+];
 
 interface ProjectsPageClientProps {
   initialVotes?: Record<number, number>;
@@ -58,16 +68,31 @@ export default function ProjectsPageClient({ initialVotes }: ProjectsPageClientP
 
   return (
     <main className="relative z-10 flex flex-col min-h-screen bg-[#FDFBF7]">
-      <div
-        className="absolute inset-0 z-0 pointer-events-none"
-        style={{
-          backgroundColor: '#e5e5f7',
-          opacity: 0.4,
-          backgroundImage: 'repeating-radial-gradient( circle at 0 0, transparent 0, #e5e5f7 10px ), repeating-linear-gradient( #4ede8b55, #4ede8b )',
-          maskImage: 'linear-gradient(to bottom, black, transparent)',
-          WebkitMaskImage: 'linear-gradient(to bottom, black, transparent)'
-        }}
-      />
+      {/* Pinned meme photos — corkboard style */}
+      <div className="absolute inset-0 pointer-events-none z-0 hidden md:block overflow-hidden">
+        {memes.map((m) => (
+          <div
+            key={m.alt}
+            className={cn(
+              "absolute w-[140px] lg:w-[160px]",
+              m.rotate, m.top, m.left
+            )}
+          >
+            {/* Polaroid frame */}
+            <div className="bg-white border-[2px] border-black/10 shadow-[4px_4px_12px_rgba(0,0,0,0.15)] p-2 pb-6">
+              <Image
+                src={m.src}
+                alt={m.alt}
+                width={160}
+                height={130}
+                className="w-full object-cover grayscale-[20%] opacity-80"
+              />
+            </div>
+            {/* Push pin */}
+            <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-red-500 border-[2px] border-black shadow-sm z-10" />
+          </div>
+        ))}
+      </div>
       <div className="flex-grow flex flex-col items-center pt-32 pb-20 px-6 text-center max-w-[1280px] mx-auto w-full relative z-10">
         <span className="inline-block border-[3px] border-black bg-[#A5FFD6] px-4 py-1 text-xs font-black uppercase tracking-widest text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-6 rounded-full">
           Projects Directory

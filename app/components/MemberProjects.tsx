@@ -1,13 +1,22 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ExternalLink, TrendingUp, Sparkles } from "lucide-react";
 import ProjectCard from "./ProjectCard";
-import { GridPattern } from "./GridPattern";
 import { cn } from "@/lib/utils";
 import { memberProjectsData } from "@/lib/member-projects-data";
 import { getProjectVotes } from "@/app/actions/upvote";
+
+const memes = [
+  { src: "https://res.cloudinary.com/ddtpurhae/image/upload/v1785135582/photo_2026-07-27_11-45-05_cjh0ie.jpg",  alt: "KCC Community", rotate: "-rotate-3", top: "top-6",  left: "left-[1%]" },
+  { src: "https://res.cloudinary.com/ddtpurhae/image/upload/v1785135582/photo_2026-07-27_11-45-05_2_xqlats.jpg", alt: "KCC Meetup", rotate: "rotate-2",  top: "top-3",  left: "left-[17%]" },
+  { src: "https://res.cloudinary.com/ddtpurhae/image/upload/v1785135582/photo_2026-07-27_11-45-05_3_r00rhn.jpg", alt: "Tech Discussion", rotate: "-rotate-1", top: "top-8",  left: "left-[33%]" },
+  { src: "https://res.cloudinary.com/ddtpurhae/image/upload/v1785135582/photo_2026-07-27_12-29-25_bzsw83.jpg",  alt: "Networking", rotate: "rotate-3",  top: "top-4",  left: "left-[50%]" },
+  { src: "https://res.cloudinary.com/ddtpurhae/image/upload/v1785135583/photo_2026-07-27_12-29-29_r0vigp.jpg",  alt: "Group Photo", rotate: "-rotate-2", top: "top-7",  left: "left-[66%]" },
+  { src: "https://res.cloudinary.com/ddtpurhae/image/upload/v1785135582/photo_2026-07-27_11-45-04_wip9qk.jpg",  alt: "Event", rotate: "rotate-1",  top: "top-2",  left: "left-[82%]" },
+];
 
 export default function MemberProjects({ initialVotes }: { initialVotes?: Record<number, number> }) {
 
@@ -44,17 +53,31 @@ export default function MemberProjects({ initialVotes }: { initialVotes?: Record
   return (
     <section id="community-projects" className="scroll-mt-24 px-6 py-28 md:px-12 bg-[#FDFBF7] border-t-[3px] border-black relative overflow-hidden">
 
-      {/* Playful Memphis Grid Pattern */}
-      <GridPattern
-        width={40}
-        height={40}
-        x={-1}
-        y={-1}
-        className={cn(
-          "[mask-image:linear-gradient(to_bottom,white,transparent)]",
-          "opacity-60 stroke-[#FF8C42]/40 fill-transparent"
-        )}
-      />
+      {/* Pinned meme photos — corkboard style */}
+      <div className="absolute inset-0 pointer-events-none z-0 hidden md:block">
+        {memes.map((m) => (
+          <div
+            key={m.alt}
+            className={cn(
+              "absolute w-[140px] lg:w-[160px]",
+              m.rotate, m.top, m.left
+            )}
+          >
+            {/* Polaroid frame */}
+            <div className="bg-white border-[2px] border-black/10 shadow-[4px_4px_12px_rgba(0,0,0,0.15)] p-2 pb-6">
+              <Image
+                src={m.src}
+                alt={m.alt}
+                width={160}
+                height={130}
+                className="w-full object-cover grayscale-[20%] opacity-80"
+              />
+            </div>
+            {/* Push pin */}
+            <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-red-500 border-[2px] border-black shadow-sm z-10" />
+          </div>
+        ))}
+      </div>
 
       <div className="mx-auto max-w-[1280px] relative z-10">
 
@@ -89,7 +112,7 @@ export default function MemberProjects({ initialVotes }: { initialVotes?: Record
           </p>
         </div>
 
-        {/* Sort Toggle — right above the cards */}
+        {/* Sort Toggle */}
         <div className="flex items-center gap-3 w-full max-w-4xl mx-auto mb-6">
           <div className="flex items-center gap-1 bg-white border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-xl p-1">
             <button
@@ -123,7 +146,7 @@ export default function MemberProjects({ initialVotes }: { initialVotes?: Record
           </span>
         </div>
 
-        {/* Project Cards Grid */}
+        {/* Project Cards */}
         <div className="flex flex-col gap-6 w-full max-w-4xl mx-auto">
           {isLoading ? (
             Array.from({ length: 3 }).map((_, i) => (
@@ -143,7 +166,7 @@ export default function MemberProjects({ initialVotes }: { initialVotes?: Record
           )}
         </div>
 
-        {/* Action Buttons Row */}
+        {/* Action Buttons */}
         <div className="mt-20 flex flex-col sm:flex-row items-center justify-center gap-6">
           <Link
             href="/projects"
@@ -151,7 +174,6 @@ export default function MemberProjects({ initialVotes }: { initialVotes?: Record
           >
             See All Projects
           </Link>
-
           <Link
             href="https://docs.google.com/forms/d/e/1FAIpQLSeeHzA9LoWRRBOkqAYeXTNQnce6RSUi1uf1xZYVhIVKLBJz7Q/viewform"
             target="_blank"
