@@ -8,10 +8,10 @@ import FeaturedBlogs from "./components/FeaturedBlogs";
 import Testimonials from "./components/Testimonials";
 import LinkedInEmbed from "./components/LinkedInEmbed";
 import Footer from "./components/Footer";
-import { getProjectVotes } from "@/app/actions/upvote";
+import { getProjectVotesQuery } from "@/lib/queries";
 
 export default async function Home() {
-  const votes = await getProjectVotes();
+  const votes = await getProjectVotesQuery();
 
   return (
     <main className="relative z-10">

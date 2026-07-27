@@ -1,6 +1,6 @@
 import Teams from "../components/Teams";
 import Footer from "../components/Footer";
-import { getTeamVotes } from "@/app/actions/upvote";
+import { getTeamVotesQuery } from "@/lib/queries";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default async function TeamsPage() {
-  const initialVotes = await getTeamVotes("akhil");
+  const initialVotes = await getTeamVotesQuery("akhil");
 
   return (
     <main className="relative z-10">
