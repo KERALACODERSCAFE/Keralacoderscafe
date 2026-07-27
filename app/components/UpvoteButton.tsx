@@ -44,17 +44,29 @@ export default function UpvoteButton({ projectId, initialVotes, isTopProject = f
 
     try {
       const result = await upvoteProject(projectId);
+      
+      if (result.triggerAuth) {
+        // Not logged in, redirect to Google Sign in
+        const { signIn } = await import("next-auth/react");
+        signIn("google");
+        // Revert optimistic since they weren't logged in
+        setVotes((prev) => prev - 1);
+        setHasVoted(false);
+        setIsVoting(false);
+        return;
+      }
+      
       if (result.success && result.votes) {
         setVotes(result.votes);
 
-        // Save to local storage
+        // Save to local storage for quick subsequent UI checks
         const votedProjects = JSON.parse(localStorage.getItem("votedProjects") || "[]");
         if (!votedProjects.includes(projectId)) {
           votedProjects.push(projectId);
           localStorage.setItem("votedProjects", JSON.stringify(votedProjects));
         }
       } else {
-        // Revert on failure
+        // Revert on failure (e.g. already voted on server)
         setVotes((prev) => prev - 1);
         setHasVoted(false);
       }

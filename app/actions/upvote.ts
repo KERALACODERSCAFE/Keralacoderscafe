@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redis } from "@/lib/redis";
+import { auth } from "@/auth";
 
 const REDIS_KEY = "project:votes";
 
@@ -15,7 +16,7 @@ export async function getProjectVotes(): Promise<Record<number, number>> {
   }
   try {
     const votes = await redis.hgetall<Record<string, number>>(REDIS_KEY);
-    
+
     if (!votes) return {};
 
     // Convert string keys to numbers
@@ -23,15 +24,13 @@ export async function getProjectVotes(): Promise<Record<number, number>> {
     for (const [key, value] of Object.entries(votes)) {
       formattedVotes[Number(key)] = Number(value);
     }
-    
+
     return formattedVotes;
   } catch (error) {
     console.error("Error fetching project votes from Redis:", error);
     return {};
   }
 }
-
-import { cookies } from "next/headers";
 
 /**
  * Increment a project's vote count by 1
@@ -42,16 +41,24 @@ export async function upvoteProject(projectId: number) {
   }
   
   try {
-    const cookieStore = await cookies();
-    const cookieName = `voted_project_${projectId}`;
+    const session = await auth();
+    if (!session || !session.user || !session.user.email) {
+      return { success: false, error: "Unauthorized. Please sign in to vote.", triggerAuth: true };
+    }
     
-    if (cookieStore.get(cookieName)) {
-      return { success: false, error: "Already voted" };
+    const userId = session.user.email; // Using email as unique ID
+    const voteKey = `user:${userId}:voted_project_${projectId}`;
+    
+    // Check if user already voted for this project
+    const hasVoted = await redis.get(voteKey);
+    if (hasVoted) {
+      return { success: false, error: "You have already voted for this project." };
     }
 
     const newVotes = await redis.hincrby(REDIS_KEY, projectId.toString(), 1);
     
-    cookieStore.set(cookieName, "true", { maxAge: 60 * 60 * 24 * 365 }); // 1 year
+    // Mark as voted in redis permanently
+    await redis.set(voteKey, "true");
 
     // Revalidate the paths where the projects are displayed
     revalidatePath("/projects");
@@ -91,16 +98,22 @@ export async function upvoteTeamMember(memberId: string) {
   }
   
   try {
-    const cookieStore = await cookies();
-    const cookieName = `voted_team_${memberId}`;
+    const session = await auth();
+    if (!session || !session.user || !session.user.email) {
+      return { success: false, error: "Unauthorized. Please sign in to vote.", triggerAuth: true };
+    }
     
-    if (cookieStore.get(cookieName)) {
-      return { success: false, error: "Already voted" };
+    const userId = session.user.email;
+    const voteKey = `user:${userId}:voted_team_${memberId}`;
+    
+    const hasVoted = await redis.get(voteKey);
+    if (hasVoted) {
+      return { success: false, error: "You have already voted for this team member." };
     }
 
     const newVotes = await redis.hincrby(TEAM_REDIS_KEY, memberId, 1);
     
-    cookieStore.set(cookieName, "true", { maxAge: 60 * 60 * 24 * 365 }); // 1 year
+    await redis.set(voteKey, "true");
 
     revalidatePath("/teams");
     return { success: true, votes: newVotes };

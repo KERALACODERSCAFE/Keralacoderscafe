@@ -131,6 +131,7 @@ import SmoothScroll from "./components/SmoothScroll";
 import NavBar from "./components/NavBar";
 import PageLoader from "./components/PageLoader";
 import AnnouncementPopup from "./components/AnnouncementPopup";
+import SessionProviderWrapper from "./components/SessionProviderWrapper";
 import Script from "next/script";
 import { Suspense } from "react";
 
@@ -224,15 +225,17 @@ export default function RootLayout({
           `}
         </Script>
 
-        <Suspense fallback={null}>
-          <PageLoader />
-        </Suspense>
-        <NavBar />
-        <AnnouncementPopup />
-        <SmoothScroll>
-          {children}
-          <FloatingCTA />
-        </SmoothScroll>
+        <SessionProviderWrapper>
+          <Suspense fallback={null}>
+            <PageLoader />
+          </Suspense>
+          <NavBar />
+          <AnnouncementPopup />
+          <SmoothScroll>
+            {children}
+            <FloatingCTA />
+          </SmoothScroll>
+        </SessionProviderWrapper>
       </body>
     </html>
   );

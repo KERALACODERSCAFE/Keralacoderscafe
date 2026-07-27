@@ -5,6 +5,7 @@ import { ArrowUpRight } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { useLenis } from "lenis/react";
+import AuthButton from "./AuthButton";
 
 const navLinks = [
   { name: "Home", href: "/", type: "scroll" },
@@ -194,6 +195,9 @@ export default function NavBar() {
               <span className="sm:hidden">Join</span>
               <ArrowUpRight className="h-3 w-3 sm:h-4 sm:w-4" />
             </Link>
+
+            {/* Auth Button */}
+            <AuthButton />
           </div>
         </nav>
       </div>
