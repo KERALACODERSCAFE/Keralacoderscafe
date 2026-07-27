@@ -70,7 +70,7 @@ function hexPoints(
   direction: "horizontal" | "vertical"
 ): string {
   return hexVertexList(cx, cy, r, direction)
-    .map(([px, py]) => `${px},${py}`)
+    .map(([px, py]) => `${Number(px.toFixed(4))},${Number(py.toFixed(4))}`)
     .join(" ")
 }
 
@@ -290,10 +290,10 @@ export function HexagonPattern({
                 <line
                   className="fill-none"
                   key={edgeLexKey(a, b)}
-                  x1={a[0]}
-                  x2={b[0]}
-                  y1={a[1]}
-                  y2={b[1]}
+                  x1={Number(a[0].toFixed(4))}
+                  x2={Number(b[0].toFixed(4))}
+                  y1={Number(a[1].toFixed(4))}
+                  y2={Number(b[1].toFixed(4))}
                   strokeDasharray={strokeDasharray}
                 />
               ))}

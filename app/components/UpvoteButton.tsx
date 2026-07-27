@@ -16,6 +16,7 @@ export default function UpvoteButton({ projectId, initialVotes, isTopProject = f
   const [hasVoted, setHasVoted] = useState(false);
   const [isVoting, setIsVoting] = useState(false);
   const [showSoul, setShowSoul] = useState(false);
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
 
   // Sync with prop in case it updates from parent
   useEffect(() => {
