@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { ArrowBigUpDash } from "lucide-react";
 import { upvoteProject } from "@/app/actions/upvote";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface UpvoteButtonProps {
   projectId: number;
@@ -16,6 +17,7 @@ export default function UpvoteButton({ projectId, initialVotes, isTopProject = f
   const [hasVoted, setHasVoted] = useState(false);
   const [isVoting, setIsVoting] = useState(false);
   const [showSoul, setShowSoul] = useState(false);
+  const [showAlreadyVotedPopup, setShowAlreadyVotedPopup] = useState(false);
 
   // Sync with prop in case it updates from parent
   useEffect(() => {
@@ -77,7 +79,7 @@ export default function UpvoteButton({ projectId, initialVotes, isTopProject = f
             votedProjects.push(projectId);
             localStorage.setItem("votedProjects", JSON.stringify(votedProjects));
           }
-          alert("You have already voted for this project!");
+          setShowAlreadyVotedPopup(true);
         } else {
           setHasVoted(false);
           if (result.error) alert(result.error);
@@ -114,6 +116,50 @@ export default function UpvoteButton({ projectId, initialVotes, isTopProject = f
         </div>
         <span className="text-sm">{votes}</span>
       </button>
+
+      {/* Already Voted Custom Popup */}
+      {showAlreadyVotedPopup && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 pointer-events-none">
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-black/20 dark:bg-black/60 backdrop-blur-sm pointer-events-auto"
+            onClick={() => setShowAlreadyVotedPopup(false)}
+          />
+          
+          {/* Modal Container */}
+          <div className="relative z-[101] bg-[#FFF8F3] dark:bg-[#1a1a2e] border-[3px] border-black p-6 sm:p-8 rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,0.1)] max-w-sm w-full pointer-events-auto animate-in zoom-in-95 duration-200 flex flex-col items-center text-center">
+            
+            {/* Cute Graphic Placeholder */}
+            <div className="mb-4 relative flex items-center justify-center">
+              <span className="absolute -left-6 top-2 text-2xl animate-pulse text-yellow-400 z-10">✨</span>
+              <span className="absolute -right-4 top-10 text-xl animate-pulse text-blue-400 delay-100 z-10">✨</span>
+              <span className="absolute top-0 right-4 text-2xl animate-pulse text-pink-400 delay-200 z-10">✨</span>
+              <Image 
+                src="/already-voted-cat.png" 
+                alt="Already Voted Cat" 
+                width={120} 
+                height={120} 
+                className="object-contain"
+              />
+            </div>
+            
+            <h3 className="font-black text-2xl mb-2 text-black dark:text-white tracking-tight">
+              Ayy! You already voted 😎
+            </h3>
+            <p className="text-sm font-bold text-black/70 dark:text-white/70 mb-6 leading-relaxed">
+              One vote per project, legend!<br />
+              Thanks for supporting our fellow developer. ❤️
+            </p>
+            
+            <button
+              onClick={() => setShowAlreadyVotedPopup(false)}
+              className="bg-[#6C5DD3] text-white px-8 py-3 rounded-full font-black text-sm border-[2px] border-black dark:border-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
+            >
+              Cool, got it! 😉
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }
