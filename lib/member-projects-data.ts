@@ -10,8 +10,8 @@ export const memberProjectsData = [
     category: "Govt",
     icon: Store,
     animationClass: "group-hover:animate-icon-swing",
-    windowColor: "bg-[#FF8C42]", // Orange
-    pillColor: "bg-[#42A5F5]", // Blue
+    windowColor: "bg-[#FF8C42]",
+    pillColor: "bg-[#42A5F5]",
     link: "https://rationundo.onrender.com",
     github: "https://github.com/jithin-jz",
     email: "jithinjzx@gmail.com"
@@ -25,8 +25,8 @@ export const memberProjectsData = [
     category: "Govt",
     icon: MessageSquare,
     animationClass: "group-hover:animate-icon-wiggle",
-    windowColor: "bg-[#A18CE5]", // Purple
-    pillColor: "bg-[#FFD166]", // Yellow
+    windowColor: "bg-[#A18CE5]",
+    pillColor: "bg-[#FFD166]",
     link: "https://Parathipetty.com",
     email: "muhammedroshanps@gmail.com"
   },
@@ -39,8 +39,8 @@ export const memberProjectsData = [
     category: "Community",
     icon: BarChart,
     animationClass: "group-hover:animate-icon-heartbeat",
-    windowColor: "bg-[#4CAF50]", // Green
-    pillColor: "bg-[#E91E63]", // Pink
+    windowColor: "bg-[#4CAF50]",
+    pillColor: "bg-[#E91E63]",
     link: "https://kerala-polling.rishnu.xyz/",
     email: "rishnudev@gmail.com"
   },
@@ -53,8 +53,8 @@ export const memberProjectsData = [
     category: "Community",
     icon: MapPin,
     animationClass: "group-hover:animate-icon-float",
-    windowColor: "bg-[#FF5722]", // Deep Orange
-    pillColor: "bg-[#03A9F4]", // Light Blue
+    windowColor: "bg-[#FF5722]",
+    pillColor: "bg-[#03A9F4]",
     link: "https://kuzhiyundo.com",
     github: "https://github.com/sajithlaldev/kuzhiyundo",
     email: "sajithlal65@gmail.com"
@@ -68,8 +68,8 @@ export const memberProjectsData = [
     category: "SaaS",
     icon: Bot,
     animationClass: "group-hover:animate-icon-wiggle",
-    windowColor: "bg-[#9C27B0]", // Purple
-    pillColor: "bg-[#FFEB3B]", // Yellow
+    windowColor: "bg-[#9C27B0]",
+    pillColor: "bg-[#FFEB3B]",
     link: "https://github.com/modamaan/Ai-mock-Interview",
     github: "https://github.com/modamaan/Ai-mock-Interview",
     email: "mohamedamaan319@gmail.com"
@@ -83,8 +83,8 @@ export const memberProjectsData = [
     category: "Portfolios",
     icon: Briefcase,
     animationClass: "group-hover:animate-icon-swing",
-    windowColor: "bg-[#2196F3]", // Blue
-    pillColor: "bg-[#FF5722]", // Deep Orange
+    windowColor: "bg-[#2196F3]",
+    pillColor: "bg-[#FF5722]",
     link: "https://alen-james.vercel.app/",
     github: "https://github.com/alen899-my",
     email: "alenjames899@gmail.com"
@@ -98,8 +98,8 @@ export const memberProjectsData = [
     category: "Tools",
     icon: FileText,
     animationClass: "group-hover:animate-icon-float",
-    windowColor: "bg-[#00BCD4]", // Cyan
-    pillColor: "bg-[#FF9800]", // Orange
+    windowColor: "bg-[#00BCD4]",
+    pillColor: "bg-[#FF9800]",
     link: "https://enteprofile.com",
     github: "https://github.com/Roshan-Here/",
     email: "muhammedroshanps@gmail.com"
@@ -113,8 +113,8 @@ export const memberProjectsData = [
     category: "Tools",
     icon: Receipt,
     animationClass: "group-hover:animate-icon-wiggle",
-    windowColor: "bg-[#8BC34A]", // Light Green
-    pillColor: "bg-[#03A9F4]", // Light Blue
+    windowColor: "bg-[#8BC34A]",
+    pillColor: "bg-[#03A9F4]",
     link: "https://invoice.shihabsaleem.site/",
     github: "https://github.com/shihabsaleem/invoice-landing",
     email: "hello@shihabsaleem.site"
@@ -128,8 +128,8 @@ export const memberProjectsData = [
     category: "Community",
     icon: Users,
     animationClass: "group-hover:animate-icon-float",
-    windowColor: "bg-[#FF5252]", // Red
-    pillColor: "bg-[#FFEB3B]", // Yellow
+    windowColor: "bg-[#FF5252]",
+    pillColor: "bg-[#FFEB3B]",
     link: "http://collabifi.vercel.app",
     github: "https://github.com/aarjjun/Collabify",
     email: "arjunanoop.codes@gmail.com"
@@ -143,8 +143,8 @@ export const memberProjectsData = [
     category: "SaaS",
     icon: Cloud,
     animationClass: "group-hover:animate-icon-heartbeat",
-    windowColor: "bg-[#009688]", // Teal
-    pillColor: "bg-[#FF5722]", // Deep Orange
+    windowColor: "bg-[#009688]",
+    pillColor: "bg-[#FF5722]",
     link: "https://n-drive-app.netlify.app/",
     github: "https://github.com/aflah-pp/N-Drive",
     email: "aflahpp777@gmail.com"
@@ -158,8 +158,8 @@ export const memberProjectsData = [
     category: "Community",
     icon: Heart,
     animationClass: "group-hover:animate-icon-heartbeat",
-    windowColor: "bg-[#E91E63]", // Pink/Red
-    pillColor: "bg-[#FFFFFF]", // White
+    windowColor: "bg-[#E91E63]",
+    pillColor: "bg-[#FFFFFF]",
     link: "https://kerala-blood-connect.vercel.app",
     github: "https://github.com/Abhijithsachu/Kerala-Blood-Connect",
     email: "abhijith007sachu@gmail.com"
@@ -173,8 +173,8 @@ export const memberProjectsData = [
     category: "Tools",
     icon: Briefcase,
     animationClass: "group-hover:animate-icon-swing",
-    windowColor: "bg-[#3F51B5]", // Indigo
-    pillColor: "bg-[#00BCD4]", // Cyan
+    windowColor: "bg-[#3F51B5]",
+    pillColor: "bg-[#00BCD4]",
     link: "https://globalthozhil.onrender.com/",
     github: "https://github.com/jojin1709/-GlobalThozhil",
     email: "jojinjohn1709@gmail.com"
@@ -188,8 +188,8 @@ export const memberProjectsData = [
     category: "Community",
     icon: MessageSquare,
     animationClass: "group-hover:animate-icon-wiggle",
-    windowColor: "bg-[#FF9800]", // Orange
-    pillColor: "bg-[#FF5722]", // Deep Orange
+    windowColor: "bg-[#FF9800]",
+    pillColor: "bg-[#FF5722]",
     link: "https://sparq-flax.vercel.app/",
     github: "https://github.com/arjunkr303/sparq",
     email: "jithubiju124@gmail.com"
@@ -203,8 +203,8 @@ export const memberProjectsData = [
     category: "Tools",
     icon: Monitor,
     animationClass: "group-hover:animate-icon-float",
-    windowColor: "bg-[#607D8B]", // Blue Grey
-    pillColor: "bg-[#9E9E9E]", // Grey
+    windowColor: "bg-[#607D8B]",
+    pillColor: "bg-[#9E9E9E]",
     link: "",
     github: "https://github.com/lalupj07/GenXlink",
     email: "lalujames560@gmail.com"
@@ -218,8 +218,8 @@ export const memberProjectsData = [
     category: "EdTech",
     icon: BookOpen,
     animationClass: "group-hover:animate-icon-float",
-    windowColor: "bg-[#0F172A]", // Dark Slate (Stylish Dark Mode)
-    pillColor: "bg-[#38BDF8]", // Neon Sky Blue
+    windowColor: "bg-[#0F172A]",
+    pillColor: "bg-[#38BDF8]",
     link: "https://interviewkit.online/",
     github: "https://github.com/AbyvargheseMandapathel/",
     email: "abyvarghesemandapathel@gmail.com"
@@ -233,8 +233,8 @@ export const memberProjectsData = [
     category: "Tools",
     icon: FileText,
     animationClass: "group-hover:animate-icon-wiggle",
-    windowColor: "bg-[#9C27B0]", // Purple
-    pillColor: "bg-[#FFEB3B]", // Yellow
+    windowColor: "bg-[#9C27B0]",
+    pillColor: "bg-[#FFEB3B]",
     link: "https://pixlsheet.vercel.app/",
     github: "https://github.com/nijil71/PixlSheet",
     email: "nmnijilkhan@gmail.com"
@@ -248,8 +248,8 @@ export const memberProjectsData = [
     category: "Portfolios",
     icon: Briefcase,
     animationClass: "group-hover:animate-icon-swing",
-    windowColor: "bg-[#2196F3]", // Blue
-    pillColor: "bg-[#FF5722]", // Deep Orange
+    windowColor: "bg-[#2196F3]",
+    pillColor: "bg-[#FF5722]",
     link: "https://evin-jacob-subin.vercel.app/",
     github: "https://github.com/EVINJSUBIN",
     email: "youridertech@gmail.com"
@@ -263,8 +263,8 @@ export const memberProjectsData = [
     category: "AI",
     icon: Bot,
     animationClass: "group-hover:animate-icon-wiggle",
-    windowColor: "bg-[#F44336]", // Red
-    pillColor: "bg-[#FFC107]", // Amber
+    windowColor: "bg-[#F44336]",
+    pillColor: "bg-[#FFC107]",
     link: "https://github.com/nafanpe/Flame-AI",
     github: "https://github.com/nafanpe",
     email: "nafan.official@gmail.com"
@@ -278,8 +278,8 @@ export const memberProjectsData = [
     category: "EdTech",
     icon: BookOpen,
     animationClass: "group-hover:animate-icon-float",
-    windowColor: "bg-[#4CAF50]", // Green
-    pillColor: "bg-[#FF9800]", // Orange
+    windowColor: "bg-[#4CAF50]",
+    pillColor: "bg-[#FF9800]",
     link: "https://notes-undo.onrender.com",
     github: "https://www.github.com/ClashLex/notes.undo",
     email: "ansilmuhammed919@gmail.com"
@@ -293,8 +293,8 @@ export const memberProjectsData = [
     category: "Tools",
     icon: MapPin,
     animationClass: "group-hover:animate-icon-swing",
-    windowColor: "bg-[#FFEB3B]", // Yellow
-    pillColor: "bg-[#4CAF50]", // Green
+    windowColor: "bg-[#FFEB3B]",
+    pillColor: "bg-[#4CAF50]",
     link: "https://solaa.vercel.app/",
     github: "https://github.com/Githubdiaries/Sola",
     email: "aksasusan1904@gmail.com"
@@ -308,8 +308,8 @@ export const memberProjectsData = [
     category: "AI",
     icon: Bot,
     animationClass: "group-hover:animate-icon-float",
-    windowColor: "bg-[#00BCD4]", // Cyan
-    pillColor: "bg-[#FF9800]", // Orange
+    windowColor: "bg-[#00BCD4]",
+    pillColor: "bg-[#FF9800]",
     link: "https://smart-mental-health-counselling-sys.vercel.app/",
     github: "https://github.com/Hashmil-Muhammed/MindCareAI-Smart_Mental_Health_Counselling_SystemUsing_Multimodal_AI",
     email: "hashmilmuhammedparammal@gmail.com"
@@ -323,8 +323,8 @@ export const memberProjectsData = [
     category: "FinTech",
     icon: Wallet,
     animationClass: "group-hover:animate-icon-float",
-    windowColor: "bg-[#4CAF50]", // Green
-    pillColor: "bg-[#FFC107]", // Amber
+    windowColor: "bg-[#4CAF50]",
+    pillColor: "bg-[#FFC107]",
     link: "https://www.justsplitbill.com/",
     email: "hello@justsplitbill.com"
   },
@@ -333,207 +333,12 @@ export const memberProjectsData = [
     name: "salt-text",
     author: "Abhijith Baby",
     description: "A secure, offline-first text editor that encrypts your files entirely in the browser.",
-    stats: { stars: 0, forks: 0 },
-    category: "Tools",
-    icon: FileText,
-    animationClass: "group-hover:animate-icon-wiggle",
-    windowColor: "bg-[#607D8B]", // Blue Grey
-    pillColor: "bg-[#03A9F4]", // Light Blue
-    link: "https://abhijithbaby.github.io/Salt-Text/",
-    github: "https://github.com/AbhijithBaby/Salt-Text",
-    email: "abhijithbaby2005@gmail.com"
-  },
-  {
-    id: 27,
-    name: "Devtasks",
-    author: "Shamil",
-    description: "DevTasks is a high-performance, minimalist, and monochrome developer dashboard and task manager. It is designed to act as an offline-first workspace for developers to track engineering roadmaps and manage code snippets with minimal friction",
-    stats: { stars: 0, forks: 0 },
-    category: "Tools",
-    icon: Monitor,
-    animationClass: "group-hover:animate-icon-swing",
-    windowColor: "bg-[#212121]", // Grey
-    pillColor: "bg-[#FFFFFF]", // White
-    link: "https://dev-tasks-beta.vercel.app/",
-    github: "https://github.com/shamilahmdt/devtasks",
-    email: "shamilahmd12@gmail.com"
-  },
-  {
-    id: 28,
-    name: "Deep Face Net",
-    author: "Midhun G Raj",
-    description: "Real-time face swapping application with GUI and CLI support. Built with Python, PyQt6, OpenCV, and ONNX Runtime using InsightFace and GFPGAN models for face detection, swapping, and enhancement.",
-    stats: { stars: 0, forks: 0 },
-    category: "AI",
-    icon: Bot,
-    animationClass: "group-hover:animate-icon-heartbeat",
-    windowColor: "bg-[#9C27B0]", // Purple
-    pillColor: "bg-[#FFEB3B]", // Yellow
-    link: "https://github.com/polynet-org/Deep-Face-Net",
-    github: "https://github.com/MIDHUNGRAJ",
-    email: "neurobyte.ml@gmail.com"
-  },
-  {
-    id: 29,
-    name: "Makeitforthem",
-    author: "BR Govind",
-    description: "Started as a small token of love to my gf,pinne i though let's make it better and added a bit more features",
-    stats: { stars: 0, forks: 0 },
-    category: "Entertainment",
-    icon: Heart,
-    animationClass: "group-hover:animate-icon-float",
-    windowColor: "bg-[#E91E63]", // Pink
-    pillColor: "bg-[#FFFFFF]", // White
-    link: "https://makeitforthem.vercel.app/",
-    github: "https://github.com/BRGOVIND",
-    email: "brg"
-  },
-  {
-    id: 30,
-    name: "Zyncview vision therapy",
-    author: "Zyncview",
-    description: "Zyncview is a platform for treatment of amblyopia (lazy eye), by playing dichoptic games on your computer or phone.",
-    stats: { stars: 0, forks: 0 },
-    category: "HealthTech",
-    icon: Heart,
-    animationClass: "group-hover:animate-icon-heartbeat",
-    windowColor: "bg-[#00BCD4]", // Cyan
-    pillColor: "bg-[#FF9800]", // Orange
-    link: "https://zyncview.com",
-    github: "https://github.com/notopensource",
-    email: "Nospam@gmail.com"
-  },
-  {
-    id: 31,
-    name: "Fadhi Zaman P T",
-    author: "Fadhi Zaman P T",
-    description: "Portfolio Showcasing My Work",
-    stats: { stars: 0, forks: 0 },
-    category: "Portfolios",
-    icon: Briefcase,
-    animationClass: "group-hover:animate-icon-swing",
-    windowColor: "bg-[#2196F3]",
-    pillColor: "bg-[#FF5722]",
-    link: "https://fadhizamanpt.vercel.app/",
-    github: "https://github.com/fadhizamanpt",
-    email: "fadhizamantsy@gmail.com"
-  },
-  {
-    id: 32,
-    name: "Shelfy",
-    author: "Fadhi Zaman P T",
-    description: "Online library management system to manage books, members, and borrowings, with AI powered search and summaries.",
-    stats: { stars: 0, forks: 0 },
-    category: "SaaS",
-    icon: Cloud,
-    animationClass: "group-hover:animate-icon-float",
-    windowColor: "bg-[#009688]",
-    pillColor: "bg-[#FF5722]",
-    link: "https://shelfylibrary.vercel.app/",
-    github: "https://github.com/fadhizamanpt",
-    email: "fadhizamantsy@gmail.com"
-  },
-  {
-    id: 33,
-    name: "anatomyof-k8s",
-    author: "Anas Kadambalath",
-    description: "DevOps Atlas is an interactive learning platform designed to make DevOps concepts simple, visual, and accessible for everyone.",
-    stats: { stars: 0, forks: 0 },
-    category: "EdTech",
-    icon: BookOpen,
-    animationClass: "group-hover:animate-icon-float",
-    windowColor: "bg-[#3F51B5]",
-    pillColor: "bg-[#00BCD4]",
-    link: "https://www.cloudtruck.space",
-    github: "https://github.com/anaskmh/anatomyof-k8s",
-    email: "anaskofficial8@gmail.com"
-  },
-  {
-    id: 34,
-    name: "Utility app",
-    author: "Akshay Krishna",
-    description: "Daily common usecase web solutions.",
     stats: { stars: 0, forks: 0 },
     category: "Tools",
     icon: FileText,
     animationClass: "group-hover:animate-icon-wiggle",
     windowColor: "bg-[#607D8B]",
     pillColor: "bg-[#03A9F4]",
-    link: "https://akshay43215.github.io/utility_apps/",
-    github: "https://github.com/akshay43215",
-    email: "akshaykrishna24996@gmail.com"
-  },
-  {
-    id: 35,
-    name: "Fambudget",
-    author: "Lalu James",
-    description: "FamBudget is a powerful, privacy-focused desktop application designed to help families manage their finances effectively.",
-    stats: { stars: 0, forks: 0 },
-    category: "FinTech",
-    icon: Wallet,
-    animationClass: "group-hover:animate-icon-swing",
-    windowColor: "bg-[#4CAF50]",
-    pillColor: "bg-[#FFC107]",
-    link: "",
-    github: "https://github.com/lalupj07/FamBudget",
-    email: "lalujames560@gmail.com"
-  },
-  {
-    id: 36,
-    name: "Kerala Vipani",
-    author: "Abid TS",
-    description: "A community-driven platform where anyone can check and contribute live market rates across Kerala — vegetables, fish, meat, gold, petrol, KSEB rates and more. Features district-wise rates, a smart shopping list builder with PDF export & WhatsApp sharing, leaderboard, trust points, monthly badges, and PWA support.",
-    stats: { stars: 0, forks: 0 },
-    stats: { stars: 0, forks: 0 },
-    category: "Tools",
-    icon: MapPin,
-    animationClass: "group-hover:animate-icon-swing",
-    windowColor: "bg-[#FFEB3B]", // Yellow
-    pillColor: "bg-[#4CAF50]", // Green
-    link: "https://solaa.vercel.app/",
-    github: "https://github.com/Githubdiaries/Sola",
-    email: "aksasusan1904@gmail.com"
-  },
-  {
-    id: 24,
-    name: "MindCare AI",
-    author: "Hashmil Muhammed",
-    description: "MindCare AI is an AI-powered mental health support platform designed to detect stress levels and provide personalized counselling assistance. The system integrates NLP-based conversational AI, facial emotion recognition, voice emotion detection, and machine learning-based behavioral risk assessment to identify emotional distress. It offers supportive conversations, stress analysis and emotion detection to help users better understand their mental well-being.",
-    stats: { stars: 0, forks: 0 },
-    category: "AI",
-    icon: Bot,
-    animationClass: "group-hover:animate-icon-float",
-    windowColor: "bg-[#00BCD4]", // Cyan
-    pillColor: "bg-[#FF9800]", // Orange
-    link: "https://smart-mental-health-counselling-sys.vercel.app/",
-    github: "https://github.com/Hashmil-Muhammed/MindCareAI-Smart_Mental_Health_Counselling_SystemUsing_Multimodal_AI",
-    email: "hashmilmuhammedparammal@gmail.com"
-  },
-  {
-    id: 25,
-    name: "Just Split Bill",
-    author: "Just Split Bill",
-    description: "Just Split Bill helps friends and groups split bills fast in the browser. No sign up, no app, easy sharing, smart payback, and flexible split tools.",
-    stats: { stars: 0, forks: 0 },
-    category: "FinTech",
-    icon: Wallet,
-    animationClass: "group-hover:animate-icon-float",
-    windowColor: "bg-[#4CAF50]", // Green
-    pillColor: "bg-[#FFC107]", // Amber
-    link: "https://www.justsplitbill.com/",
-    email: "hello@justsplitbill.com"
-  },
-  {
-    id: 26,
-    name: "salt-text",
-    author: "Abhijith Baby",
-    description: "A secure, offline-first text editor that encrypts your files entirely in the browser.",
-    stats: { stars: 0, forks: 0 },
-    category: "Tools",
-    icon: FileText,
-    animationClass: "group-hover:animate-icon-wiggle",
-    windowColor: "bg-[#607D8B]", // Blue Grey
-    pillColor: "bg-[#03A9F4]", // Light Blue
     link: "https://abhijithbaby.github.io/Salt-Text/",
     github: "https://github.com/AbhijithBaby/Salt-Text",
     email: "abhijithbaby2005@gmail.com"
@@ -547,8 +352,8 @@ export const memberProjectsData = [
     category: "Tools",
     icon: Monitor,
     animationClass: "group-hover:animate-icon-swing",
-    windowColor: "bg-[#212121]", // Grey
-    pillColor: "bg-[#FFFFFF]", // White
+    windowColor: "bg-[#212121]",
+    pillColor: "bg-[#FFFFFF]",
     link: "https://dev-tasks-beta.vercel.app/",
     github: "https://github.com/shamilahmdt/devtasks",
     email: "shamilahmd12@gmail.com"
@@ -562,8 +367,8 @@ export const memberProjectsData = [
     category: "AI",
     icon: Bot,
     animationClass: "group-hover:animate-icon-heartbeat",
-    windowColor: "bg-[#9C27B0]", // Purple
-    pillColor: "bg-[#FFEB3B]", // Yellow
+    windowColor: "bg-[#9C27B0]",
+    pillColor: "bg-[#FFEB3B]",
     link: "https://github.com/polynet-org/Deep-Face-Net",
     github: "https://github.com/MIDHUNGRAJ",
     email: "neurobyte.ml@gmail.com"
@@ -577,8 +382,8 @@ export const memberProjectsData = [
     category: "Entertainment",
     icon: Heart,
     animationClass: "group-hover:animate-icon-float",
-    windowColor: "bg-[#E91E63]", // Pink
-    pillColor: "bg-[#FFFFFF]", // White
+    windowColor: "bg-[#E91E63]",
+    pillColor: "bg-[#FFFFFF]",
     link: "https://makeitforthem.vercel.app/",
     github: "https://github.com/BRGOVIND",
     email: "brg"
@@ -592,8 +397,8 @@ export const memberProjectsData = [
     category: "HealthTech",
     icon: Heart,
     animationClass: "group-hover:animate-icon-heartbeat",
-    windowColor: "bg-[#00BCD4]", // Cyan
-    pillColor: "bg-[#FF9800]", // Orange
+    windowColor: "bg-[#00BCD4]",
+    pillColor: "bg-[#FF9800]",
     link: "https://zyncview.com",
     github: "https://github.com/notopensource",
     email: "Nospam@gmail.com"
@@ -682,8 +487,8 @@ export const memberProjectsData = [
     category: "Community",
     icon: Store,
     animationClass: "group-hover:animate-icon-swing",
-    windowColor: "bg-[#1B6B3A]", // Kerala Green
-    pillColor: "bg-[#FFD166]", // Gold
+    windowColor: "bg-[#1B6B3A]",
+    pillColor: "bg-[#FFD166]",
     link: "https://keralavipani.vercel.app",
     github: "https://github.com/abid0853/keralavipani",
     email: "abidts2028@cs.ajce.in"
@@ -697,8 +502,8 @@ export const memberProjectsData = [
     category: "Community",
     icon: MapPin,
     animationClass: "group-hover:animate-icon-float",
-    windowColor: "bg-[#FF9800]", // Orange
-    pillColor: "bg-[#1B6B3A]", // Green
+    windowColor: "bg-[#FF9800]",
+    pillColor: "bg-[#1B6B3A]",
     link: "https://kandetham.page.gd/",
     github: "https://github.com/b4daru",
     email: "badarudheenvk7@gmail.com"
@@ -712,8 +517,8 @@ export const memberProjectsData = [
     category: "Tools",
     icon: BookOpen,
     animationClass: "group-hover:animate-icon-wiggle",
-    windowColor: "bg-[#0F172A]", // Dark Slate
-    pillColor: "bg-[#A5FFD6]", // Mint Green
+    windowColor: "bg-[#0F172A]",
+    pillColor: "bg-[#A5FFD6]",
     link: "https://opnhub.vercel.app/",
     github: "https://github.com/MohamedDanis/opnhub",
     email: "mohameddanisap@gmail.com"
@@ -727,8 +532,8 @@ export const memberProjectsData = [
     category: "AI",
     icon: BarChart,
     animationClass: "group-hover:animate-icon-heartbeat",
-    windowColor: "bg-[#1A237E]", // Deep Navy
-    pillColor: "bg-[#FF5252]", // Red
+    windowColor: "bg-[#1A237E]",
+    pillColor: "bg-[#FF5252]",
     link: "https://parthiv2005.github.io/EchoBreaker-web/",
     github: "https://github.com/Parthiv2005/EchoBreaker",
     email: "parthivraju2005@gmail.com"
@@ -742,8 +547,8 @@ export const memberProjectsData = [
     category: "EdTech",
     icon: BookOpen,
     animationClass: "group-hover:animate-icon-float",
-    windowColor: "bg-[#212121]", // German Black
-    pillColor: "bg-[#FFD600]", // German Gold
+    windowColor: "bg-[#212121]",
+    pillColor: "bg-[#FFD600]",
     link: "https://talesofdeutsch.vercel.app/",
     github: "https://github.com/StDensity/Tales-of-Deutsch",
     email: "noyaljosephnnj@gmail.com"
@@ -757,8 +562,8 @@ export const memberProjectsData = [
     category: "Tools",
     icon: Monitor,
     animationClass: "group-hover:animate-icon-wiggle",
-    windowColor: "bg-[#0D1B2A]", // Dark Midnight
-    pillColor: "bg-[#A5FFD6]", // Mint Green
+    windowColor: "bg-[#0D1B2A]",
+    pillColor: "bg-[#A5FFD6]",
     link: "https://web-demo-vercel.vercel.app/",
     github: "https://github.com/lalupj07/Gen-Vault",
     email: "lalujames560@gmail.com"
