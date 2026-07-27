@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import Footer from "../components/Footer";
 import ProjectCard from "../components/ProjectCard";
 import { memberProjectsData } from "@/lib/member-projects-data";
 import { cn } from "@/lib/utils";
 import { getProjectVotes } from "@/app/actions/upvote";
+import { TrendingUp, Sparkles } from "lucide-react";
 
 interface ProjectsPageClientProps {
   initialVotes?: Record<number, number>;
@@ -13,7 +14,18 @@ interface ProjectsPageClientProps {
 
 export default function ProjectsPageClient({ initialVotes }: ProjectsPageClientProps) {
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [sortMode, setSortMode] = useState<"votes" | "new">("new");
   const [votesMap, setVotesMap] = useState<Record<number, number>>(initialVotes || {});
+  const newAnchorRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hash === "#new") {
+      setSortMode("new");
+      setTimeout(() => {
+        newAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 300);
+    }
+  }, []);
 
   useEffect(() => {
     if (initialVotes && Object.keys(initialVotes).length > 0) return;
@@ -25,7 +37,6 @@ export default function ProjectsPageClient({ initialVotes }: ProjectsPageClientP
         console.error("Failed to load votes", error);
       }
     }
-
     loadVotes();
   }, [initialVotes]);
 
@@ -38,8 +49,12 @@ export default function ProjectsPageClient({ initialVotes }: ProjectsPageClientP
     const projects = selectedCategory === "All"
       ? [...memberProjectsData]
       : memberProjectsData.filter(p => p.category === selectedCategory);
+
+    if (sortMode === "new") {
+      return projects.sort((a, b) => b.id - a.id);
+    }
     return projects.sort((a, b) => (votesMap[b.id] || 0) - (votesMap[a.id] || 0));
-  }, [selectedCategory, votesMap]);
+  }, [selectedCategory, votesMap, sortMode]);
 
   return (
     <main className="relative z-10 flex flex-col min-h-screen bg-[#FDFBF7]">
@@ -67,9 +82,37 @@ export default function ProjectsPageClient({ initialVotes }: ProjectsPageClientP
             </span>
           </span>
         </h1>
-        <p className="max-w-[620px] text-xl font-bold leading-relaxed text-black/80 border-l-4 border-black pl-6 mb-16 text-left">
+        <p className="max-w-[620px] text-xl font-bold leading-relaxed text-black/80 border-l-4 border-black pl-6 mb-12 text-left">
           Discover the amazing open-source tools, libraries, and self projects shipped by developers in the KCC community.
         </p>
+
+        {/* Sort Toggle */}
+        <div ref={newAnchorRef} id="new" className="scroll-mt-28 flex items-center gap-3 mb-10 bg-white border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-xl p-1.5">
+          <button
+            onClick={() => setSortMode("new")}
+            className={cn(
+              "flex items-center gap-2 px-5 py-2.5 text-sm font-black uppercase tracking-wider rounded-lg border-[2px] transition-all",
+              sortMode === "new"
+                ? "bg-[#A5FFD6] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                : "bg-transparent border-transparent text-black/50 hover:text-black"
+            )}
+          >
+            <Sparkles className="w-4 h-4" />
+            Latest
+          </button>
+          <button
+            onClick={() => setSortMode("votes")}
+            className={cn(
+              "flex items-center gap-2 px-5 py-2.5 text-sm font-black uppercase tracking-wider rounded-lg border-[2px] transition-all",
+              sortMode === "votes"
+                ? "bg-[#FFD166] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                : "bg-transparent border-transparent text-black/50 hover:text-black"
+            )}
+          >
+            <TrendingUp className="w-4 h-4" />
+            Top Voted
+          </button>
+        </div>
 
         {/* Category Filters */}
         <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
@@ -95,7 +138,7 @@ export default function ProjectsPageClient({ initialVotes }: ProjectsPageClientP
               key={project.id}
               project={project}
               initialVotes={votesMap[project.id] || 0}
-              isTopProject={index < 3}
+              isTopProject={sortMode === "votes" && index < 3}
             />
           ))}
         </div>

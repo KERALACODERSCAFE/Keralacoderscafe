@@ -13,7 +13,7 @@ export default function MemberProjects({ initialVotes }: { initialVotes?: Record
 
   const [isLoading, setIsLoading] = useState(!initialVotes || Object.keys(initialVotes).length === 0);
   const [votesMap, setVotesMap] = useState<Record<number, number>>(initialVotes || {});
-  const [sortMode, setSortMode] = useState<"votes" | "new">("votes");
+  const [sortMode, setSortMode] = useState<"votes" | "new">("new");
 
   useEffect(() => {
     if (initialVotes && Object.keys(initialVotes).length > 0) {
