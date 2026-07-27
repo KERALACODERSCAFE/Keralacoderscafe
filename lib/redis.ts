@@ -6,5 +6,11 @@ export const redis = hasRedis
   ? new Redis({
       url: process.env.UPSTASH_REDIS_REST_URL!,
       token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+      fetch: (url, options) => {
+        return fetch(url, {
+          ...options,
+          cache: "force-cache",
+        });
+      },
     })
   : null;
