@@ -31,6 +31,8 @@ export async function getProjectVotes(): Promise<Record<number, number>> {
   }
 }
 
+import { cookies } from "next/headers";
+
 /**
  * Increment a project's vote count by 1
  */
@@ -38,9 +40,19 @@ export async function upvoteProject(projectId: number) {
   if (!redis) {
     return { success: false, error: "Redis is not configured." };
   }
+  
   try {
+    const cookieStore = await cookies();
+    const cookieName = `voted_project_${projectId}`;
+    
+    if (cookieStore.get(cookieName)) {
+      return { success: false, error: "Already voted" };
+    }
+
     const newVotes = await redis.hincrby(REDIS_KEY, projectId.toString(), 1);
     
+    cookieStore.set(cookieName, "true", { maxAge: 60 * 60 * 24 * 365 }); // 1 year
+
     // Revalidate the paths where the projects are displayed
     revalidatePath("/projects");
     revalidatePath("/");
@@ -77,8 +89,19 @@ export async function upvoteTeamMember(memberId: string) {
   if (!redis) {
     return { success: false, error: "Redis is not configured." };
   }
+  
   try {
+    const cookieStore = await cookies();
+    const cookieName = `voted_team_${memberId}`;
+    
+    if (cookieStore.get(cookieName)) {
+      return { success: false, error: "Already voted" };
+    }
+
     const newVotes = await redis.hincrby(TEAM_REDIS_KEY, memberId, 1);
+    
+    cookieStore.set(cookieName, "true", { maxAge: 60 * 60 * 24 * 365 }); // 1 year
+
     revalidatePath("/teams");
     return { success: true, votes: newVotes };
   } catch (error) {
