@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ExternalLink, Github, ArrowRight } from "lucide-react";
 import UpvoteButton from "./UpvoteButton";
 
-export default function ProjectCard({ project, initialVotes = 0, isTopProject = false }: { project: any, initialVotes?: number, isTopProject?: boolean }) {
+export default function ProjectCard({ project, initialVotes = 0, initialHasVoted = false, isTopProject = false }: { project: any, initialVotes?: number, initialHasVoted?: boolean, isTopProject?: boolean }) {
   const githubUsername = project.github ? project.github.split('github.com/')[1]?.split('/')[0] : null;
 
   return (
@@ -50,7 +50,7 @@ export default function ProjectCard({ project, initialVotes = 0, isTopProject = 
 
       {/* 4. Actions (Right side) */}
       <div className="shrink-0 flex items-center gap-3 md:gap-4 mt-2 md:mt-0 w-full md:w-auto justify-between md:justify-end border-t-2 md:border-t-0 border-black/10 pt-4 md:pt-0 border-dashed">
-        <UpvoteButton projectId={project.id} initialVotes={initialVotes} isTopProject={isTopProject} />
+        <UpvoteButton projectId={project.id} initialVotes={initialVotes} initialHasVoted={initialHasVoted} isTopProject={isTopProject} />
         
         <div className="flex items-center gap-2">
           {project.github && (

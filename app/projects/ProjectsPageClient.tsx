@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import ProjectCard from "../components/ProjectCard";
 import { memberProjectsData } from "@/lib/member-projects-data";
 import { cn } from "@/lib/utils";
-import { getProjectVotes } from "@/app/actions/upvote";
+import { getProjectVotes, getUserVotedProjectIds } from "@/app/actions/upvote";
 import { TrendingUp, Sparkles } from "lucide-react";
 import Image from "next/image";
 
@@ -20,9 +20,10 @@ const memes = [
 
 interface ProjectsPageClientProps {
   initialVotes?: Record<number, number>;
+  initialVotedProjects?: number[];
 }
 
-export default function ProjectsPageClient({ initialVotes }: ProjectsPageClientProps) {
+export default function ProjectsPageClient({ initialVotes, initialVotedProjects = [] }: ProjectsPageClientProps) {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortMode, setSortMode] = useState<"votes" | "new">("new");
   const [votesMap, setVotesMap] = useState<Record<number, number>>(initialVotes || {});
@@ -37,17 +38,23 @@ export default function ProjectsPageClient({ initialVotes }: ProjectsPageClientP
     }
   }, []);
 
+  const [votedProjects, setVotedProjects] = useState<number[]>(initialVotedProjects);
+
   useEffect(() => {
     if (initialVotes && Object.keys(initialVotes).length > 0) return;
-    async function loadVotes() {
+    async function loadData() {
       try {
-        const votes = await getProjectVotes();
+        const [votes, votedIds] = await Promise.all([
+          getProjectVotes(),
+          getUserVotedProjectIds()
+        ]);
         setVotesMap(votes);
+        setVotedProjects(votedIds || []);
       } catch (error) {
-        console.error("Failed to load votes", error);
+        console.error("Failed to load data", error);
       }
     }
-    loadVotes();
+    loadData();
   }, [initialVotes]);
 
   const categories = useMemo(() => {
@@ -163,6 +170,7 @@ export default function ProjectsPageClient({ initialVotes }: ProjectsPageClientP
               key={project.id}
               project={project}
               initialVotes={votesMap[project.id] || 0}
+              initialHasVoted={votedProjects.includes(project.id)}
               isTopProject={sortMode === "votes" && index < 3}
             />
           ))}

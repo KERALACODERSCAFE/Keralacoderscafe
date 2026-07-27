@@ -9,9 +9,13 @@ import Testimonials from "./components/Testimonials";
 import LinkedInEmbed from "./components/LinkedInEmbed";
 import Footer from "./components/Footer";
 import { getProjectVotesQuery } from "@/lib/queries";
+import { getUserVotedProjectIds } from "@/app/actions/upvote";
 
 export default async function Home() {
-  const votes = await getProjectVotesQuery();
+  const [votes, votedIds] = await Promise.all([
+    getProjectVotesQuery(),
+    getUserVotedProjectIds()
+  ]);
 
   return (
     <main className="relative z-10">
@@ -20,7 +24,7 @@ export default async function Home() {
       <Mission />
       <Contributors />
       <Projects />
-      <MemberProjects initialVotes={votes} />
+      <MemberProjects initialVotes={votes} initialVotedProjects={votedIds} />
       <FeaturedBlogs />
       <Testimonials />
       <LinkedInEmbed />

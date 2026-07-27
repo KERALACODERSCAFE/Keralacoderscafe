@@ -16,6 +16,32 @@ export async function getProjectVotes(): Promise<Record<number, number>> {
 }
 
 /**
+ * Fetch project IDs that the current user has already voted for
+ */
+export async function getUserVotedProjectIds(): Promise<number[]> {
+  if (!redis) return [];
+  try {
+    const session = await auth();
+    if (!session || !session.user || !session.user.email) return [];
+    
+    const userId = session.user.email;
+    // We fetch all keys for this user's project votes
+    const keys = await redis.keys(`user:${userId}:voted_project_*`);
+    if (!keys || keys.length === 0) return [];
+    
+    const projectIds = keys.map(key => {
+      const parts = key.split('_project_');
+      return Number(parts[1]);
+    });
+    
+    return projectIds;
+  } catch (error) {
+    console.error("Error fetching user voted projects:", error);
+    return [];
+  }
+}
+
+/**
  * Increment a project's vote count by 1
  */
 export async function upvoteProject(projectId: number) {

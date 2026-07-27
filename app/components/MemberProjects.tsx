@@ -7,7 +7,7 @@ import { ExternalLink, TrendingUp, Sparkles } from "lucide-react";
 import ProjectCard from "./ProjectCard";
 import { cn } from "@/lib/utils";
 import { memberProjectsData } from "@/lib/member-projects-data";
-import { getProjectVotes } from "@/app/actions/upvote";
+import { getProjectVotes, getUserVotedProjectIds } from "@/app/actions/upvote";
 
 const memes = [
   { src: "https://res.cloudinary.com/ddtpurhae/image/upload/v1785135582/photo_2026-07-27_11-45-05_cjh0ie.jpg",  alt: "KCC Community", rotate: "-rotate-3", top: "top-6",  left: "left-[1%]" },
@@ -18,28 +18,34 @@ const memes = [
   { src: "https://res.cloudinary.com/ddtpurhae/image/upload/v1785135582/photo_2026-07-27_11-45-04_wip9qk.jpg",  alt: "Event", rotate: "rotate-1",  top: "top-2",  left: "left-[82%]" },
 ];
 
-export default function MemberProjects({ initialVotes }: { initialVotes?: Record<number, number> }) {
+export default function MemberProjects({ initialVotes, initialVotedProjects = [] }: { initialVotes?: Record<number, number>, initialVotedProjects?: number[] }) {
 
   const [isLoading, setIsLoading] = useState(!initialVotes || Object.keys(initialVotes).length === 0);
   const [votesMap, setVotesMap] = useState<Record<number, number>>(initialVotes || {});
   const [sortMode, setSortMode] = useState<"votes" | "new">("new");
 
+  const [votedProjects, setVotedProjects] = useState<number[]>(initialVotedProjects);
+
   useEffect(() => {
     if (initialVotes && Object.keys(initialVotes).length > 0) {
       return;
     }
-    async function loadVotes() {
+    async function loadData() {
       setIsLoading(true);
       try {
-        const votes = await getProjectVotes();
+        const [votes, votedIds] = await Promise.all([
+          getProjectVotes(),
+          getUserVotedProjectIds()
+        ]);
         setVotesMap(votes);
+        setVotedProjects(votedIds || []);
       } catch (error) {
         console.error("Failed to load votes", error);
       } finally {
         setIsLoading(false);
       }
     }
-    loadVotes();
+    loadData();
   }, [initialVotes]);
 
   const sortedProjects = [...memberProjectsData]
@@ -160,6 +166,7 @@ export default function MemberProjects({ initialVotes }: { initialVotes?: Record
                 key={project.id}
                 project={project}
                 initialVotes={votesMap[project.id] || 0}
+                initialHasVoted={votedProjects.includes(project.id)}
                 isTopProject={sortMode === "votes" && index < 3}
               />
             ))

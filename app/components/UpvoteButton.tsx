@@ -10,12 +10,13 @@ import Image from "next/image";
 interface UpvoteButtonProps {
   projectId: number;
   initialVotes: number;
+  initialHasVoted?: boolean;
   isTopProject?: boolean;
 }
 
-export default function UpvoteButton({ projectId, initialVotes, isTopProject = false }: UpvoteButtonProps) {
+export default function UpvoteButton({ projectId, initialVotes, initialHasVoted = false, isTopProject = false }: UpvoteButtonProps) {
   const [votes, setVotes] = useState(initialVotes);
-  const [hasVoted, setHasVoted] = useState(false);
+  const [hasVoted, setHasVoted] = useState(initialHasVoted);
   const [isVoting, setIsVoting] = useState(false);
   const [showSoul, setShowSoul] = useState(false);
   const [showAlreadyVotedPopup, setShowAlreadyVotedPopup] = useState(false);
@@ -25,13 +26,9 @@ export default function UpvoteButton({ projectId, initialVotes, isTopProject = f
     setVotes(initialVotes);
   }, [initialVotes]);
 
-  // Check local storage on mount
   useEffect(() => {
-    const votedProjects = JSON.parse(localStorage.getItem("votedProjects") || "[]");
-    if (votedProjects.includes(projectId)) {
-      setHasVoted(true);
-    }
-  }, [projectId]);
+    setHasVoted(initialHasVoted);
+  }, [initialHasVoted]);
 
   const handleUpvote = async () => {
     if (hasVoted || isVoting) return;
@@ -62,24 +59,12 @@ export default function UpvoteButton({ projectId, initialVotes, isTopProject = f
       
       if (result.success && result.votes) {
         setVotes(result.votes);
-
-        // Save to local storage for quick subsequent UI checks
-        const votedProjects = JSON.parse(localStorage.getItem("votedProjects") || "[]");
-        if (!votedProjects.includes(projectId)) {
-          votedProjects.push(projectId);
-          localStorage.setItem("votedProjects", JSON.stringify(votedProjects));
-        }
       } else {
         // Revert on failure (e.g. already voted on server)
         setVotes((prev) => prev - 1);
         
         if (result.error && result.error.includes("already voted")) {
           setHasVoted(true);
-          const votedProjects = JSON.parse(localStorage.getItem("votedProjects") || "[]");
-          if (!votedProjects.includes(projectId)) {
-            votedProjects.push(projectId);
-            localStorage.setItem("votedProjects", JSON.stringify(votedProjects));
-          }
           setShowAlreadyVotedPopup(true);
         } else {
           setHasVoted(false);

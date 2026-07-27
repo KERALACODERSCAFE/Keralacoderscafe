@@ -1,5 +1,6 @@
 import ProjectsPageClient from "./ProjectsPageClient";
 import { getProjectVotesQuery } from "@/lib/queries";
+import { getUserVotedProjectIds } from "@/app/actions/upvote";
 
 export const metadata = {
   title: "KCC Projects | Open Source Contributions & Community Showcase",
@@ -7,6 +8,9 @@ export const metadata = {
 };
 
 export default async function ProjectsPage() {
-  const votes = await getProjectVotesQuery();
-  return <ProjectsPageClient initialVotes={votes} />;
+  const [votes, votedIds] = await Promise.all([
+    getProjectVotesQuery(),
+    getUserVotedProjectIds()
+  ]);
+  return <ProjectsPageClient initialVotes={votes} initialVotedProjects={votedIds} />;
 }
