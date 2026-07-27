@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { ArrowBigUpDash } from "lucide-react";
 import { upvoteProject } from "@/app/actions/upvote";
 import { cn } from "@/lib/utils";
@@ -117,9 +118,9 @@ export default function UpvoteButton({ projectId, initialVotes, isTopProject = f
         <span className="text-sm">{votes}</span>
       </button>
 
-      {/* Already Voted Custom Popup */}
-      {showAlreadyVotedPopup && (
-        <div className="fixed inset-0 z-[100] flex items-start justify-center pt-20 px-4 pointer-events-none">
+      {/* Already Voted Custom Popup (Rendered in Portal to avoid z-index clipping) */}
+      {showAlreadyVotedPopup && typeof window !== "undefined" && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-start justify-center pt-20 px-4 pointer-events-none">
           {/* Backdrop */}
           <div 
             className="fixed inset-0 bg-black/20 dark:bg-black/60 backdrop-blur-sm pointer-events-auto"
@@ -127,14 +128,20 @@ export default function UpvoteButton({ projectId, initialVotes, isTopProject = f
           />
           
           {/* Modal Container */}
-          <div className="relative z-[101] bg-[#FFF8F3] dark:bg-[#1a1a2e] border-[3px] border-black p-6 sm:p-8 rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,0.1)] max-w-sm w-full pointer-events-auto animate-in slide-in-from-top-10 fade-in duration-300 flex flex-col items-center text-center">
+          <div className="relative z-[10000] bg-[#FFF8F3] dark:bg-[#1a1a2e] border-[3px] border-black p-6 sm:p-8 rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,0.1)] max-w-sm w-full pointer-events-auto animate-in slide-in-from-top-10 fade-in duration-300 flex flex-col items-center text-center">
             
-            {/* Cute Graphic Placeholder */}
-            <div className="text-[5rem] mb-4 relative flex items-center justify-center">
-              <span className="absolute -left-6 top-2 text-2xl text-yellow-400">✨</span>
-              <span className="absolute -right-4 top-10 text-xl text-blue-400">✨</span>
-              <span className="absolute top-0 right-4 text-2xl text-pink-400">✨</span>
-              😺🪧
+            {/* Cute Graphic */}
+            <div className="mb-4 relative flex items-center justify-center">
+              <span className="absolute -left-6 top-2 text-2xl text-yellow-400 z-10">✨</span>
+              <span className="absolute -right-4 top-10 text-xl text-blue-400 z-10">✨</span>
+              <span className="absolute top-0 right-4 text-2xl text-pink-400 z-10">✨</span>
+              <Image 
+                src="/already-voted-cat.png" 
+                alt="Already Voted Cat" 
+                width={120} 
+                height={120} 
+                className="object-contain"
+              />
             </div>
             
             <h3 className="font-black text-2xl mb-2 text-black dark:text-white tracking-tight">
@@ -152,7 +159,8 @@ export default function UpvoteButton({ projectId, initialVotes, isTopProject = f
               Cool, got it! 😉
             </button>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
