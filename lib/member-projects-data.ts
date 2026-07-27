@@ -477,6 +477,290 @@ export const memberProjectsData = [
     link: "",
     github: "https://github.com/lalupj07/FamBudget",
     email: "lalujames560@gmail.com"
+  },
+  {
+    id: 36,
+    name: "Kerala Vipani",
+    author: "Abid TS",
+    description: "A community-driven platform where anyone can check and contribute live market rates across Kerala — vegetables, fish, meat, gold, petrol, KSEB rates and more. Features district-wise rates, a smart shopping list builder with PDF export & WhatsApp sharing, leaderboard, trust points, monthly badges, and PWA support.",
+    stats: { stars: 0, forks: 0 },
+    stats: { stars: 0, forks: 0 },
+    category: "Tools",
+    icon: MapPin,
+    animationClass: "group-hover:animate-icon-swing",
+    windowColor: "bg-[#FFEB3B]", // Yellow
+    pillColor: "bg-[#4CAF50]", // Green
+    link: "https://solaa.vercel.app/",
+    github: "https://github.com/Githubdiaries/Sola",
+    email: "aksasusan1904@gmail.com"
+  },
+  {
+    id: 24,
+    name: "MindCare AI",
+    author: "Hashmil Muhammed",
+    description: "MindCare AI is an AI-powered mental health support platform designed to detect stress levels and provide personalized counselling assistance. The system integrates NLP-based conversational AI, facial emotion recognition, voice emotion detection, and machine learning-based behavioral risk assessment to identify emotional distress. It offers supportive conversations, stress analysis and emotion detection to help users better understand their mental well-being.",
+    stats: { stars: 0, forks: 0 },
+    category: "AI",
+    icon: Bot,
+    animationClass: "group-hover:animate-icon-float",
+    windowColor: "bg-[#00BCD4]", // Cyan
+    pillColor: "bg-[#FF9800]", // Orange
+    link: "https://smart-mental-health-counselling-sys.vercel.app/",
+    github: "https://github.com/Hashmil-Muhammed/MindCareAI-Smart_Mental_Health_Counselling_SystemUsing_Multimodal_AI",
+    email: "hashmilmuhammedparammal@gmail.com"
+  },
+  {
+    id: 25,
+    name: "Just Split Bill",
+    author: "Just Split Bill",
+    description: "Just Split Bill helps friends and groups split bills fast in the browser. No sign up, no app, easy sharing, smart payback, and flexible split tools.",
+    stats: { stars: 0, forks: 0 },
+    category: "FinTech",
+    icon: Wallet,
+    animationClass: "group-hover:animate-icon-float",
+    windowColor: "bg-[#4CAF50]", // Green
+    pillColor: "bg-[#FFC107]", // Amber
+    link: "https://www.justsplitbill.com/",
+    email: "hello@justsplitbill.com"
+  },
+  {
+    id: 26,
+    name: "salt-text",
+    author: "Abhijith Baby",
+    description: "A secure, offline-first text editor that encrypts your files entirely in the browser.",
+    stats: { stars: 0, forks: 0 },
+    category: "Tools",
+    icon: FileText,
+    animationClass: "group-hover:animate-icon-wiggle",
+    windowColor: "bg-[#607D8B]", // Blue Grey
+    pillColor: "bg-[#03A9F4]", // Light Blue
+    link: "https://abhijithbaby.github.io/Salt-Text/",
+    github: "https://github.com/AbhijithBaby/Salt-Text",
+    email: "abhijithbaby2005@gmail.com"
+  },
+  {
+    id: 27,
+    name: "Devtasks",
+    author: "Shamil",
+    description: "DevTasks is a high-performance, minimalist, and monochrome developer dashboard and task manager. It is designed to act as an offline-first workspace for developers to track engineering roadmaps and manage code snippets with minimal friction",
+    stats: { stars: 0, forks: 0 },
+    category: "Tools",
+    icon: Monitor,
+    animationClass: "group-hover:animate-icon-swing",
+    windowColor: "bg-[#212121]", // Grey
+    pillColor: "bg-[#FFFFFF]", // White
+    link: "https://dev-tasks-beta.vercel.app/",
+    github: "https://github.com/shamilahmdt/devtasks",
+    email: "shamilahmd12@gmail.com"
+  },
+  {
+    id: 28,
+    name: "Deep Face Net",
+    author: "Midhun G Raj",
+    description: "Real-time face swapping application with GUI and CLI support. Built with Python, PyQt6, OpenCV, and ONNX Runtime using InsightFace and GFPGAN models for face detection, swapping, and enhancement.",
+    stats: { stars: 0, forks: 0 },
+    category: "AI",
+    icon: Bot,
+    animationClass: "group-hover:animate-icon-heartbeat",
+    windowColor: "bg-[#9C27B0]", // Purple
+    pillColor: "bg-[#FFEB3B]", // Yellow
+    link: "https://github.com/polynet-org/Deep-Face-Net",
+    github: "https://github.com/MIDHUNGRAJ",
+    email: "neurobyte.ml@gmail.com"
+  },
+  {
+    id: 29,
+    name: "Makeitforthem",
+    author: "BR Govind",
+    description: "Started as a small token of love to my gf,pinne i though let's make it better and added a bit more features",
+    stats: { stars: 0, forks: 0 },
+    category: "Entertainment",
+    icon: Heart,
+    animationClass: "group-hover:animate-icon-float",
+    windowColor: "bg-[#E91E63]", // Pink
+    pillColor: "bg-[#FFFFFF]", // White
+    link: "https://makeitforthem.vercel.app/",
+    github: "https://github.com/BRGOVIND",
+    email: "brg"
+  },
+  {
+    id: 30,
+    name: "Zyncview vision therapy",
+    author: "Zyncview",
+    description: "Zyncview is a platform for treatment of amblyopia (lazy eye), by playing dichoptic games on your computer or phone.",
+    stats: { stars: 0, forks: 0 },
+    category: "HealthTech",
+    icon: Heart,
+    animationClass: "group-hover:animate-icon-heartbeat",
+    windowColor: "bg-[#00BCD4]", // Cyan
+    pillColor: "bg-[#FF9800]", // Orange
+    link: "https://zyncview.com",
+    github: "https://github.com/notopensource",
+    email: "Nospam@gmail.com"
+  },
+  {
+    id: 31,
+    name: "Fadhi Zaman P T",
+    author: "Fadhi Zaman P T",
+    description: "Portfolio Showcasing My Work",
+    stats: { stars: 0, forks: 0 },
+    category: "Portfolios",
+    icon: Briefcase,
+    animationClass: "group-hover:animate-icon-swing",
+    windowColor: "bg-[#2196F3]",
+    pillColor: "bg-[#FF5722]",
+    link: "https://fadhizamanpt.vercel.app/",
+    github: "https://github.com/fadhizamanpt",
+    email: "fadhizamantsy@gmail.com"
+  },
+  {
+    id: 32,
+    name: "Shelfy",
+    author: "Fadhi Zaman P T",
+    description: "Online library management system to manage books, members, and borrowings, with AI powered search and summaries.",
+    stats: { stars: 0, forks: 0 },
+    category: "SaaS",
+    icon: Cloud,
+    animationClass: "group-hover:animate-icon-float",
+    windowColor: "bg-[#009688]",
+    pillColor: "bg-[#FF5722]",
+    link: "https://shelfylibrary.vercel.app/",
+    github: "https://github.com/fadhizamanpt",
+    email: "fadhizamantsy@gmail.com"
+  },
+  {
+    id: 33,
+    name: "anatomyof-k8s",
+    author: "Anas Kadambalath",
+    description: "DevOps Atlas is an interactive learning platform designed to make DevOps concepts simple, visual, and accessible for everyone.",
+    stats: { stars: 0, forks: 0 },
+    category: "EdTech",
+    icon: BookOpen,
+    animationClass: "group-hover:animate-icon-float",
+    windowColor: "bg-[#3F51B5]",
+    pillColor: "bg-[#00BCD4]",
+    link: "https://www.cloudtruck.space",
+    github: "https://github.com/anaskmh/anatomyof-k8s",
+    email: "anaskofficial8@gmail.com"
+  },
+  {
+    id: 34,
+    name: "Utility app",
+    author: "Akshay Krishna",
+    description: "Daily common usecase web solutions.",
+    stats: { stars: 0, forks: 0 },
+    category: "Tools",
+    icon: FileText,
+    animationClass: "group-hover:animate-icon-wiggle",
+    windowColor: "bg-[#607D8B]",
+    pillColor: "bg-[#03A9F4]",
+    link: "https://akshay43215.github.io/utility_apps/",
+    github: "https://github.com/akshay43215",
+    email: "akshaykrishna24996@gmail.com"
+  },
+  {
+    id: 35,
+    name: "Fambudget",
+    author: "Lalu James",
+    description: "FamBudget is a powerful, privacy-focused desktop application designed to help families manage their finances effectively.",
+    stats: { stars: 0, forks: 0 },
+    category: "FinTech",
+    icon: Wallet,
+    animationClass: "group-hover:animate-icon-swing",
+    windowColor: "bg-[#4CAF50]",
+    pillColor: "bg-[#FFC107]",
+    link: "",
+    github: "https://github.com/lalupj07/FamBudget",
+    email: "lalujames560@gmail.com"
+  },
+  {
+    id: 36,
+    name: "Kerala Vipani",
+    author: "Abid TS",
+    description: "A community-driven platform where anyone can check and contribute live market rates across Kerala — vegetables, fish, meat, gold, petrol, KSEB rates and more. Features district-wise rates, a smart shopping list builder with PDF export & WhatsApp sharing, leaderboard, trust points, monthly badges, and PWA support.",
+    stats: { stars: 0, forks: 0 },
+    category: "Community",
+    icon: Store,
+    animationClass: "group-hover:animate-icon-swing",
+    windowColor: "bg-[#1B6B3A]", // Kerala Green
+    pillColor: "bg-[#FFD166]", // Gold
+    link: "https://keralavipani.vercel.app",
+    github: "https://github.com/abid0853/keralavipani",
+    email: "abidts2028@cs.ajce.in"
+  },
+  {
+    id: 37,
+    name: "Kandetham",
+    author: "Badarudheen VK",
+    description: "Kandetham helps the people of Kerala recover lost belongings and return found items to their rightful owners. A community-driven lost & found platform connecting people across Kerala.",
+    stats: { stars: 0, forks: 0 },
+    category: "Community",
+    icon: MapPin,
+    animationClass: "group-hover:animate-icon-float",
+    windowColor: "bg-[#FF9800]", // Orange
+    pillColor: "bg-[#1B6B3A]", // Green
+    link: "https://kandetham.page.gd/",
+    github: "https://github.com/b4daru",
+    email: "badarudheenvk7@gmail.com"
+  },
+  {
+    id: 38,
+    name: "OPNHUB",
+    author: "Mohamed Danis",
+    description: "Discover open-source projects from GitHub, categorized by programming language, with this intuitive web app. Find the right project to contribute to or get inspired by the open-source community.",
+    stats: { stars: 0, forks: 0 },
+    category: "Tools",
+    icon: BookOpen,
+    animationClass: "group-hover:animate-icon-wiggle",
+    windowColor: "bg-[#0F172A]", // Dark Slate
+    pillColor: "bg-[#A5FFD6]", // Mint Green
+    link: "https://opnhub.vercel.app/",
+    github: "https://github.com/MohamedDanis/opnhub",
+    email: "mohameddanisap@gmail.com"
+  },
+  {
+    id: 39,
+    name: "EchoBreaker",
+    author: "Parthiv Raju",
+    description: "A bias-aware news aggregator in the Indian context — a Ground News clone for India. Fetches real-time news from RSS feeds, clusters similar stories, and summarises them using AI to surface multiple perspectives and break echo chambers.",
+    stats: { stars: 0, forks: 0 },
+    category: "AI",
+    icon: BarChart,
+    animationClass: "group-hover:animate-icon-heartbeat",
+    windowColor: "bg-[#1A237E]", // Deep Navy
+    pillColor: "bg-[#FF5252]", // Red
+    link: "https://parthiv2005.github.io/EchoBreaker-web/",
+    github: "https://github.com/Parthiv2005/EchoBreaker",
+    email: "parthivraju2005@gmail.com"
+  },
+  {
+    id: 40,
+    name: "Tales of Deutsch",
+    author: "Noyal Joseph",
+    description: "An interactive platform designed to help you learn German through engaging stories. Combines storytelling with interactive features to make language learning more natural and enjoyable.",
+    stats: { stars: 0, forks: 0 },
+    category: "EdTech",
+    icon: BookOpen,
+    animationClass: "group-hover:animate-icon-float",
+    windowColor: "bg-[#212121]", // German Black
+    pillColor: "bg-[#FFD600]", // German Gold
+    link: "https://talesofdeutsch.vercel.app/",
+    github: "https://github.com/StDensity/Tales-of-Deutsch",
+    email: "noyaljosephnnj@gmail.com"
+  },
+  {
+    id: 41,
+    name: "Gen Vault",
+    author: "Lalu James",
+    description: "An offline-first password and TOTP vault by GenXis Innovations. Credentials and 2FA secrets stay on your device — encrypted with AES-256-GCM, unlocked with your master password and optional biometrics. Built with Tauri 2, Rust, and Next.js. No cloud sync. No server that can read your vault.",
+    stats: { stars: 0, forks: 0 },
+    category: "Tools",
+    icon: Monitor,
+    animationClass: "group-hover:animate-icon-wiggle",
+    windowColor: "bg-[#0D1B2A]", // Dark Midnight
+    pillColor: "bg-[#A5FFD6]", // Mint Green
+    link: "https://web-demo-vercel.vercel.app/",
+    github: "https://github.com/lalupj07/Gen-Vault",
+    email: "lalujames560@gmail.com"
   }
 ];
-

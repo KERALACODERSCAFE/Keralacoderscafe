@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
 import Link from "next/link";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, TrendingUp, Sparkles } from "lucide-react";
 import ProjectCard from "./ProjectCard";
 import { GridPattern } from "./GridPattern";
 import { cn } from "@/lib/utils";
@@ -14,6 +13,7 @@ export default function MemberProjects({ initialVotes }: { initialVotes?: Record
 
   const [isLoading, setIsLoading] = useState(!initialVotes || Object.keys(initialVotes).length === 0);
   const [votesMap, setVotesMap] = useState<Record<number, number>>(initialVotes || {});
+  const [sortMode, setSortMode] = useState<"votes" | "new">("votes");
 
   useEffect(() => {
     if (initialVotes && Object.keys(initialVotes).length > 0) {
@@ -30,9 +30,16 @@ export default function MemberProjects({ initialVotes }: { initialVotes?: Record
         setIsLoading(false);
       }
     }
-    
     loadVotes();
   }, [initialVotes]);
+
+  const sortedProjects = [...memberProjectsData]
+    .sort((a, b) =>
+      sortMode === "new"
+        ? b.id - a.id
+        : (votesMap[b.id] || 0) - (votesMap[a.id] || 0)
+    )
+    .slice(0, 7);
 
   return (
     <section id="community-projects" className="scroll-mt-24 px-6 py-28 md:px-12 bg-[#FDFBF7] border-t-[3px] border-black relative overflow-hidden">
@@ -52,9 +59,8 @@ export default function MemberProjects({ initialVotes }: { initialVotes?: Record
       <div className="mx-auto max-w-[1280px] relative z-10">
 
         {/* Section Header */}
-        <div className="mb-20 flex flex-col md:flex-row md:items-end justify-between gap-8 relative">
+        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8 relative">
 
-          {/* Decorative squiggles and stars could go here */}
           <svg className="absolute -top-10 left-1/2 w-16 h-16 text-[#42A5F5] fill-current animate-[spin_10s_linear_infinite] hidden md:block" viewBox="0 0 100 100">
             <path d="M50 0L60 35L95 35L65 55L75 90L50 70L25 90L35 55L5 35L40 35Z" />
           </svg>
@@ -70,7 +76,6 @@ export default function MemberProjects({ initialVotes }: { initialVotes?: Record
                 <span className="relative z-10 bg-[#FFD166] border-[4px] border-black px-6 py-2 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-md inline-block -rotate-2 text-[clamp(1.5rem,4vw,3.5rem)]">
                   Community Members
                 </span>
-                {/* Decorative purple arrow behind text */}
                 <svg className="absolute -bottom-6 -right-12 w-16 h-16 text-[#A18CE5] z-0 -rotate-12" viewBox="0 0 100 100" fill="currentColor" stroke="black" strokeWidth="4">
                   <path d="M0 0 L100 50 L0 100 Z" />
                 </svg>
@@ -84,25 +89,55 @@ export default function MemberProjects({ initialVotes }: { initialVotes?: Record
           </p>
         </div>
 
+        {/* Sort Toggle — right above the cards */}
+        <div className="flex items-center gap-3 w-full max-w-4xl mx-auto mb-6">
+          <div className="flex items-center gap-1 bg-white border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-xl p-1">
+            <button
+              onClick={() => setSortMode("votes")}
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 text-xs font-black uppercase tracking-wider rounded-lg border-[2px] transition-all",
+                sortMode === "votes"
+                  ? "bg-[#FFD166] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-black"
+                  : "bg-transparent border-transparent text-black/40 hover:text-black"
+              )}
+            >
+              <TrendingUp className="w-3.5 h-3.5" />
+              Top Voted
+            </button>
+            <button
+              onClick={() => setSortMode("new")}
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 text-xs font-black uppercase tracking-wider rounded-lg border-[2px] transition-all",
+                sortMode === "new"
+                  ? "bg-[#A5FFD6] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-black"
+                  : "bg-transparent border-transparent text-black/40 hover:text-black"
+              )}
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              Latest
+            </button>
+          </div>
+          <div className="flex-1 h-[3px] bg-black/10 rounded-full" />
+          <span className="text-xs font-black text-black/40 uppercase tracking-widest">
+            {memberProjectsData.length} projects
+          </span>
+        </div>
+
         {/* Project Cards Grid */}
         <div className="flex flex-col gap-6 w-full max-w-4xl mx-auto">
           {isLoading ? (
-            // Skeleton Loaders
             Array.from({ length: 3 }).map((_, i) => (
               <div key={i} className="bg-concrete shadow-concrete rounded-2xl p-4 h-[120px] w-full animate-pulse">
                 <div className="w-full h-full bg-black/10 rounded-xl"></div>
               </div>
             ))
           ) : (
-            [...memberProjectsData]
-              .sort((a, b) => (votesMap[b.id] || 0) - (votesMap[a.id] || 0))
-              .slice(0, 7)
-              .map((project, index) => (
-              <ProjectCard 
-                key={project.id} 
-                project={project} 
-                initialVotes={votesMap[project.id] || 0} 
-                isTopProject={index < 3}
+            sortedProjects.map((project, index) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                initialVotes={votesMap[project.id] || 0}
+                isTopProject={sortMode === "votes" && index < 3}
               />
             ))
           )}
@@ -114,8 +149,9 @@ export default function MemberProjects({ initialVotes }: { initialVotes?: Record
             href="/projects"
             className="inline-flex h-16 items-center justify-center gap-3 border-[3px] border-black bg-[#A18CE5] px-8 text-lg font-black uppercase text-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all w-full sm:w-auto rounded-xl cursor-pointer"
           >
-            See More Projects
+            See All Projects
           </Link>
+
           <Link
             href="https://docs.google.com/forms/d/e/1FAIpQLSeeHzA9LoWRRBOkqAYeXTNQnce6RSUi1uf1xZYVhIVKLBJz7Q/viewform"
             target="_blank"

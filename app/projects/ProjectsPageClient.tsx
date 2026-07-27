@@ -25,7 +25,7 @@ export default function ProjectsPageClient({ initialVotes }: ProjectsPageClientP
         console.error("Failed to load votes", error);
       }
     }
-    
+
     loadVotes();
   }, [initialVotes]);
 
@@ -35,7 +35,7 @@ export default function ProjectsPageClient({ initialVotes }: ProjectsPageClientP
   }, []);
 
   const filteredProjects = useMemo(() => {
-    const projects = selectedCategory === "All" 
+    const projects = selectedCategory === "All"
       ? [...memberProjectsData]
       : memberProjectsData.filter(p => p.category === selectedCategory);
     return projects.sort((a, b) => (votesMap[b.id] || 0) - (votesMap[a.id] || 0));
@@ -79,8 +79,8 @@ export default function ProjectsPageClient({ initialVotes }: ProjectsPageClientP
               onClick={() => setSelectedCategory(cat as string)}
               className={cn(
                 "px-5 py-2 text-sm font-black uppercase tracking-wider border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:shadow-none",
-                selectedCategory === cat 
-                  ? "bg-[#FFD166] text-black" 
+                selectedCategory === cat
+                  ? "bg-[#FFD166] text-black"
                   : "bg-white text-black"
               )}
             >
@@ -91,10 +91,10 @@ export default function ProjectsPageClient({ initialVotes }: ProjectsPageClientP
 
         <div className="flex flex-col gap-6 w-full max-w-4xl mx-auto mb-20">
           {filteredProjects.map((project, index) => (
-            <ProjectCard 
-              key={project.id} 
-              project={project} 
-              initialVotes={votesMap[project.id] || 0} 
+            <ProjectCard
+              key={project.id}
+              project={project}
+              initialVotes={votesMap[project.id] || 0}
               isTopProject={index < 3}
             />
           ))}

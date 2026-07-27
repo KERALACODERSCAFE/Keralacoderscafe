@@ -17,8 +17,12 @@ export default function CareerDisplayAd() {
     }
 
     try {
-      // @ts-ignore
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      // Only push if there are unprocessed ads in the DOM to prevent TagError in SPAs
+      const unprocessedIns = document.querySelectorAll("ins.adsbygoogle:not([data-adsbygoogle-status='done'])");
+      if (unprocessedIns.length > 0) {
+        // @ts-ignore
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      }
     } catch (err: any) {
       if (err && err.message && err.message.includes("already have ads in them")) {
         return;
