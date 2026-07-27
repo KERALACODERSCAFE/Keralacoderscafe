@@ -132,6 +132,7 @@ import NavBar from "./components/NavBar";
 import PageLoader from "./components/PageLoader";
 import AnnouncementPopup from "./components/AnnouncementPopup";
 import SessionProviderWrapper from "./components/SessionProviderWrapper";
+import GoogleOneTap from "./components/GoogleOneTap";
 import Script from "next/script";
 import { Suspense } from "react";
 
@@ -226,6 +227,7 @@ export default function RootLayout({
         </Script>
 
         <SessionProviderWrapper>
+          <GoogleOneTap />
           <Suspense fallback={null}>
             <PageLoader />
           </Suspense>
