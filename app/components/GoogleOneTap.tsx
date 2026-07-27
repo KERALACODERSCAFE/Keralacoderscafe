@@ -4,6 +4,12 @@ import { useEffect, useState } from "react";
 import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
+declare global {
+  interface Window {
+    google: any;
+  }
+}
+
 export default function GoogleOneTap() {
   const { status } = useSession();
   const router = useRouter();
