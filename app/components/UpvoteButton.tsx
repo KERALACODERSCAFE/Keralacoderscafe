@@ -69,7 +69,19 @@ export default function UpvoteButton({ projectId, initialVotes, isTopProject = f
       } else {
         // Revert on failure (e.g. already voted on server)
         setVotes((prev) => prev - 1);
-        setHasVoted(false);
+        
+        if (result.error && result.error.includes("already voted")) {
+          setHasVoted(true);
+          const votedProjects = JSON.parse(localStorage.getItem("votedProjects") || "[]");
+          if (!votedProjects.includes(projectId)) {
+            votedProjects.push(projectId);
+            localStorage.setItem("votedProjects", JSON.stringify(votedProjects));
+          }
+          alert("You have already voted for this project!");
+        } else {
+          setHasVoted(false);
+          if (result.error) alert(result.error);
+        }
       }
     } catch (error) {
       console.error("Failed to upvote:", error);
