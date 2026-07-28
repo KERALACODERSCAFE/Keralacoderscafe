@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
+import { getBlogAuthor } from "@/lib/blog-overrides";
 
 interface Category {
   id: number;
@@ -218,7 +219,9 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
                       <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
                         <User className="w-3.5 h-3.5 text-white" />
                       </div>
-                      <span className="text-xs font-bold text-white">Community Member</span>
+                      <span className="text-xs font-bold text-white">
+                        {getBlogAuthor(activeFeatured.slug, activeFeatured.author_name)}
+                      </span>
                     </div>
                     <span>•</span>
                     <span>{formatDate(activeFeatured.published_at)}</span>
@@ -342,7 +345,7 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
             <div className="flex flex-col gap-12 w-full">
               {gridBlogs.length === 0 ? (
                 <div className="border-2 border-slate-200 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-900/10 p-12 rounded-xl text-center shadow-[4px_4px_0px_0px_rgba(0,0,0,0.03)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.01)] max-w-md mx-auto my-6">
-                  <span className="text-sm font-bold text-slate-700 dark:text-slate-350 mb-1.5 block">No more articles yet</span>
+                  <span className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5 block">No more articles yet</span>
                   <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium leading-relaxed max-w-xs mx-auto">
                     We couldn't find any other posts matching this category or query. Check back soon!
                   </p>
@@ -407,7 +410,9 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
                             <User className="w-4 h-4 text-slate-450 dark:text-slate-500" />
                           </div>
                           <div>
-                            <div className="text-[11px] font-bold text-slate-900 dark:text-slate-200 leading-none">Community Member</div>
+                            <div className="text-[11px] font-bold text-slate-900 dark:text-slate-200 leading-none">
+                              {getBlogAuthor(blog.slug, blog.author_name)}
+                            </div>
                             <div className="text-[9px] text-slate-450 dark:text-slate-500 font-semibold mt-1">{formatDate(blog.published_at)}</div>
                           </div>
                         </div>

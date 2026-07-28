@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { 
-  ArrowLeft, 
-  MapPin, 
-  Briefcase, 
-  Building2, 
-  DollarSign, 
+import {
+  ArrowLeft,
+  MapPin,
+  Briefcase,
+  Building2,
+  DollarSign,
   Clock,
   ExternalLink,
   Award,
@@ -51,7 +51,7 @@ async function getJobDetails(slug: string): Promise<JobDetail | null> {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const job = await getJobDetails(slug);
-  
+
   if (!job) {
     return {
       title: "Job Not Found | KCC Careers",
@@ -59,7 +59,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const cleanTitle = job.title.replace(new RegExp(`\\s+at\\s+${job.company}`, "i"), "");
-  
+
   return {
     title: `${cleanTitle} at ${job.company} | KCC Careers`,
     description: `KCC is hiring a ${cleanTitle} at ${job.company} in ${job.location}. Click to apply now!`,
@@ -119,9 +119,9 @@ export default async function CareerDetailPage({ params }: PageProps) {
     if (!loc) return "";
     const parts = loc.split(/[;,]/).map(p => p.trim());
     if (parts.length > 2) {
-      const filtered = parts.filter(p => 
-        !p.toLowerCase().includes("district") && 
-        !p.toLowerCase().includes("division") && 
+      const filtered = parts.filter(p =>
+        !p.toLowerCase().includes("district") &&
+        !p.toLowerCase().includes("division") &&
         !p.toLowerCase().includes("konkan")
       );
       if (filtered.length > 0) {
@@ -156,7 +156,7 @@ export default async function CareerDetailPage({ params }: PageProps) {
             <p className="font-bold text-black/70 mb-8">
               We couldn't retrieve details for this job role. It may have expired or been removed.
             </p>
-            <Link 
+            <Link
               href="/careers"
               className="no-underline inline-flex items-center gap-2 border-3 border-black bg-kcc-gold px-6 py-3 font-black text-black uppercase tracking-wider shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 active:translate-y-0.5"
             >
@@ -172,123 +172,123 @@ export default async function CareerDetailPage({ params }: PageProps) {
   return (
     <>
       <NavBar />
-      
+
       <main className="min-h-screen bg-[#F8FAFC] text-black pt-32 pb-24 px-6 md:px-12 relative isolate">
         {/* Background SVG Pattern */}
         <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 2000 1500"
             className="w-full h-full object-cover opacity-60"
           >
-            <rect fill="#ffffff" width="2000" height="1500"/>
+            <rect fill="#ffffff" width="2000" height="1500" />
             <defs>
-              <rect stroke="#ffffff" strokeWidth="0.6" width="1" height="1" id="s"/>
+              <rect stroke="#ffffff" strokeWidth="0.6" width="1" height="1" id="s" />
               <pattern id="a" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(42 1000 750) scale(21.95) translate(-954.44 -715.83)">
-                <use fill="#fcfcfc" href="#s" y="2"/>
-                <use fill="#fcfcfc" href="#s" x="1" y="2"/>
-                <use fill="#fafafa" href="#s" x="2" y="2"/>
-                <use fill="#fafafa" href="#s"/>
-                <use fill="#f7f7f7" href="#s" x="2"/>
-                <use fill="#f7f7f7" href="#s" x="1" y="1"/>
+                <use fill="#fcfcfc" href="#s" y="2" />
+                <use fill="#fcfcfc" href="#s" x="1" y="2" />
+                <use fill="#fafafa" href="#s" x="2" y="2" />
+                <use fill="#fafafa" href="#s" />
+                <use fill="#f7f7f7" href="#s" x="2" />
+                <use fill="#f7f7f7" href="#s" x="1" y="1" />
               </pattern>
               <pattern id="b" width="7" height="11" patternUnits="userSpaceOnUse" patternTransform="rotate(42 1000 750) scale(21.95) translate(-954.44 -715.83)">
                 <g fill="#f5f5f5">
-                  <use href="#s"/>
+                  <use href="#s" />
                   <use href="#s" y="5" />
-                  <use href="#s" x="1" y="10"/>
-                  <use href="#s" x="2" y="1"/>
-                  <use href="#s" x="2" y="4"/>
-                  <use href="#s" x="3" y="8"/>
-                  <use href="#s" x="4" y="3"/>
-                  <use href="#s" x="4" y="7"/>
-                  <use href="#s" x="5" y="2"/>
-                  <use href="#s" x="5" y="6"/>
-                  <use href="#s" x="6" y="9"/>
+                  <use href="#s" x="1" y="10" />
+                  <use href="#s" x="2" y="1" />
+                  <use href="#s" x="2" y="4" />
+                  <use href="#s" x="3" y="8" />
+                  <use href="#s" x="4" y="3" />
+                  <use href="#s" x="4" y="7" />
+                  <use href="#s" x="5" y="2" />
+                  <use href="#s" x="5" y="6" />
+                  <use href="#s" x="6" y="9" />
                 </g>
               </pattern>
               <pattern id="h" width="5" height="13" patternUnits="userSpaceOnUse" patternTransform="rotate(42 1000 750) scale(21.95) translate(-954.44 -715.83)">
                 <g fill="#f5f5f5">
-                  <use href="#s" y="5"/>
-                  <use href="#s" y="8"/>
-                  <use href="#s" x="1" y="1"/>
-                  <use href="#s" x="1" y="9"/>
-                  <use href="#s" x="1" y="12"/>
-                  <use href="#s" x="2"/>
-                  <use href="#s" x="2" y="4"/>
-                  <use href="#s" x="3" y="2"/>
-                  <use href="#s" x="3" y="6"/>
-                  <use href="#s" x="3" y="11"/>
-                  <use href="#s" x="4" y="3"/>
-                  <use href="#s" x="4" y="7"/>
-                  <use href="#s" x="4" y="10"/>
+                  <use href="#s" y="5" />
+                  <use href="#s" y="8" />
+                  <use href="#s" x="1" y="1" />
+                  <use href="#s" x="1" y="9" />
+                  <use href="#s" x="1" y="12" />
+                  <use href="#s" x="2" />
+                  <use href="#s" x="2" y="4" />
+                  <use href="#s" x="3" y="2" />
+                  <use href="#s" x="3" y="6" />
+                  <use href="#s" x="3" y="11" />
+                  <use href="#s" x="4" y="3" />
+                  <use href="#s" x="4" y="7" />
+                  <use href="#s" x="4" y="10" />
                 </g>
               </pattern>
               <pattern id="c" width="17" height="13" patternUnits="userSpaceOnUse" patternTransform="rotate(42 1000 750) scale(21.95) translate(-954.44 -715.83)">
                 <g fill="#f2f2f2">
-                  <use href="#s" y="11"/>
-                  <use href="#s" x="2" y="9"/>
-                  <use href="#s" x="5" y="12"/>
-                  <use href="#s" x="9" y="4"/>
-                  <use href="#s" x="12" y="1"/>
-                  <use href="#s" x="16" y="6"/>
+                  <use href="#s" y="11" />
+                  <use href="#s" x="2" y="9" />
+                  <use href="#s" x="5" y="12" />
+                  <use href="#s" x="9" y="4" />
+                  <use href="#s" x="12" y="1" />
+                  <use href="#s" x="16" y="6" />
                 </g>
               </pattern>
               <pattern id="d" width="19" height="17" patternUnits="userSpaceOnUse" patternTransform="rotate(42 1000 750) scale(21.95) translate(-954.44 -715.83)">
                 <g fill="#ffffff">
-                  <use href="#s" y="9"/>
-                  <use href="#s" x="16" y="5"/>
-                  <use href="#s" x="14" y="2"/>
-                  <use href="#s" x="11" y="11"/>
-                  <use href="#s" x="6" y="14"/>
+                  <use href="#s" y="9" />
+                  <use href="#s" x="16" y="5" />
+                  <use href="#s" x="14" y="2" />
+                  <use href="#s" x="11" y="11" />
+                  <use href="#s" x="6" y="14" />
                 </g>
                 <g fill="#efefef">
-                  <use href="#s" x="3" y="13"/>
-                  <use href="#s" x="9" y="7"/>
-                  <use href="#s" x="13" y="10"/>
-                  <use href="#s" x="15" y="4"/>
-                  <use href="#s" x="18" y="1"/>
+                  <use href="#s" x="3" y="13" />
+                  <use href="#s" x="9" y="7" />
+                  <use href="#s" x="13" y="10" />
+                  <use href="#s" x="15" y="4" />
+                  <use href="#s" x="18" y="1" />
                 </g>
               </pattern>
               <pattern id="e" width="47" height="53" patternUnits="userSpaceOnUse" patternTransform="rotate(42 1000 750) scale(21.95) translate(-954.44 -715.83)">
                 <g fill="#F60">
-                  <use href="#s" x="2" y="5"/>
-                  <use href="#s" x="16" y="38"/>
-                  <use href="#s" x="46" y="42"/>
-                  <use href="#s" x="29" y="20"/>
+                  <use href="#s" x="2" y="5" />
+                  <use href="#s" x="16" y="38" />
+                  <use href="#s" x="46" y="42" />
+                  <use href="#s" x="29" y="20" />
                 </g>
               </pattern>
               <pattern id="f" width="59" height="71" patternUnits="userSpaceOnUse" patternTransform="rotate(42 1000 750) scale(21.95) translate(-954.44 -715.83)">
                 <g fill="#F60">
-                  <use href="#s" x="33" y="13"/>
-                  <use href="#s" x="27" y="54"/>
-                  <use href="#s" x="55" y="55"/>
+                  <use href="#s" x="33" y="13" />
+                  <use href="#s" x="27" y="54" />
+                  <use href="#s" x="55" y="55" />
                 </g>
               </pattern>
               <pattern id="g" width="139" height="97" patternUnits="userSpaceOnUse" patternTransform="rotate(42 1000 750) scale(21.95) translate(-954.44 -715.83)">
                 <g fill="#F60">
-                  <use href="#s" x="11" y="8"/>
-                  <use href="#s" x="51" y="13"/>
-                  <use href="#s" x="17" y="73"/>
-                  <use href="#s" x="99" y="57"/>
+                  <use href="#s" x="11" y="8" />
+                  <use href="#s" x="51" y="13" />
+                  <use href="#s" x="17" y="73" />
+                  <use href="#s" x="99" y="57" />
                 </g>
               </pattern>
             </defs>
-            <rect fill="url(#a)" width="100%" height="100%"/>
-            <rect fill="url(#b)" width="100%" height="100%"/>
-            <rect fill="url(#h)" width="100%" height="100%"/>
-            <rect fill="url(#c)" width="100%" height="100%"/>
-            <rect fill="url(#d)" width="100%" height="100%"/>
-            <rect fill="url(#e)" width="100%" height="100%"/>
-            <rect fill="url(#f)" width="100%" height="100%"/>
-            <rect fill="url(#g)" width="100%" height="100%"/>
+            <rect fill="url(#a)" width="100%" height="100%" />
+            <rect fill="url(#b)" width="100%" height="100%" />
+            <rect fill="url(#h)" width="100%" height="100%" />
+            <rect fill="url(#c)" width="100%" height="100%" />
+            <rect fill="url(#d)" width="100%" height="100%" />
+            <rect fill="url(#e)" width="100%" height="100%" />
+            <rect fill="url(#f)" width="100%" height="100%" />
+            <rect fill="url(#g)" width="100%" height="100%" />
           </svg>
         </div>
         <div className="mx-auto max-w-4xl relative z-10">
-          
+
           {/* Back button */}
           <div className="mb-6 flex items-center justify-between">
-            <Link 
+            <Link
               href="/careers"
               className="no-underline inline-flex items-center gap-1.5 text-[#00B9A5] hover:text-[#008F80] font-black transition-colors text-sm"
             >
@@ -325,7 +325,7 @@ export default async function CareerDetailPage({ params }: PageProps) {
             {/* Meta details grid in a single card */}
             <div className="mt-6 border border-slate-100 bg-slate-50/50 rounded-2xl p-5 md:p-6">
               <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
-                
+
                 {/* Location */}
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-white rounded-full border border-slate-100 flex items-center justify-center text-slate-400 shrink-0 shadow-sm">
@@ -391,10 +391,11 @@ export default async function CareerDetailPage({ params }: PageProps) {
                 Job Description
               </h2>
             </div>
-            
+
             <div className="h-[3px] w-12 bg-[#00B9A5] mb-8" />
-            
-            <style dangerouslySetInnerHTML={{ __html: `
+
+            <style dangerouslySetInnerHTML={{
+              __html: `
               .prose-custom p {
                 margin-bottom: 1.25rem;
                 font-weight: 500;
@@ -437,11 +438,11 @@ export default async function CareerDetailPage({ params }: PageProps) {
                 flex-shrink: 0;
               }
             `}} />
-            
+
             {/* Safe rendering of description payload styled in neubrutalist typography rules */}
-            <div 
+            <div
               className="prose-custom max-w-none text-[#334155] font-semibold leading-relaxed text-sm md:text-base"
-              dangerouslySetInnerHTML={{ __html: job.description }} 
+              dangerouslySetInnerHTML={{ __html: job.description }}
             />
           </div>
 
@@ -460,8 +461,8 @@ export default async function CareerDetailPage({ params }: PageProps) {
                 </p>
               </div>
             </div>
-            
-            <a 
+
+            <a
               href={job.link}
               target="_blank"
               rel="noopener noreferrer"

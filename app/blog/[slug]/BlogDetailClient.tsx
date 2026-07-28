@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import NavBar from "../../components/NavBar";
 import Footer from "../../components/Footer";
+import { getBlogAuthor } from "@/lib/blog-overrides";
 
 interface Category {
   id: number;
@@ -432,7 +433,7 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
               </h1>
 
               {/* Excerpt */}
-              <p className="text-base md:text-lg text-slate-600 dark:text-slate-350 leading-relaxed font-normal mb-6">
+              <p className="text-base md:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal mb-6">
                 {blog.excerpt}
               </p>
 
@@ -444,7 +445,7 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
                   </div>
                   <div>
                     <div className="text-xs font-bold text-slate-900 dark:text-slate-200 leading-none">
-                      By Community Member
+                      By {getBlogAuthor(blog.slug, blog.author_name)}
                     </div>
                     <div className="flex items-center gap-1.5 text-[10px] text-slate-400 dark:text-slate-500 font-semibold mt-1.5">
                       <span>{formatDate(blog.published_at)}</span>

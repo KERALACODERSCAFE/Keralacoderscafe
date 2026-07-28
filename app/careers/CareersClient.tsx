@@ -313,7 +313,7 @@ export default function CareersClient({ initialJobs }: CareersClientProps) {
     <>
       <NavBar />
 
-      <main className="min-h-screen bg-[#F8FAFC] text-black pt-32 pb-24 px-6 md:px-12 relative overflow-hidden isolate">
+      <main className="min-h-screen bg-white text-black pt-32 pb-24 px-6 md:px-12 relative overflow-hidden isolate">
         {/* Top Corner Eucalyptus Decorative Graphic */}
         <div className="absolute top-0 right-0 w-[380px] sm:w-[480px] md:w-[650px] h-auto pointer-events-none z-0 opacity-85 select-none overflow-hidden">
           <img
@@ -508,7 +508,7 @@ export default function CareersClient({ initialJobs }: CareersClientProps) {
                             setSelectedCompanies(selectedCompanies.filter(c => c !== company));
                           }
                         }}
-                        className="rounded border-slate-350 text-[#00B9A5] focus:ring-[#00B9A5] w-4 h-4"
+                        className="rounded border-slate-300 text-[#00B9A5] focus:ring-[#00B9A5] w-4 h-4"
                       />
                       <span className="flex-grow truncate">{company}</span>
                       <span className="text-[10px] text-slate-400 font-bold">({getCountForCompany(company)})</span>
@@ -537,7 +537,7 @@ export default function CareersClient({ initialJobs }: CareersClientProps) {
                             setSelectedWorkplaceTypes(selectedWorkplaceTypes.filter(t => t !== item.key));
                           }
                         }}
-                        className="rounded border-slate-350 text-[#00B9A5] focus:ring-[#00B9A5] w-4 h-4"
+                        className="rounded border-slate-300 text-[#00B9A5] focus:ring-[#00B9A5] w-4 h-4"
                       />
                       <span className="flex-grow">{item.label}</span>
                       <span className="text-[10px] text-slate-400 font-bold">({getCountForWorkplace(item.key)})</span>
@@ -565,7 +565,7 @@ export default function CareersClient({ initialJobs }: CareersClientProps) {
                               setSelectedFunctions(selectedFunctions.filter(f => f !== func));
                             }
                           }}
-                          className="rounded border-slate-350 text-[#00B9A5] focus:ring-[#00B9A5] w-4 h-4"
+                          className="rounded border-slate-300 text-[#00B9A5] focus:ring-[#00B9A5] w-4 h-4"
                         />
                         <span className="flex-grow">{func}</span>
                         <span className="text-[10px] text-slate-400 font-bold">({count})</span>
@@ -599,7 +599,7 @@ export default function CareersClient({ initialJobs }: CareersClientProps) {
                               setSelectedJobTypes(selectedJobTypes.filter(t => t !== item.key));
                             }
                           }}
-                          className="rounded border-slate-350 text-[#00B9A5] focus:ring-[#00B9A5] w-4 h-4"
+                          className="rounded border-slate-300 text-[#00B9A5] focus:ring-[#00B9A5] w-4 h-4"
                         />
                         <span className="flex-grow">{item.label}</span>
                         <span className="text-[10px] text-slate-400 font-bold">({count})</span>
