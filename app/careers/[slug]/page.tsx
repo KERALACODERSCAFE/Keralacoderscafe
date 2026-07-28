@@ -303,8 +303,13 @@ export default async function CareerDetailPage({ params }: PageProps) {
 
             <div className="flex items-center gap-5 pb-6 border-b border-gray-100">
               {/* Logo block */}
-              <div className={`w-16 h-16 rounded-[1.25rem] ${getLogoBgColor(job.logo)} flex items-center justify-center text-white font-black text-lg shadow-sm shrink-0`}>
-                {job.logo ? job.logo.substring(0, 3) : "KCC"}
+              <div className="w-16 h-16 rounded-[1.25rem] bg-slate-50 border border-slate-200/80 flex items-center justify-center shadow-sm shrink-0">
+                <svg className="w-10 h-10" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="48" y="144" width="416" height="288" rx="32" fill="#00B9A5" />
+                  <path d="M192 144V104C192 90.7 202.7 80 216 80H296C309.3 80 320 90.7 320 104V144" stroke="#00B9A5" strokeWidth="24" strokeLinecap="round" fill="none" />
+                  <rect x="232" y="232" width="48" height="36" rx="6" fill="#FFFFFF" />
+                  <path d="M48 248H464" stroke="#008F80" strokeWidth="12" />
+                </svg>
               </div>
               <div className="min-w-0">
                 <h1 className="text-xl md:text-3xl font-black uppercase tracking-tight text-slate-900 leading-tight break-words">
@@ -484,6 +489,11 @@ export default async function CareerDetailPage({ params }: PageProps) {
           {/* Ad slot right above the footer */}
           <div className="mt-8">
             <CareerDisplayAd />
+          </div>
+
+          {/* Icon Attribution */}
+          <div className="mt-6 text-center text-[10px] text-slate-400">
+            Bag briefcase business case Icon by <a href="https://icon-icons.com/authors/452-dinosoftlabs" target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-650">DinosoftLabs</a> on <a href="https://icon-icons.com/authors/452-dinosoftlabs" target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-650">Icon-Icons.com</a>
           </div>
 
         </div>

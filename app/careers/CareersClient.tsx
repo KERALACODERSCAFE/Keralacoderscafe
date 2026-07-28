@@ -648,12 +648,14 @@ export default function CareersClient({ initialJobs }: CareersClientProps) {
                         } ${loadingSlug === job.slug ? "opacity-70 cursor-wait" : ""}`}
                       >
                         <div className="flex items-start gap-4 min-w-0 flex-grow">
-                          {/* Circle Initials Logo */}
-                          <div className="w-12 h-12 border border-slate-100 rounded-full flex items-center justify-center bg-slate-50 shrink-0 relative overflow-hidden">
-                            <div className={`absolute inset-0 opacity-15 ${logoBgColor}`} />
-                            <span className="text-xs font-black uppercase text-slate-800 relative z-10">
-                              {job.logo ? job.logo.substring(0, 3) : "KCC"}
-                            </span>
+                          {/* Circle Briefcase Logo */}
+                          <div className="w-12 h-12 border border-slate-200/80 rounded-2xl flex items-center justify-center bg-slate-50 shrink-0 shadow-sm">
+                            <svg className="w-7 h-7" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <rect x="48" y="144" width="416" height="288" rx="32" fill="#00B9A5" />
+                              <path d="M192 144V104C192 90.7 202.7 80 216 80H296C309.3 80 320 90.7 320 104V144" stroke="#00B9A5" strokeWidth="24" strokeLinecap="round" fill="none" />
+                              <rect x="232" y="232" width="48" height="36" rx="6" fill="#FFFFFF" />
+                              <path d="M48 248H464" stroke="#008F80" strokeWidth="12" />
+                            </svg>
                           </div>
 
                           <div className="min-w-0">
