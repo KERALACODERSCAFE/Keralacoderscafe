@@ -12,7 +12,8 @@ import {
   Search,
   ChevronLeft,
   ChevronRight,
-  BookOpen
+  BookOpen,
+  Code
 } from "lucide-react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
@@ -187,7 +188,7 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
                           <div className="w-1.5 h-1.5 rounded-full bg-green-500/80" />
                         </div>
                         <div className="flex-grow flex items-center justify-center bg-slate-950 p-4">
-                          <div className="text-2xl font-black text-purple-400 select-none">React Dev</div>
+                          <Code className="w-10 h-10 text-purple-400" />
                         </div>
                       </div>
                     </div>
