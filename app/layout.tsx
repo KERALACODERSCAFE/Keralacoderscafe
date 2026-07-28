@@ -130,7 +130,6 @@ import FloatingCTA from "./components/FloatingCTA";
 import SmoothScroll from "./components/SmoothScroll";
 import NavBar from "./components/NavBar";
 import PageLoader from "./components/PageLoader";
-import AnnouncementPopup from "./components/AnnouncementPopup";
 import SessionProviderWrapper from "./components/SessionProviderWrapper";
 import GoogleOneTap from "./components/GoogleOneTap";
 import Script from "next/script";
@@ -232,7 +231,6 @@ export default function RootLayout({
             <PageLoader />
           </Suspense>
           <NavBar />
-          <AnnouncementPopup />
           <SmoothScroll>
             {children}
             <FloatingCTA />

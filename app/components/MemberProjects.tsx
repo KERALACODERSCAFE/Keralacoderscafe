@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ExternalLink, TrendingUp, Sparkles } from "lucide-react";
+import { ExternalLink, TrendingUp, Sparkles, Plus } from "lucide-react";
 import ProjectCard from "./ProjectCard";
 import { cn } from "@/lib/utils";
 import { memberProjectsData } from "@/lib/member-projects-data";
@@ -55,6 +55,10 @@ export default function MemberProjects({ initialVotes, initialVotedProjects = []
         : (votesMap[b.id] || 0) - (votesMap[a.id] || 0)
     )
     .slice(0, 7);
+
+  const featuredProjects = [...memberProjectsData]
+    .filter(p => (p as any).isFeatured)
+    .sort((a, b) => (votesMap[b.id] || 0) - (votesMap[a.id] || 0));
 
   return (
     <section id="community-projects" className="scroll-mt-24 px-6 py-28 md:px-12 bg-[#FDFBF7] border-t-[3px] border-black relative overflow-hidden">
@@ -118,6 +122,57 @@ export default function MemberProjects({ initialVotes, initialVotedProjects = []
           </p>
         </div>
 
+        {/* Featured Projects Section */}
+        <div className="w-full max-w-4xl mx-auto mb-16">
+          <div className="flex items-center gap-4 mb-4">
+            <h3 className="text-2xl font-black uppercase tracking-tight text-black">Featured</h3>
+            <div className="flex-1 h-[3px] bg-black/10 rounded-full" />
+          </div>
+          
+          <p className="text-black/70 font-bold mb-6 text-[15px] border-l-4 border-[#A5FFD6] pl-3 py-1">
+            Hey Coders! We want to see what you've been building. Submit your projects here to be featured in the Kerala Coders Cafe showcase. Whether it's an early-stage concept or a fully deployed application, drop your details below to inspire others and get feedback.
+          </p>
+
+          <div className="flex flex-col gap-4">
+            {isLoading ? (
+               Array.from({ length: 2 }).map((_, i) => (
+                 <div key={i} className="bg-concrete shadow-concrete rounded-2xl p-4 h-[120px] w-full animate-pulse">
+                   <div className="w-full h-full bg-black/10 rounded-xl"></div>
+                 </div>
+               ))
+            ) : (
+               featuredProjects.map((project, index) => (
+                 <ProjectCard
+                   key={`featured-${project.id}`}
+                   project={project}
+                   initialVotes={votesMap[project.id] || 0}
+                   initialHasVoted={votedProjects.includes(project.id)}
+                   isTopProject={true}
+                 />
+               ))
+            )}
+            
+            {/* Plus Card */}
+            <Link
+              href="https://docs.google.com/forms/d/e/1FAIpQLSeeHzA9LoWRRBOkqAYeXTNQnce6RSUi1uf1xZYVhIVKLBJz7Q/viewform"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative flex flex-col md:flex-row items-center justify-center bg-white border-[3px] border-dashed border-black/30 rounded-[2rem] hover:border-black hover:bg-[#A5FFD6]/20 transition-all duration-300 p-6 gap-4 w-full cursor-pointer hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
+            >
+               <div className="w-12 h-12 rounded-full border-[3px] border-black flex items-center justify-center bg-[#FFD166] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] group-hover:scale-110 transition-transform">
+                 <Plus className="w-6 h-6 text-black" strokeWidth={3} />
+               </div>
+               <span className="text-xl font-black tracking-tight text-black uppercase">Submit Your Project</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* Regular Projects Section Header */}
+        <div className="flex items-center gap-4 w-full max-w-4xl mx-auto mb-6 mt-16">
+            <h3 className="text-2xl font-black uppercase tracking-tight text-black">More Projects</h3>
+            <div className="flex-1 h-[3px] bg-black/10 rounded-full" />
+        </div>
+
         {/* Sort Toggle */}
         <div className="flex items-center gap-3 w-full max-w-4xl mx-auto mb-6">
           <div className="flex items-center gap-1 bg-white border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-xl p-1">
@@ -146,7 +201,7 @@ export default function MemberProjects({ initialVotes, initialVotedProjects = []
               Latest
             </button>
           </div>
-          <div className="flex-1 h-[3px] bg-black/10 rounded-full" />
+          <div className="flex-1 h-[3px] bg-transparent rounded-full" />
           <span className="text-xs font-black text-black/40 uppercase tracking-widest">
             {memberProjectsData.length} projects
           </span>
