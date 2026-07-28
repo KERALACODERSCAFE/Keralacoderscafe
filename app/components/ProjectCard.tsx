@@ -1,12 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
-import { ExternalLink, Github, ArrowRight, Sparkles, X, Eye } from "lucide-react";
+import { ExternalLink, Github, ArrowRight, Sparkles, X, Eye, ChevronUp, ChevronDown } from "lucide-react";
 import UpvoteButton from "./UpvoteButton";
 
 export default function ProjectCard({ project, initialVotes = 0, initialHasVoted = false, isTopProject = false }: { project: any, initialVotes?: number, initialHasVoted?: boolean, isTopProject?: boolean }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const scrollModal = (direction: 'up' | 'down') => {
+    if (scrollRef.current) {
+      const { scrollTop, clientHeight } = scrollRef.current;
+      const scrollAmount = clientHeight / 2;
+      scrollRef.current.scrollTo({
+        top: direction === 'up' ? scrollTop - scrollAmount : scrollTop + scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   const githubUsername = project.github ? project.github.split('github.com/')[1]?.split('/')[0] : null;
 
   return (
@@ -99,20 +118,22 @@ export default function ProjectCard({ project, initialVotes = 0, initialHasVoted
       </div>
 
       {/* Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+      {isModalOpen && mounted && createPortal(
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
           <div 
-            className="relative w-full max-w-2xl bg-white border-4 border-black rounded-[2rem] shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-6 md:p-10 max-h-[90vh] overflow-y-auto"
+            className="relative w-full max-w-2xl bg-white border-4 border-black rounded-[2rem] shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] max-h-[90vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             <button 
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 flex items-center justify-center bg-white border-[2px] border-black rounded-full shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-black z-10"
+              className="absolute top-2 right-2 md:-top-4 md:-right-4 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center bg-[#FF6B6B] border-[3px] border-black rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all text-white z-50 group"
+              title="Close"
             >
-              <X className="w-5 h-5" strokeWidth={3} />
+              <X className="w-6 h-6 md:w-7 md:h-7 group-hover:rotate-90 transition-transform duration-300" strokeWidth={3} />
             </button>
 
-            <div className="flex flex-col gap-6">
+            <div ref={scrollRef} className="p-6 pr-14 md:p-10 md:pr-20 overflow-y-auto scrollbar-hide flex-1">
+              <div className="flex flex-col gap-6">
               <div className="flex items-center gap-4 md:gap-6">
                 <div className={`w-20 h-20 md:w-24 md:h-24 shrink-0 border-[3px] border-black rounded-[1.5rem] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center bg-white z-10 overflow-hidden relative`}>
                    <div className={`absolute inset-0 opacity-20 ${project.windowColor || "bg-gray-200"}`} />
@@ -180,11 +201,31 @@ export default function ProjectCard({ project, initialVotes = 0, initialHasVoted
                   </Link>
                 )}
               </div>
+              </div>
+            </div>
+
+            {/* Scroll Navigation Buttons */}
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-40">
+              <button 
+                onClick={() => scrollModal('up')}
+                className="w-10 h-10 md:w-12 md:h-12 bg-[#FFD166] border-[3px] border-black rounded-full flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none hover:-translate-y-1 hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all text-black"
+                title="Scroll Up"
+              >
+                <ChevronUp className="w-6 h-6 md:w-7 md:h-7" strokeWidth={3} />
+              </button>
+              <button 
+                onClick={() => scrollModal('down')}
+                className="w-10 h-10 md:w-12 md:h-12 bg-[#A5FFD6] border-[3px] border-black rounded-full flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none hover:-translate-y-1 hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all text-black"
+                title="Scroll Down"
+              >
+                <ChevronDown className="w-6 h-6 md:w-7 md:h-7" strokeWidth={3} />
+              </button>
             </div>
           </div>
           
           <div className="absolute inset-0 z-[-1]" onClick={() => setIsModalOpen(false)}></div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

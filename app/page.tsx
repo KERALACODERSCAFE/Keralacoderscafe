@@ -8,6 +8,7 @@ import FeaturedBlogs from "./components/FeaturedBlogs";
 import Testimonials from "./components/Testimonials";
 import LinkedInEmbed from "./components/LinkedInEmbed";
 import Footer from "./components/Footer";
+import FloatingCTA from "./components/FloatingCTA";
 import { getProjectVotesQuery } from "@/lib/queries";
 import { getUserVotedProjectIds } from "@/app/actions/upvote";
 
@@ -29,6 +30,7 @@ export default async function Home() {
       <Testimonials />
       <LinkedInEmbed />
       <Footer />
+      <FloatingCTA />
     </main>
   );
 }

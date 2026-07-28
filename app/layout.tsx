@@ -126,7 +126,6 @@ const organizationLd = {
 };
 
 
-import FloatingCTA from "./components/FloatingCTA";
 import SmoothScroll from "./components/SmoothScroll";
 import NavBar from "./components/NavBar";
 import PageLoader from "./components/PageLoader";
@@ -233,7 +232,6 @@ export default function RootLayout({
           <NavBar />
           <SmoothScroll>
             {children}
-            <FloatingCTA />
           </SmoothScroll>
         </SessionProviderWrapper>
       </body>
