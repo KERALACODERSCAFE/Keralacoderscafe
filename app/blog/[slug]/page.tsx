@@ -8,7 +8,7 @@ interface PageProps {
 async function getBlogDetails(slug: string) {
   try {
     const res = await fetch(`https://api.interviewkit.online/api/blogs/${slug}/`, {
-      next: { revalidate: 3600 } // cache for 1 hour
+      next: { revalidate: 60 } // cache for 1 minute
     });
     if (!res.ok) return null;
     return await res.json();
