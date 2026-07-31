@@ -13,7 +13,7 @@ export default async function TeamsPage() {
 
   return (
     <main className="relative z-10">
-      <div className="pt-20">
+      <div className="pt-20 bg-black">
         <Teams initialVotes={initialVotes} />
       </div>
       <Footer />

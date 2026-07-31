@@ -73,7 +73,7 @@ export default function Footer() {
   };
 
   return (
-    <footer id="footer" className="relative w-full overflow-x-clip mt-16 pt-16">
+    <footer id="footer" className="relative w-full overflow-x-clip pt-16 bg-black">
 
       {/* Black Background */}
       <div className="absolute top-[80px] left-0 right-0 bottom-0 bg-black z-0" />

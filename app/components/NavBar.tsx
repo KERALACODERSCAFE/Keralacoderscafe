@@ -117,11 +117,11 @@ export default function NavBar() {
 
   return (
     <div
-      className={`fixed inset-x-0 top-0 z-50 bg-white/95 dark:bg-[#090d16]/95 backdrop-blur-sm transition-all duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"
+      className={`fixed inset-x-0 top-0 z-50 bg-black/95 backdrop-blur-sm transition-all duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"
         }`}
     >
-      <div className="border-b-2 border-dashed border-black/10 dark:border-white/10">
-        <nav className="mx-auto max-w-[1280px] px-4 py-2.5 sm:py-3 sm:px-6">
+      <div className="border-b-2 border-dashed border-white/10">
+        <nav className="w-full px-4 py-2.5 sm:py-3 sm:px-6">
           <div className="flex items-center justify-between gap-3 flex-wrap lg:flex-nowrap">
             {/* Logo */}
             <Link
@@ -130,7 +130,7 @@ export default function NavBar() {
               className="flex items-center gap-2 group shrink-0 order-1"
             >
 
-              <svg viewBox="0 0 720 250" className="h-8 sm:h-10 md:h-12 w-auto shrink-0 group-hover:scale-105 transition-transform origin-left text-black dark:text-white">
+              <svg viewBox="0 0 720 250" className="h-8 sm:h-10 md:h-12 w-auto shrink-0 group-hover:scale-105 transition-transform origin-left text-white">
                 <defs>
                   <style>{`
                     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap');
@@ -171,8 +171,8 @@ export default function NavBar() {
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href, link.name)}
                     className={`text-[10px] sm:text-xs font-bold uppercase tracking-tight transition-colors whitespace-nowrap ${activeSection === link.name
-                      ? "text-black dark:text-white border-b-2 border-black dark:border-white"
-                      : "text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white"
+                      ? "text-white border-b-2 border-white"
+                      : "text-white/60 hover:text-white"
                       }`}
                   >
                     {link.name}
@@ -189,7 +189,7 @@ export default function NavBar() {
             {/* Join Button */}
             <Link
               href="/join"
-              className="inline-flex h-8 sm:h-10 items-center gap-1.5 sm:gap-2 border-2 border-black dark:border-white/80 bg-kcc-green px-3 sm:px-5 rounded-full text-[10px] sm:text-xs font-black uppercase text-black hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,0.15)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[3px_3px_0px_0px_rgba(255,255,255,0.25)] shrink-0 order-2 lg:order-3"
+              className="inline-flex h-8 sm:h-10 items-center gap-1.5 sm:gap-2 border-2 border-white/80 bg-kcc-green px-3 sm:px-5 rounded-full text-[10px] sm:text-xs font-black uppercase text-black hover:bg-white hover:text-black transition-all shadow-[2px_2px_0px_0px_rgba(255,255,255,0.15)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(255,255,255,0.25)] shrink-0 order-2 lg:order-3"
             >
               <span className="hidden sm:inline">Join the Community</span>
               <span className="sm:hidden">Join</span>
