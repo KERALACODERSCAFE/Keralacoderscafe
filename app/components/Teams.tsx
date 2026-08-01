@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Github, Linkedin, Twitter, Mail, ArrowUpRight, Heart, Users, User, MapPin, Calendar, Folder, Rocket, MessageSquare } from "lucide-react";
 import { upvoteTeamMember } from "@/app/actions/upvote";
+import SpeakingRobot from "./SpeakingRobot";
 
 const skyBackgrounds = [
   "#000000",
@@ -79,8 +80,9 @@ export default function Teams({ initialVotes = 0 }: { initialVotes?: number }) {
   return (
     <section
       id="teams"
-      className="relative px-6 py-20 lg:py-32 min-h-screen bg-black text-white font-sans overflow-hidden"
+      className="relative px-6 py-20 lg:py-32 min-h-screen bg-black text-white font-sans overflow-hidden cursor-crosshair"
     >
+      <SpeakingRobot />
       {/* Interactive Sky Background */}
       <div className="absolute inset-0 z-0 flex">
         {skyBackgrounds.map((bg, i) => (

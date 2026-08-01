@@ -97,8 +97,8 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
   });
 
   // Determine whether to display the Featured Post Hero layout
-  // We hide the banner when search query is active to make search results clear
-  const showFeaturedHero = activeFeatured !== null && currentPage === 1 && searchQuery === "";
+  // We hide the banner when search query or category filter is active to make search results clear
+  const showFeaturedHero = activeFeatured !== null && currentPage === 1 && searchQuery === "" && selectedCategory === "View all";
 
   // Filter out the active featured article from the grid
   const gridBlogs = showFeaturedHero
