@@ -73,7 +73,7 @@ export default function Footer() {
   };
 
   return (
-    <footer id="footer" className="relative w-full overflow-x-clip pt-16 bg-black">
+    <footer id="footer" className="relative w-full overflow-x-clip pt-16 bg-transparent">
 
       {/* Black Background */}
       <div className="absolute top-[80px] left-0 right-0 bottom-0 bg-black z-0" />
@@ -335,15 +335,18 @@ const footerQuotes = [
 ];
 
 function FooterMarquee() {
-  const repeated = [...footerQuotes, ...footerQuotes, ...footerQuotes];
+  // Use an even number of repeats so that 50% translation is a perfect loop
+  const repeated = [...footerQuotes, ...footerQuotes, ...footerQuotes, ...footerQuotes];
   return (
     <div className="flex items-center overflow-hidden w-full">
-      <div className="flex gap-8 items-center whitespace-nowrap animate-marquee-footer">
+      <div className="flex items-center whitespace-nowrap animate-marquee-footer w-max">
         {repeated.map((q, i) => (
-          <span key={i} className="flex items-center gap-6 text-2xl md:text-4xl font-black tracking-tight text-black uppercase px-2">
-            {q}
-            <span className="text-xl md:text-2.5xl font-black">✱</span>
-          </span>
+          <div key={i} className="flex items-center gap-8 md:gap-12 mr-8 md:mr-12">
+            <span className="text-2xl md:text-4xl font-black tracking-tight text-black uppercase">
+              {q}
+            </span>
+            <span className="text-xl md:text-3xl font-black text-black">✱</span>
+          </div>
         ))}
       </div>
     </div>

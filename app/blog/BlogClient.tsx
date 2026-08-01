@@ -105,9 +105,13 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
     ? filteredBlogs.filter((b) => b.id !== activeFeatured.id)
     : filteredBlogs;
 
-  // Pagination calculation
-  const totalPages = Math.ceil(gridBlogs.length / itemsPerPage);
-  const visibleBlogs = gridBlogs.slice(
+  // Split gridBlogs for the top section if showFeaturedHero is true
+  const topGridBlogs = showFeaturedHero ? gridBlogs.slice(0, 6) : [];
+  const mainGridBlogs = showFeaturedHero ? gridBlogs.slice(6) : gridBlogs;
+
+  // Pagination calculation based on mainGridBlogs
+  const totalPages = Math.ceil(mainGridBlogs.length / itemsPerPage);
+  const visibleBlogs = mainGridBlogs.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -160,12 +164,14 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
 
 
 
-          {/* Featured Banner Section */}
+          {/* Featured Banner & Top Posts Section */}
           {showFeaturedHero && activeFeatured && (
-            <div className="mb-16">
+            <div className="mb-16 grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-8 lg:gap-12">
+              
+              {/* Left Column: Large Featured Post */}
               <div 
                 onClick={() => handleCardClick(activeFeatured.slug)}
-                className="relative w-full overflow-hidden rounded-[2rem] bg-[#0B0F19] text-white p-6 md:p-12 shadow-sm min-h-[380px] md:min-h-[440px] flex flex-col justify-end group cursor-pointer border border-white/5"
+                className="relative w-full overflow-hidden rounded-[2rem] bg-[#0B0F19] text-white p-6 md:p-10 shadow-sm min-h-[380px] flex flex-col justify-end group cursor-pointer border border-white/5"
               >
                 {/* Background image or fallback gradient */}
                 {activeFeatured.cover_image ? (
@@ -181,15 +187,15 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
                       backgroundSize: "16px 16px"
                     }} />
                     {/* Faded interactive mockup graphic in background on desktop */}
-                    <div className="hidden md:block absolute right-16 top-1/2 -translate-y-1/2 opacity-35 group-hover:scale-[1.03] transition-transform duration-500">
-                      <div className="w-64 h-40 bg-slate-900 border border-slate-700/50 rounded-xl shadow-2xl flex flex-col overflow-hidden relative">
-                        <div className="h-6 bg-slate-800 border-b border-slate-700/50 px-3 flex items-center gap-1.5 shrink-0">
-                          <div className="w-1.5 h-1.5 rounded-full bg-red-500/80" />
-                          <div className="w-1.5 h-1.5 rounded-full bg-yellow-500/80" />
-                          <div className="w-1.5 h-1.5 rounded-full bg-green-500/80" />
+                    <div className="hidden md:block absolute right-8 top-1/2 -translate-y-1/2 opacity-35 group-hover:scale-[1.03] transition-transform duration-500">
+                      <div className="w-48 h-32 bg-slate-900 border border-slate-700/50 rounded-xl shadow-2xl flex flex-col overflow-hidden relative">
+                        <div className="h-4 bg-slate-800 border-b border-slate-700/50 px-2 flex items-center gap-1 shrink-0">
+                          <div className="w-1 h-1 rounded-full bg-red-500/80" />
+                          <div className="w-1 h-1 rounded-full bg-yellow-500/80" />
+                          <div className="w-1 h-1 rounded-full bg-green-500/80" />
                         </div>
-                        <div className="flex-grow flex items-center justify-center bg-slate-950 p-4">
-                          <Code className="w-10 h-10 text-purple-400" />
+                        <div className="flex-grow flex items-center justify-center bg-slate-950 p-2">
+                          <Code className="w-6 h-6 text-purple-400" />
                         </div>
                       </div>
                     </div>
@@ -200,26 +206,26 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20 z-10" />
 
                 {/* Card Content Overlay */}
-                <div className="relative z-20 w-full text-left max-w-3xl pr-12 md:pr-16">
-                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/10 text-white border border-white/20 mb-5 select-none">
+                <div className="relative z-20 w-full text-left max-w-xl pr-8 md:pr-12">
+                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/10 text-white border border-white/20 mb-4 select-none">
                     Featured
                   </span>
                   
-                  <h2 className="text-xl sm:text-2xl md:text-4xl font-extrabold text-white tracking-tight leading-tight mb-3 group-hover:text-[#D6BBFB] transition-colors line-clamp-3">
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight leading-tight mb-3 group-hover:text-[#D6BBFB] transition-colors line-clamp-3">
                     {activeFeatured.title}
                   </h2>
                   
-                  <p className="text-xs md:text-sm text-slate-300 leading-relaxed mb-6 font-medium line-clamp-2 max-w-2xl">
+                  <p className="text-xs text-slate-300 leading-relaxed mb-5 font-medium line-clamp-2 max-w-lg">
                     {activeFeatured.excerpt}
                   </p>
  
                   {/* Author profile, metadata */}
-                  <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-5 border-t border-white/10 w-full select-none text-xs font-semibold text-slate-400">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
-                        <User className="w-3.5 h-3.5 text-white" />
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-2 pt-4 border-t border-white/10 w-full select-none text-[10px] font-semibold text-slate-400">
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
+                        <User className="w-2.5 h-2.5 text-white" />
                       </div>
-                      <span className="text-xs font-bold text-white">
+                      <span className="font-bold text-white">
                         {getBlogAuthor(activeFeatured.slug, activeFeatured.author_name)}
                       </span>
                     </div>
@@ -227,20 +233,62 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
                     <span>{formatDate(activeFeatured.published_at)}</span>
                     <span>•</span>
                     <span className="flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-white/60" /> {getReadingTime(activeFeatured.excerpt)}
+                      <Clock className="w-2.5 h-2.5 text-white/60" /> {getReadingTime(activeFeatured.excerpt)}
                     </span>
                   </div>
 
                   {/* Action circle arrow link overlay positioned absolutely in the corner */}
-                  <div className="absolute bottom-6 right-6 md:bottom-12 md:right-12 text-white bg-white/15 group-hover:bg-white group-hover:text-black w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 border border-white/10 shadow-sm">
-                    <ArrowRight className="w-4 h-4" />
+                  <div className="absolute bottom-6 right-6 md:bottom-8 md:right-8 text-white bg-white/15 group-hover:bg-white group-hover:text-black w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 border border-white/10 shadow-sm">
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </div>
                 </div>
               </div>
+
+              {/* Right Column: Top Grid Blogs (2 columns x 3 rows) */}
+              {topGridBlogs.length > 0 && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8 items-start self-start">
+                  {topGridBlogs.map((blog) => (
+                    <div 
+                      key={blog.id} 
+                      onClick={() => handleCardClick(blog.slug)}
+                      className="group cursor-pointer flex flex-col gap-3"
+                    >
+                      {/* Image */}
+                      <div className="w-full aspect-[16/9] relative rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 shrink-0 shadow-sm">
+                        {blog.cover_image ? (
+                          <img
+                            src={blog.cover_image}
+                            alt={blog.title}
+                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                          />
+                        ) : (
+                          <div className="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-800 dark:to-slate-900 flex items-center justify-center">
+                            <Code className="w-6 h-6 text-slate-400 dark:text-slate-600 opacity-50" />
+                          </div>
+                        )}
+                        {/* Overlay to subtly darken images in dark mode for better contrast */}
+                        <div className="absolute inset-0 bg-black/0 dark:bg-black/10 group-hover:dark:bg-black/0 transition-colors duration-300" />
+                      </div>
+                      
+                      {/* Content */}
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-2 mb-1.5 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                          <Clock className="w-3 h-3" />
+                          <span>{formatDate(blog.published_at)}</span>
+                        </div>
+                        <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 leading-snug group-hover:text-[#6941C6] dark:group-hover:text-[#D6BBFB] transition-colors line-clamp-2">
+                          {blog.title}
+                        </h3>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
             </div>
           )}
 
-          {/* Two Column Grid layout */}
+          {/* Bottom Layout - Sidebar + Main Grid layout */}
           <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-12 items-start mt-12">
             
             {/* Sidebar (Left Column) - Search box, categories vertical list, and CTA */}
@@ -274,16 +322,16 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
                           "flex items-center justify-between text-left text-xs transition-all cursor-pointer whitespace-nowrap shrink-0",
                           // Mobile styles (pills)
                           "px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 font-medium",
-                          isActive && "border-[#6941C6] dark:border-purple-400 bg-[#F9F5FF] dark:bg-purple-950/30 text-[#6941C6] dark:text-purple-400 font-bold",
-                          // Desktop styles (standard vertical tabs)
-                          "lg:px-0 lg:pl-4 lg:pr-3 lg:py-2 lg:block lg:w-full lg:rounded-r-lg lg:border-l-2 lg:border-y-0 lg:border-r-0 lg:rounded-l-none lg:bg-transparent lg:dark:bg-transparent lg:border-slate-200 lg:dark:border-slate-800",
-                          isActive && "lg:border-l-2 lg:border-[#6941C6] lg:dark:border-purple-400 lg:bg-[#F9F5FF] lg:dark:bg-purple-950/30"
+                          isActive && "border-[#6941C6] dark:border-white bg-[#F9F5FF] dark:bg-white text-[#6941C6] dark:text-black font-bold",
+                          // Desktop styles (standard vertical buttons)
+                          "lg:px-4 lg:py-2.5 lg:block lg:w-full lg:rounded-xl lg:border-none lg:bg-transparent lg:dark:bg-transparent lg:text-slate-600 lg:dark:text-slate-400 hover:lg:bg-slate-50 hover:lg:dark:bg-slate-800/50",
+                          isActive && "lg:bg-white lg:dark:bg-white lg:text-slate-900 lg:dark:text-black lg:font-bold lg:shadow-sm"
                         )}
                       >
-                        <span>{cat}</span>
+                        <span className="relative z-10">{cat}</span>
                         <span className={cn(
-                          "text-[10px] font-bold px-2 py-0.5 rounded-full select-none ml-1.5 lg:ml-0",
-                          isActive ? "bg-[#F4EBFF] dark:bg-purple-950/60 text-[#6941C6] dark:text-purple-300" : "bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400"
+                          "text-[10px] font-bold px-2 py-0.5 rounded-full select-none ml-1.5 lg:ml-0 relative z-10",
+                          isActive ? "bg-slate-100 dark:bg-slate-200 text-slate-800 dark:text-black" : "bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400"
                         )}>
                           {getCountForCategory(cat)}
                         </span>
@@ -464,9 +512,21 @@ export default function BlogClient({ initialBlogs, initialCategories }: BlogClie
           </div>
 
 
-
         </div>
       </main>
+
+      {/* Mobile Floating Action Button for "Write for KCC" */}
+      <a
+        href="https://forms.gle/Z6wCFuYcbLdCyT1n9"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="lg:hidden fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#0B0F19] dark:bg-white rounded-full shadow-lg border border-slate-700 dark:border-white/20 flex items-center justify-center text-white dark:text-black hover:scale-105 transition-transform"
+        aria-label="Write for KCC"
+      >
+        <svg className="w-6 h-6 fill-none stroke-current stroke-[2.5]" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+        </svg>
+      </a>
 
       <Footer />
     </div>

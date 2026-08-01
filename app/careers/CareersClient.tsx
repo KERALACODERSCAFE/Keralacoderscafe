@@ -179,6 +179,11 @@ export default function CareersClient({ initialJobs }: CareersClientProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+    document.getElementById("jobs-list-start")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   // Reset page when filter criteria change
   useEffect(() => {
     setCurrentPage(1);
@@ -186,11 +191,14 @@ export default function CareersClient({ initialJobs }: CareersClientProps) {
 
   // Filter Logic
   const filteredJobs = initialJobs.filter((job) => {
-    // Only show jobs from the current calendar month
+    // Only show jobs from the last 15 days
     try {
       const postDate = new Date(job.posted_at);
       const now = new Date();
-      if (postDate.getMonth() !== now.getMonth() || postDate.getFullYear() !== now.getFullYear()) {
+      // Calculate difference in days
+      const diffTime = now.getTime() - postDate.getTime();
+      const diffDays = diffTime / (1000 * 60 * 60 * 24);
+      if (diffDays > 15 || diffDays < 0) {
         return false;
       }
     } catch {
@@ -712,7 +720,7 @@ export default function CareersClient({ initialJobs }: CareersClientProps) {
               {totalPages > 1 && (
                 <div className="flex items-center justify-center gap-2 mt-8">
                   <button
-                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
                     disabled={currentPage === 1}
                     className="w-10 h-10 border border-slate-200 rounded-xl flex items-center justify-center bg-white text-slate-500 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white cursor-pointer transition-colors"
                   >
@@ -722,7 +730,7 @@ export default function CareersClient({ initialJobs }: CareersClientProps) {
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
                     <button
                       key={pageNum}
-                      onClick={() => setCurrentPage(pageNum)}
+                      onClick={() => handlePageChange(pageNum)}
                       className={`w-10 h-10 border rounded-xl flex items-center justify-center font-bold text-xs transition-colors cursor-pointer ${
                         currentPage === pageNum
                           ? "bg-[#00B9A5] border-[#00B9A5] text-white"
@@ -734,7 +742,7 @@ export default function CareersClient({ initialJobs }: CareersClientProps) {
                   ))}
 
                   <button
-                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
                     disabled={currentPage === totalPages}
                     className="w-10 h-10 border border-slate-200 rounded-xl flex items-center justify-center bg-white text-slate-500 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white cursor-pointer transition-colors"
                   >

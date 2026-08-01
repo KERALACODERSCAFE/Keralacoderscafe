@@ -84,8 +84,12 @@ export default function NavBar() {
   }, [pathname]);
 
   useEffect(() => {
-    if (pathname && !pathname.startsWith("/blog")) {
-      document.documentElement.classList.remove("dark");
+    if (pathname) {
+      if (pathname.startsWith("/blog") || pathname.startsWith("/teams")) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
     }
   }, [pathname]);
 
@@ -115,12 +119,14 @@ export default function NavBar() {
     }, 1200);
   };
 
+  const isDarkNav = pathname?.startsWith("/blog") || pathname?.startsWith("/teams");
+
   return (
     <div
-      className={`fixed inset-x-0 top-0 z-50 bg-black/95 backdrop-blur-sm transition-all duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"
-        }`}
+      className={`fixed inset-x-0 top-0 z-50 backdrop-blur-sm transition-all duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"
+        } ${isDarkNav ? "bg-black/95" : "bg-white/95"}`}
     >
-      <div className="border-b-2 border-dashed border-white/10">
+      <div className={`border-b-2 border-dashed ${isDarkNav ? "border-white/10" : "border-black/10"}`}>
         <nav className="w-full px-4 py-2.5 sm:py-3 sm:px-6">
           <div className="flex items-center justify-between gap-3 flex-wrap lg:flex-nowrap">
             {/* Logo */}
@@ -130,7 +136,7 @@ export default function NavBar() {
               className="flex items-center gap-2 group shrink-0 order-1"
             >
 
-              <svg viewBox="0 0 720 250" className="h-8 sm:h-10 md:h-12 w-auto shrink-0 group-hover:scale-105 transition-transform origin-left text-white">
+              <svg viewBox="0 0 720 250" className={`h-8 sm:h-10 md:h-12 w-auto shrink-0 group-hover:scale-105 transition-transform origin-left ${isDarkNav ? "text-white" : "text-black"}`}>
                 <defs>
                   <style>{`
                     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap');
@@ -170,10 +176,15 @@ export default function NavBar() {
                   <Link
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href, link.name)}
-                    className={`text-[10px] sm:text-xs font-bold uppercase tracking-tight transition-colors whitespace-nowrap ${activeSection === link.name
-                      ? "text-white border-b-2 border-white"
-                      : "text-white/60 hover:text-white"
-                      }`}
+                    className={`text-[10px] sm:text-xs font-bold uppercase tracking-tight transition-colors whitespace-nowrap ${
+                      activeSection === link.name
+                        ? isDarkNav
+                          ? "text-white border-b-2 border-white"
+                          : "text-black border-b-2 border-black"
+                        : isDarkNav
+                          ? "text-white/60 hover:text-white"
+                          : "text-black/60 hover:text-black"
+                    }`}
                   >
                     {link.name}
                   </Link>
@@ -186,10 +197,13 @@ export default function NavBar() {
               ))}
             </div>
 
-            {/* Join Button */}
             <Link
               href="/join"
-              className="inline-flex h-8 sm:h-10 items-center gap-1.5 sm:gap-2 border-2 border-white/80 bg-kcc-green px-3 sm:px-5 rounded-full text-[10px] sm:text-xs font-black uppercase text-black hover:bg-white hover:text-black transition-all shadow-[2px_2px_0px_0px_rgba(255,255,255,0.15)] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_rgba(255,255,255,0.25)] shrink-0 order-2 lg:order-3"
+              className={`inline-flex h-8 sm:h-10 items-center gap-1.5 sm:gap-2 border-2 bg-kcc-green px-3 sm:px-5 rounded-full text-[10px] sm:text-xs font-black uppercase transition-all shrink-0 order-2 lg:order-3 hover:translate-x-[-1px] hover:translate-y-[-1px] ${
+                isDarkNav
+                  ? "border-white/80 text-black hover:bg-white hover:text-black shadow-[2px_2px_0px_0px_rgba(255,255,255,0.15)] hover:shadow-[3px_3px_0px_0px_rgba(255,255,255,0.25)]"
+                  : "border-black text-black hover:bg-black hover:text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+              }`}
             >
               <span className="hidden sm:inline">Join the Community</span>
               <span className="sm:hidden">Join</span>

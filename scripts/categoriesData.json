@@ -1,0 +1,74 @@
+[
+  {
+    "id": "aab39289-d0d0-4381-a604-16e46680a82b",
+    "name": "STARTERS",
+    "slug": "starters",
+    "sortOrder": 1
+  },
+  {
+    "id": "6a97781c-6fc3-4587-8eb9-8ce14d525cf9",
+    "name": "SNACKS",
+    "slug": "snacks",
+    "sortOrder": 2
+  },
+  {
+    "id": "824b35df-3edf-42df-8c8d-2c9b86edc875",
+    "name": "BEEF",
+    "slug": "beef",
+    "sortOrder": 14
+  },
+  {
+    "id": "6becdf5b-8b88-4f96-9c63-72b90e183213",
+    "name": "SEA FOODS",
+    "slug": "sea-foods",
+    "sortOrder": 17
+  },
+  {
+    "id": "41c820f8-7313-4d08-b604-1c656eed1b67",
+    "name": "RICE & BREAD",
+    "slug": "rice-bread",
+    "sortOrder": 21
+  },
+  {
+    "id": "88481184-2566-4358-aff5-09ecf442cc84",
+    "name": "MAIN COURSE",
+    "slug": "main-course",
+    "sortOrder": 23
+  },
+  {
+    "id": "f10c9bb8-94fa-4163-9417-bfa888511fbd",
+    "name": "CURRY",
+    "slug": "curry",
+    "sortOrder": 26
+  },
+  {
+    "id": "e04c778f-41e2-4bf3-bc64-40e3448c6a38",
+    "name": "LITTLE FOODIES CORNER",
+    "slug": "little-foodies-corner",
+    "sortOrder": 30
+  },
+  {
+    "id": "e7656c12-fce6-41ba-9688-2a55d2be4106",
+    "name": "DOSA",
+    "slug": "dosa",
+    "sortOrder": 31
+  },
+  {
+    "id": "25ca120e-b64a-4136-b69b-ce5f31756c7a",
+    "name": "DESSERT",
+    "slug": "dessert",
+    "sortOrder": 32
+  },
+  {
+    "id": "ffe0e81b-f537-489a-a281-1824aaa65d33",
+    "name": "HOT DRINKS",
+    "slug": "hot-drinks",
+    "sortOrder": 36
+  },
+  {
+    "id": "031c7a35-a8c2-4e2d-9743-96558cec6cca",
+    "name": "DRINKS",
+    "slug": "drinks",
+    "sortOrder": 37
+  }
+]
