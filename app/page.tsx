@@ -11,7 +11,7 @@ import Footer from "./components/Footer";
 import FloatingCTA from "./components/FloatingCTA";
 import { getProjectVotesQuery } from "@/lib/queries";
 import { getUserVotedProjectIds } from "@/app/actions/upvote";
-import OnamModal from "./components/OnamModal";
+
 
 export default async function Home() {
   const [votes, votedIds] = await Promise.all([
@@ -21,7 +21,7 @@ export default async function Home() {
 
   return (
     <main className="relative z-10">
-      <OnamModal />
+
       <Marquee />
       <Hero />
       <Mission />
