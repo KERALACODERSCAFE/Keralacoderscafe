@@ -4,16 +4,25 @@ import Script from "next/script";
 import "./OnamModal.css";
 
 export default function OnamModal() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const doodleRef = useRef<any>(null);
 
   useEffect(() => {
-    // Check if already shown this session
     const hasShown = sessionStorage.getItem("onam_modal_shown");
-    if (!hasShown) {
-      setIsOpen(true);
+    if (hasShown) {
+      setIsOpen(false);
     }
   }, []);
+
+  // Auto-close after 15 seconds
+  useEffect(() => {
+    if (!isOpen) return;
+    const timer = setTimeout(() => {
+      setIsOpen(false);
+      sessionStorage.setItem("onam_modal_shown", "true");
+    }, 15000);
+    return () => clearTimeout(timer);
+  }, [isOpen]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -32,7 +41,7 @@ export default function OnamModal() {
     sessionStorage.setItem("onam_modal_shown", "true");
   };
 
-  if (!isOpen) return null;
+  if (!isOpen) return null; // modal closed
 
   const doodleRules = `
     :doodle {
@@ -89,7 +98,7 @@ export default function OnamModal() {
 
   return (
     <>
-      <Script src="https://cdnjs.cloudflare.com/ajax/libs/css-doodle/0.38.4/css-doodle.min.js" strategy="lazyOnload" />
+      <Script src="https://cdnjs.cloudflare.com/ajax/libs/css-doodle/0.38.4/css-doodle.min.js" strategy="afterInteractive" />
       <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
         <div className="onam-graph relative bg-[#fbf1da] p-[4vmin] sm:p-[6vmin] rounded-xl flex flex-col items-center max-w-[90vw] max-h-[90vh] overflow-hidden animate-fade-in-up">
           

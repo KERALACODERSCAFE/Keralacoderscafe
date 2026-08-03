@@ -247,17 +247,10 @@ export default function FlowerGenerator({ fullScreen = false, className = '' }: 
 
     init();
     
-    const interval = setInterval(() => {
-      if (!svg) return;
-      svg.innerHTML = '';
-      init();
-    }, 5000);
-    
     window.addEventListener('resize', onResize);
     svg.addEventListener('click', onClick);
     
     return () => {
-      clearInterval(interval);
       window.removeEventListener('resize', onResize);
       svg.removeEventListener('click', onClick);
     };
@@ -294,7 +287,7 @@ export default function FlowerGenerator({ fullScreen = false, className = '' }: 
       <svg 
         ref={svgRef} 
         id="flower-svg" 
-        className={`flower-generator ${fullScreen ? 'flower-fullscreen' : ''} ${className}`} 
+        className={`flower-generator animate-[spin_60s_linear_infinite] ${fullScreen ? 'flower-fullscreen' : ''} ${className}`} 
       />
     </>
   );

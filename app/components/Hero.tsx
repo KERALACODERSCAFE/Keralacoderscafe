@@ -116,7 +116,7 @@ export default function Hero() {
                 />{" "}
                 <br className="hidden sm:block" />
                 <span className="relative inline-block">
-                  <div className="absolute top-1/2 left-1/1 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] -z-10 opacity-70 pointer-events-auto">
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150px] h-[150px] sm:w-[350px] sm:h-[350px] -z-10 opacity-70 pointer-events-auto">
                     <FlowerGenerator />
                   </div>
                   <span className="relative z-10">Coders</span>

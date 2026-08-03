@@ -12,3 +12,8 @@
   align-items: center;
   justify-content: center;
 }
+
+/* Hide the raw text content before the css-doodle script initializes */
+css-doodle:not(:defined) {
+  display: none !important;
+}

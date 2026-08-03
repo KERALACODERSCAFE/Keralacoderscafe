@@ -316,7 +316,7 @@ const PageLoader: React.FC = () => {
               <text x="10" y="100" className="text-kerala">KERALA</text>
               <text x="15" y="195" className="text-coders">CODERS</text>
               <text x="450" y="195" className="text-cafe" transform="rotate(-8, 450, 195)">Cafe</text>
-              <text x="15" y="240" className="text-chilanka">ഞാൻ അല്ലാതെ ആര്</text>
+              <text x="15" y="240" className="text-chilanka">Happy Onam Guys</text>
             </g>
             <g transform="translate(680, 20)">
               {['#FCCC12', '#FF7112', '#EF1541', '#6E55DC', '#069DE0', '#05AC3F'].map((c, i) => (
