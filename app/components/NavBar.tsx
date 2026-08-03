@@ -76,10 +76,16 @@ export default function NavBar() {
 
   useEffect(() => {
     if (pathname !== "/") {
-      const activeLink = navLinks.find(link => link.href === pathname);
+      const activeLink = navLinks.find(link => 
+        link.type === "page" 
+          ? pathname.startsWith(link.href) 
+          : link.href === pathname
+      );
       if (activeLink) {
         setActiveSection(activeLink.name);
       }
+    } else {
+      setActiveSection("Home");
     }
   }, [pathname]);
 

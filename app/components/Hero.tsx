@@ -5,7 +5,7 @@ import { ArrowUpRight, Github, MessageCircle } from "lucide-react";
 import ColourfulText from "./ColourfulText";
 import { heroMalayalam } from "../../lib/fonts";
 import FlowerGenerator from "./FlowerGenerator";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import Script from "next/script";
 
 const highlights = [
@@ -27,10 +27,7 @@ const defaultRotations = ["sm:rotate-[-2deg]", "sm:rotate-[1deg]", "sm:rotate-[-
 
 export default function Hero() {
   const [topContributors, setTopContributors] = useState(fallbackContributors);
-  const [avatarIndex, setAvatarIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
   const [isBulbOn, setIsBulbOn] = useState(false);
-  const fastAvatars = ["👨‍💻", "👩‍💻", "🚀", "💡"];
 
   useEffect(() => {
     const REPOS_TO_FETCH = [
@@ -74,25 +71,7 @@ export default function Hero() {
         }
       })
       .catch((err) => console.error("Failed to fetch GitHub contributors:", err));
-
-    // Trigger animation for 3 seconds every 10 seconds
-    const burstInterval = setInterval(() => {
-      setIsAnimating(true);
-      setTimeout(() => setIsAnimating(false), 3000);
-    }, 10000);
-
-    return () => clearInterval(burstInterval);
   }, []);
-
-  useEffect(() => {
-    let animInterval: NodeJS.Timeout;
-    if (isAnimating) {
-      animInterval = setInterval(() => {
-        setAvatarIndex((prev) => (prev + 1) % fastAvatars.length);
-      }, 150);
-    }
-    return () => clearInterval(animInterval);
-  }, [isAnimating, fastAvatars.length]);
 
   return (
     <>
@@ -134,7 +113,7 @@ export default function Hero() {
                 <br className="hidden sm:block" />
                 <span className="relative inline-block">
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150px] h-[150px] sm:w-[350px] sm:h-[350px] -z-10 opacity-70 pointer-events-auto">
-                    <FlowerGenerator />
+                    {useMemo(() => <FlowerGenerator />, [])}
                   </div>
                   <span className="relative z-10">Coders</span>
                 </span>
@@ -146,7 +125,7 @@ export default function Hero() {
               <div className="relative mt-16 max-w-[640px] border-4 border-black p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] bg-[#475d50] overflow-hidden rounded-md">
                 {/* CSS Doodle background inside description box */}
                 <div className="absolute inset-0 opacity-45 pointer-events-none z-0 flex items-center justify-center scale-150">
-                  {React.createElement("css-doodle", {
+                  {useMemo(() => React.createElement("css-doodle", {
                     dangerouslySetInnerHTML: {
                       __html: `
                         :doodle {
@@ -196,7 +175,7 @@ export default function Hero() {
                         }
                       `
                     }
-                  })}
+                  }), [])}
                 </div>
                 <p
                   className="relative z-10 text-[1.2rem] font-black leading-relaxed text-white sm:text-[1.35rem]"
