@@ -28,6 +28,16 @@ const defaultRotations = ["sm:rotate-[-2deg]", "sm:rotate-[1deg]", "sm:rotate-[-
 export default function Hero() {
   const [topContributors, setTopContributors] = useState(fallbackContributors);
   const [isBulbOn, setIsBulbOn] = useState(false);
+  const [isMobile, setIsMobile] = useState(true);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const REPOS_TO_FETCH = [
@@ -112,8 +122,8 @@ export default function Hero() {
                 />{" "}
                 <br className="hidden sm:block" />
                 <span className="relative inline-block">
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150px] h-[150px] sm:w-[350px] sm:h-[350px] -z-10 opacity-70 pointer-events-auto">
-                    {useMemo(() => <FlowerGenerator />, [])}
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150px] h-[150px] sm:w-[350px] sm:h-[350px] -z-10 opacity-70 pointer-events-auto hidden sm:block">
+                    {!isMobile && useMemo(() => <FlowerGenerator />, [])}
                   </div>
                   <span className="relative z-10">Coders</span>
                 </span>
@@ -124,59 +134,61 @@ export default function Hero() {
 
               <div className="relative mt-16 max-w-[640px] border-4 border-black p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] bg-[#475d50] overflow-hidden rounded-md">
                 {/* CSS Doodle background inside description box */}
-                <div className="absolute inset-0 opacity-45 pointer-events-none z-0 flex items-center justify-center scale-150">
-                  {useMemo(() => React.createElement("css-doodle", {
-                    dangerouslySetInnerHTML: {
-                      __html: `
-                        :doodle {
-                          @grid: 12 / 100% 100%;
-                          background: transparent;
-                        }
-                        --c: @p(#e8aa3e, #d7e2eb, #dcc6f5, #ffebd2); 
-                        @place-cell: center;
-                        @random(0.7) {
-                          z-index: 1;
-                          :after {
-                            content: "";
-                            transform: translate(@m2(@r(±15vmin))) rotate(@r(360deg));
-                            @size: 3vmin;
-                            background: @doodle(
-                              @grid: 3x4 / 100% 100%;
-                              @size: 20%;
-                              @place-cell: center;
-                              border-radius: 0 100% 0 100%;
-                              background: var(--c);
-                              opacity: @r(0.7, 1);
-                              transform: rotate(@r(360deg));
-                              transform-origin: 0 0;
-                              @match(i > 11) {
-                                :after {
-                                  content: "";
-                                  z-index: 1;
-                                  position: absolute;
-                                  top: -25%;
-                                  left: -25%;
-                                  @size: 50%;
-                                  background: #d4603c;
-                                  border: 0.5px solid rgba(0, 0, 0, 0.2);
-                                  border-radius: 100%;
-                                }
-                              }
-                            );
+                {!isMobile && (
+                  <div className="absolute inset-0 opacity-45 pointer-events-none z-0 flex items-center justify-center scale-150">
+                    {useMemo(() => React.createElement("css-doodle", {
+                      dangerouslySetInnerHTML: {
+                        __html: `
+                          :doodle {
+                            @grid: 12 / 100% 100%;
+                            background: transparent;
                           }
-                        }
-                        :before {
-                          content: "";
-                          @size: @r(0.5, 1)vmin;
-                          border-radius: 100% 0 100% 0;
-                          background: @p(#aec58d, #7c9852);
-                          transform: translate(@m2(@r(±12vmin))) rotate(@r(360deg));
-                          opacity: @r(0.6, 1);
-                        }
-                      `
-                    }
-                  }), [])}
-                </div>
+                          --c: @p(#e8aa3e, #d7e2eb, #dcc6f5, #ffebd2); 
+                          @place-cell: center;
+                          @random(0.7) {
+                            z-index: 1;
+                            :after {
+                              content: "";
+                              transform: translate(@m2(@r(±15vmin))) rotate(@r(360deg));
+                              @size: 3vmin;
+                              background: @doodle(
+                                @grid: 3x4 / 100% 100%;
+                                @size: 20%;
+                                @place-cell: center;
+                                border-radius: 0 100% 0 100%;
+                                background: var(--c);
+                                opacity: @r(0.7, 1);
+                                transform: rotate(@r(360deg));
+                                transform-origin: 0 0;
+                                @match(i > 11) {
+                                  :after {
+                                    content: "";
+                                    z-index: 1;
+                                    position: absolute;
+                                    top: -25%;
+                                    left: -25%;
+                                    @size: 50%;
+                                    background: #d4603c;
+                                    border: 0.5px solid rgba(0, 0, 0, 0.2);
+                                    border-radius: 100%;
+                                  }
+                                }
+                              );
+                            }
+                          }
+                          :before {
+                            content: "";
+                            @size: @r(0.5, 1)vmin;
+                            border-radius: 100% 0 100% 0;
+                            background: @p(#aec58d, #7c9852);
+                            transform: translate(@m2(@r(±12vmin))) rotate(@r(360deg));
+                            opacity: @r(0.6, 1);
+                          }
+                        `
+                      }
+                    }), [])}
+                  </div>
+                )}
                 <p
                   className="relative z-10 text-[1.2rem] font-black leading-relaxed text-white sm:text-[1.35rem]"
                 >
