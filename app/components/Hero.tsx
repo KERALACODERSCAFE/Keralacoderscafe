@@ -104,6 +104,15 @@ export default function Hero() {
         <div className="grid items-center gap-24 lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)]">
           <div className="max-w-[750px]">
             <div className="mt-10 animate-fade-in-up delay-100">
+              {/* Onam Greeting Console Container */}
+              <div className="mb-6 inline-block bg-[#1a1a1a] text-[#FFE66D] border-4 border-black px-6 py-3 font-mono text-sm sm:text-base shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] max-w-full">
+                <div className="flex items-center gap-2">
+                  <span className="text-kcc-green font-bold">&gt;</span>
+                  <span className="font-extrabold tracking-wide">എല്ലാവർക്കും ഹൃദയം നിറഞ്ഞ ഓണാശംസകൾ! 🌸</span>
+                  <span className="inline-block w-2.5 h-5 bg-[#FFE66D] animate-[pulse_1s_infinite]"></span>
+                </div>
+              </div>
+
               <span className="inline-block border-2 border-black bg-kcc-green px-4 py-1.5 text-sm font-black uppercase tracking-widest shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-6">
                 Built in Kerala • Powered by curiosity
               </span>
