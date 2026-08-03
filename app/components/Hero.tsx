@@ -5,7 +5,8 @@ import { ArrowUpRight, Github, MessageCircle } from "lucide-react";
 import ColourfulText from "./ColourfulText";
 import { heroMalayalam } from "../../lib/fonts";
 import FlowerGenerator from "./FlowerGenerator";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import Script from "next/script";
 
 const highlights = [
   "3000+ developers from Kerala & beyond",
@@ -94,7 +95,14 @@ export default function Hero() {
   }, [isAnimating, fastAvatars.length]);
 
   return (
-    <header className="relative overflow-clip px-6 pb-28 pt-12 md:px-12 lg:pb-36 lg:pt-20 bg-white border-b-4 border-black">
+    <>
+      <Script src="https://cdnjs.cloudflare.com/ajax/libs/css-doodle/0.38.4/css-doodle.min.js" strategy="afterInteractive" />
+      <style>{`
+        css-doodle:not(:defined) {
+          display: none !important;
+        }
+      `}</style>
+      <header className="relative overflow-clip px-6 pb-28 pt-12 md:px-12 lg:pb-36 lg:pt-20 bg-white border-b-4 border-black">
       {/* Geometric Background Elements */}
       <div className="absolute top-20 left-10 h-32 w-32 border-4 border-black bg-kcc-gold -z-10 rotate-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hidden lg:block" />
       <div className="absolute bottom-20 right-20 h-40 w-40 border-4 border-black bg-kcc-green -z-10 -rotate-6 shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hidden lg:block" />
@@ -135,13 +143,69 @@ export default function Hero() {
                 </span>
               </h1>
 
-              <p
-                className="mt-16 max-w-[640px] text-[1.2rem] font-bold leading-relaxed text-black sm:text-[1.35rem] border-4 border-black p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] bg-white"
-              >
-                A vibrant community of developers, designers, and tech
-                enthusiasts from Kerala. Building the future, one commit at a
-                time.
-              </p>
+              <div className="relative mt-16 max-w-[640px] border-4 border-black p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] bg-[#475d50] overflow-hidden rounded-md">
+                {/* CSS Doodle background inside description box */}
+                <div className="absolute inset-0 opacity-45 pointer-events-none z-0 flex items-center justify-center scale-150">
+                  {React.createElement("css-doodle", {
+                    dangerouslySetInnerHTML: {
+                      __html: `
+                        :doodle {
+                          @grid: 12 / 100% 100%;
+                          background: transparent;
+                        }
+                        --c: @p(#e8aa3e, #d7e2eb, #dcc6f5, #ffebd2); 
+                        @place-cell: center;
+                        @random(0.7) {
+                          z-index: 1;
+                          :after {
+                            content: "";
+                            transform: translate(@m2(@r(±15vmin))) rotate(@r(360deg));
+                            @size: 3vmin;
+                            background: @doodle(
+                              @grid: 3x4 / 100% 100%;
+                              @size: 20%;
+                              @place-cell: center;
+                              border-radius: 0 100% 0 100%;
+                              background: var(--c);
+                              opacity: @r(0.7, 1);
+                              transform: rotate(@r(360deg));
+                              transform-origin: 0 0;
+                              @match(i > 11) {
+                                :after {
+                                  content: "";
+                                  z-index: 1;
+                                  position: absolute;
+                                  top: -25%;
+                                  left: -25%;
+                                  @size: 50%;
+                                  background: #d4603c;
+                                  border: 0.5px solid rgba(0, 0, 0, 0.2);
+                                  border-radius: 100%;
+                                }
+                              }
+                            );
+                          }
+                        }
+                        :before {
+                          content: "";
+                          @size: @r(0.5, 1)vmin;
+                          border-radius: 100% 0 100% 0;
+                          background: @p(#aec58d, #7c9852);
+                          transform: translate(@m2(@r(±12vmin))) rotate(@r(360deg));
+                          opacity: @r(0.6, 1);
+                        }
+                      `
+                    }
+                  })}
+                </div>
+                <p
+                  className="relative z-10 text-[1.2rem] font-black leading-relaxed text-white sm:text-[1.35rem]"
+                >
+                  A vibrant community of developers, designers, and tech
+                  enthusiasts from Kerala. Building the future, one commit at a
+                  time.
+                </p>
+              </div>
             </div>
 
             <div className="mt-20 hidden flex-wrap gap-4 animate-fade-in-up delay-200 md:flex">
@@ -456,5 +520,6 @@ export default function Hero() {
         </div>
       </div>
     </header>
+    </>
   );
 }
