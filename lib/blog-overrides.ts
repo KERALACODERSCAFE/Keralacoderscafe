@@ -5,6 +5,7 @@
 export const BLOG_AUTHOR_OVERRIDES: Record<string, string> = {
   "kimi-k3": "Moonshot AI Team",
   "trip-planner": "Aswin Pradeep C",
+  "how-we-took-a-cpu-heavy-api": "Aswin Pradeep C",
 };
 
 /**
