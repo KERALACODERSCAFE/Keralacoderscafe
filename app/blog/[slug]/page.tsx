@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import BlogDetailClient from "./BlogDetailClient";
 
+export const dynamicParams = false;
+
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
@@ -8,7 +10,7 @@ interface PageProps {
 async function getBlogDetails(slug: string) {
   try {
     const res = await fetch(`https://api.interviewkit.online/api/blogs/${slug}/`, {
-      next: { revalidate: 60 } // cache for 1 minute
+      next: { revalidate: 3600 } // cache for 1 hour
     });
     if (!res.ok) return null;
     return await res.json();

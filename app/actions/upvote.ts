@@ -68,10 +68,6 @@ export async function upvoteProject(projectId: number) {
     
     // Mark as voted in redis permanently
     await redis.set(voteKey, "true");
-
-    // Revalidate the paths where the projects are displayed
-    revalidatePath("/projects");
-    revalidatePath("/");
     
     return { success: true, votes: newVotes };
   } catch (error) {
@@ -115,7 +111,6 @@ export async function upvoteTeamMember(memberId: string) {
     
     await redis.set(voteKey, "true");
 
-    revalidatePath("/teams");
     return { success: true, votes: newVotes };
   } catch (error) {
     console.error(`Error upvoting team member ${memberId}:`, error);

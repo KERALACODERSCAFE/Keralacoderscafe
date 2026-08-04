@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+
+export const dynamicParams = false;
 import {
   ArrowLeft,
   MapPin,
