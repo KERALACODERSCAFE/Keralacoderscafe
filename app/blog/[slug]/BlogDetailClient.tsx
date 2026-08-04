@@ -56,8 +56,15 @@ interface BlogDetail {
   updated_at?: string;
 }
 
+interface SimilarBlog {
+  title: string;
+  slug: string;
+  category: string;
+}
+
 interface BlogDetailClientProps {
   blog: BlogDetail | null;
+  similarBlogs?: SimilarBlog[];
 }
 
 interface ToCItem {
@@ -66,7 +73,7 @@ interface ToCItem {
   level: number;
 }
 
-export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
+export default function BlogDetailClient({ blog, similarBlogs = [] }: BlogDetailClientProps) {
   const router = useRouter();
   const [toc, setToC] = useState<ToCItem[]>([]);
   const [activeId, setActiveId] = useState<string>("");
@@ -302,7 +309,7 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
   })();
 
   return (
-    <div className={cn("min-h-screen transition-colors duration-300 overflow-x-hidden", theme === "dark" ? "dark bg-[#090d16]" : "bg-white")}>
+    <div className={cn("min-h-screen transition-colors duration-300 overflow-x-clip", theme === "dark" ? "dark bg-[#090d16]" : "bg-white")}>
       <NavBar />
       
       <main className="min-h-screen bg-white dark:bg-[#090d16] text-black dark:text-slate-100 pt-32 pb-24 px-6 md:px-12 relative isolate transition-colors duration-300">
@@ -377,7 +384,7 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
           <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-12 items-start">
             
             {/* Sidebar (Left Column) - Table of Contents & CTA */}
-            <aside className="hidden lg:flex flex-col gap-6 sticky top-28 w-[240px] shrink-0 self-start">
+            <aside className="hidden lg:flex flex-col gap-6 sticky top-28 w-[240px] shrink-0 self-start max-h-[calc(100vh-120px)] overflow-y-auto custom-scrollbar pr-2 pb-4">
               {toc.length > 0 && (
                 <div>
                   <h3 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4">
@@ -416,35 +423,56 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
                   Strong basics = Confident developer.
                 </p>
               </div>
+
+              {/* Similar Blogs */}
+              {similarBlogs && similarBlogs.length > 0 && (
+                <div className="mt-4">
+                  <h3 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4">
+                    More from KCC
+                  </h3>
+                  <div className="flex flex-col gap-4">
+                    {similarBlogs.map((sb, idx) => (
+                      <Link href={`/blog/${sb.slug}`} key={idx} className="group block">
+                        <span className="text-[9px] font-bold text-[#00B9A5] uppercase tracking-wider block mb-1.5">
+                          {sb.category}
+                        </span>
+                        <h4 className="text-xs font-semibold text-slate-800 dark:text-slate-200 leading-snug group-hover:text-[#00B9A5] transition-colors line-clamp-2">
+                          {sb.title}
+                        </h4>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </aside>
 
             {/* Main Content Area (Right Column) */}
             <div className="w-full min-w-0 overflow-hidden">
               {/* Category pill */}
               {blog.category && (
-                <span className="text-xs font-bold text-[#00B9A5] tracking-wider uppercase block mb-3">
+                <span className="text-xs font-bold text-[#00B9A5] tracking-wider uppercase block mb-4">
                   {blog.category.name}
                 </span>
               )}
 
               {/* Article Main Heading */}
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight mb-4">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight mb-8">
                 {blog.title}
               </h1>
 
               {/* Excerpt */}
-              <p className="text-base md:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal mb-6">
+              <p className="text-base md:text-lg lg:text-xl text-slate-600 dark:text-slate-300 leading-relaxed font-normal mb-10">
                 {blog.excerpt}
               </p>
 
               {/* Author & Meta Row */}
-              <div className="flex flex-wrap items-center justify-between gap-4 py-5 border-y border-slate-100 dark:border-slate-800 mb-8">
+              <div className="flex flex-wrap items-center justify-between gap-4 py-6 border-y border-slate-100 dark:border-slate-800 mb-12">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center shrink-0 border dark:border-slate-850">
-                    <User className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+                  <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center shrink-0 border dark:border-slate-850">
+                    <User className="w-4.5 h-4.5 text-slate-500 dark:text-slate-400" />
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-slate-900 dark:text-slate-200 leading-none">
+                    <div className="text-sm font-bold text-slate-900 dark:text-slate-200 leading-none">
                       By {getBlogAuthor(blog.slug, blog.author_name)}
                     </div>
                     <div className="flex items-center gap-1.5 text-[10px] text-slate-400 dark:text-slate-500 font-semibold mt-1.5">
@@ -474,11 +502,11 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
 
               {/* Cover image wrapper (only if not already embedded in body) */}
               {blog.cover_image && !isImageInContent && (
-                <div className="w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 shadow-xs mb-10 max-h-[460px] select-none">
+                <div className="w-full rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 shadow-xs mb-10 max-h-[320px] lg:max-w-4xl select-none mx-auto">
                   <img
                     src={blog.cover_image}
                     alt={blog.title}
-                    className="w-full h-full object-cover max-h-[460px]"
+                    className="w-full h-full object-cover max-h-[320px]"
                   />
                 </div>
               )}
@@ -717,6 +745,21 @@ export default function BlogDetailClient({ blog }: BlogDetailClientProps) {
                   className="max-w-none text-[#334155] dark:text-[#cbd5e1]"
                   dangerouslySetInnerHTML={{ __html: processedContent }} 
                 />
+              </div>
+
+              {/* Author Card */}
+              <div className="mt-8 mb-12 p-6 rounded-2xl bg-white dark:bg-[#0c1220] border border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center gap-5 shadow-xs transition-colors">
+                <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 border border-slate-200 dark:border-slate-700">
+                  <User className="w-8 h-8 text-slate-400 dark:text-slate-500" />
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-1.5">
+                    Written by {getBlogAuthor(blog.slug, blog.author_name)}
+                  </h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl">
+                    Contributing writer at Kerala Coders Cafe. Passionate about software engineering, technical deep dives, and sharing knowledge with the community.
+                  </p>
+                </div>
               </div>
 
               {/* Bottom CTA block */}

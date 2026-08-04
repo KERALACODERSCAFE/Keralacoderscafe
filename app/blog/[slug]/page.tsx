@@ -68,5 +68,27 @@ export async function generateStaticParams() {
 export default async function BlogDetailPage({ params }: PageProps) {
   const { slug } = await params;
   const blog = await getBlogDetails(slug);
-  return <BlogDetailClient blog={blog} />;
+  
+  let similarBlogs = [];
+  try {
+    const res = await fetch("https://api.interviewkit.online/api/blogs/", {
+      next: { revalidate: 3600 }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const allBlogs = Array.isArray(data) ? data : (data.value || []);
+      similarBlogs = allBlogs
+        .filter((b: any) => b.slug !== slug)
+        .slice(0, 3)
+        .map((b: any) => ({
+          title: b.title,
+          slug: b.slug,
+          category: b.category?.name || "Community News"
+        }));
+    }
+  } catch (error) {
+    console.error("Failed to fetch similar blogs", error);
+  }
+
+  return <BlogDetailClient blog={blog} similarBlogs={similarBlogs} />;
 }
