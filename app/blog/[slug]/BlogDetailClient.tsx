@@ -18,7 +18,8 @@ import {
   Check,
   Lightbulb,
   Sun,
-  Moon
+  Moon,
+  PenLine
 } from "lucide-react";
 import NavBar from "../../components/NavBar";
 import Footer from "../../components/Footer";
@@ -747,19 +748,25 @@ export default function BlogDetailClient({ blog, similarBlogs = [] }: BlogDetail
                 />
               </div>
 
-              {/* Author Card */}
-              <div className="mt-8 mb-12 p-6 rounded-2xl bg-white dark:bg-[#0c1220] border border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center gap-5 shadow-xs transition-colors">
-                <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 border border-slate-200 dark:border-slate-700">
-                  <User className="w-8 h-8 text-slate-400 dark:text-slate-500" />
-                </div>
+              {/* Write a Blog CTA Card */}
+              <div className="mt-8 mb-12 p-8 rounded-2xl bg-gradient-to-r from-[#E6F9F6] to-white dark:from-teal-950/30 dark:to-[#0c1220] border border-teal-100 dark:border-teal-900/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-sm">
                 <div>
-                  <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-1.5">
-                    Written by {getBlogAuthor(blog.slug, blog.author_name)}
+                  <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
+                    Have a story to share?
                   </h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl">
-                    Contributing writer at Kerala Coders Cafe. Passionate about software engineering, technical deep dives, and sharing knowledge with the community.
+                  <p className="text-sm text-slate-600 dark:text-slate-400 max-w-md">
+                    We're always looking for great technical articles. Write a blog for Kerala Coders Cafe and share your knowledge with the community.
                   </p>
                 </div>
+                <a 
+                  href="https://forms.gle/Z6wCFuYcbLdCyT1n9" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="shrink-0 bg-[#00B9A5] hover:bg-[#009686] text-white px-6 py-3 rounded-xl font-bold transition-colors shadow-xs flex items-center gap-2"
+                >
+                  <PenLine className="w-4 h-4" />
+                  Write a Blog
+                </a>
               </div>
 
               {/* Bottom CTA block */}
