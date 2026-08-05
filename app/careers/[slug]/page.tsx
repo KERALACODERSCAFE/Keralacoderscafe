@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const dynamicParams = false;
+export const dynamicParams = true;
 import {
   ArrowLeft,
   MapPin,
@@ -41,7 +41,7 @@ interface PageProps {
 async function getJobDetails(slug: string): Promise<JobDetail | null> {
   try {
     const res = await fetch(`https://api.interviewkit.online/api/jobs/${slug}/`, {
-      next: { revalidate: 3600 } // cache for 1 hour
+      next: { revalidate: 60 } // cache for 1 min so new jobs appear fast
     });
     if (!res.ok) return null;
     return await res.json();
@@ -398,15 +398,26 @@ export default async function CareerDetailPage({ params }: PageProps) {
 
             <style dangerouslySetInnerHTML={{
               __html: `
+              .prose-custom p,
+              .prose-custom span,
+              .prose-custom div,
+              .prose-custom h1,
+              .prose-custom h2,
+              .prose-custom h3,
+              .prose-custom h4,
+              .prose-custom h5,
+              .prose-custom h6 {
+                color: #475569 !important;
+              }
               .prose-custom p {
                 margin-bottom: 1.25rem;
                 font-weight: 500;
-                color: #475569;
                 line-height: 1.6;
               }
-              .prose-custom strong {
+              .prose-custom strong,
+              .prose-custom b {
                 font-weight: 800;
-                color: #0f172a;
+                color: #0f172a !important;
                 display: inline-block;
                 margin-top: 1.5rem;
                 margin-bottom: 0.75rem;
@@ -422,7 +433,7 @@ export default async function CareerDetailPage({ params }: PageProps) {
                 align-items: flex-start;
                 gap: 0.5rem;
                 font-weight: 500;
-                color: #475569;
+                color: #475569 !important;
                 line-height: 1.6;
                 margin-bottom: 0.75rem;
               }
@@ -433,11 +444,15 @@ export default async function CareerDetailPage({ params }: PageProps) {
               }
               .prose-custom li::before {
                 content: "✓";
-                color: #0D9488; /* teal-600 */
+                color: #0D9488 !important; /* teal-600 */
                 font-weight: 900;
                 font-size: 1.1rem;
                 line-height: 1.4;
                 flex-shrink: 0;
+              }
+              .prose-custom a {
+                color: #00B9A5 !important;
+                text-decoration: underline;
               }
             `}} />
 

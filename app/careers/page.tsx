@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 async function getJobs() {
   try {
     const res = await fetch("https://api.interviewkit.online/api/jobs/", {
-      next: { revalidate: 3600 } // Cache for 1 hour to ensure fast loads
+      next: { revalidate: 60 } // Cache for 1 min to ensure fast updates
     });
     if (!res.ok) throw new Error("Failed to fetch from API");
     return await res.json();

@@ -198,7 +198,7 @@ export default function CareersClient({ initialJobs }: CareersClientProps) {
       // Calculate difference in days
       const diffTime = now.getTime() - postDate.getTime();
       const diffDays = diffTime / (1000 * 60 * 60 * 24);
-      if (diffDays > 15 || diffDays < 0) {
+      if (diffDays > 30) {
         return false;
       }
     } catch {
