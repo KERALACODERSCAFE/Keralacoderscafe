@@ -14,11 +14,7 @@ async function getBlogs() {
     if (!res.ok) throw new Error("Failed to fetch blogs");
     const data = await res.json();
     const allBlogs = Array.isArray(data) ? data : (data.value || []);
-    return allBlogs.filter((blog: any) => {
-      if (!blog.published_at) return false;
-      const pubDate = new Date(blog.published_at);
-      return pubDate >= new Date("2026-07-01");
-    });
+    return allBlogs.filter((blog: any) => blog.published_at);
   } catch (error) {
     console.error("Error loading blog data:", error);
     return [];

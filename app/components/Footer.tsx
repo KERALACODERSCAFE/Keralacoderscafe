@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const exploreLinks = [
   { label: "Home", href: "/" },
-  { label: "About", href: "/#about" },
+  { label: "About", href: "/about" },
   { label: "Projects", href: "/#projects" },
   { label: "Careers", href: "/careers" },
   { label: "Blog", href: "/blog" },
