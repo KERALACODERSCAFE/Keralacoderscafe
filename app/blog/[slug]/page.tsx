@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import BlogDetailClient from "./BlogDetailClient";
 
-export const dynamicParams = false;
+
 
 interface PageProps {
   params: Promise<{ slug: string }>;
