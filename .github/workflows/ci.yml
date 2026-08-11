@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_FIREBASE_API_KEY: dummy
+      NEXT_PUBLIC_FIREBASE_DATABASE_URL: https://dummy.firebaseio.com
+      NEXT_PUBLIC_FIREBASE_PROJECT_ID: dummy
+      GOOGLE_CLIENT_ID: dummy
+      GOOGLE_CLIENT_SECRET: dummy
+      AUTH_SECRET: dummy-ci-secret
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # NOTE: lint currently fails on ~135 pre-existing errors unrelated to
+      # this workflow's introduction (see PR description). Non-blocking
+      # until that debt is cleaned up; flip to a hard gate once it's green.
+      - name: Lint
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Run tests
+        run: npm test
+
+      # `next build` type-checks the project itself (and needs the
+      # generated .next/types it produces along the way), so a separate
+      # `tsc --noEmit` step here would false-flag routes using generated
+      # PageProps types. Build is the type-check gate.
+      - name: Build
+        run: npm run build

@@ -1,6 +1,7 @@
 import Footer from "../components/Footer";
+import ContactForm from "../components/ContactForm";
 import type { Metadata } from "next";
-import { Mail, MessageCircle, Github, Twitter, MapPin } from "lucide-react";
+import { Mail, MessageCircle, Github, MapPin } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Contact Us | Kerala Coders Cafe",
@@ -25,8 +26,17 @@ export default function ContactPage() {
             Have questions about our meetups, community guidelines, job listings, or sponsorship opportunities? Reach out to us through any of the channels below.
           </p>
 
-          <div className="mt-10 border-t border-gray-100 pt-10 grid gap-6 md:grid-cols-2">
+          <div className="mt-10 border-t border-gray-100 pt-10 grid gap-8 md:grid-cols-2">
+            {/* Message form */}
+            <div>
+              <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">
+                Send us a message
+              </h2>
+              <ContactForm />
+            </div>
+
             {/* Contact cards */}
+            <div className="grid gap-6">
             <a
               href="mailto:keralacoderscafe@gmail.com"
               className="group border border-gray-100 bg-slate-50 p-6 rounded-[2rem] hover:border-slate-200 transition-all duration-300 flex items-start gap-4"
@@ -88,6 +98,7 @@ export default function ContactPage() {
                   Operating online and hosting physical developer meetups across Kerala.
                 </p>
               </div>
+            </div>
             </div>
           </div>
         </div>
