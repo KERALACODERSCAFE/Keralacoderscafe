@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 async function getFeaturedBlogs() {
   try {
     const res = await fetch("https://api.interviewkit.online/api/blogs/", {
-      next: { revalidate: 3600 } // Cache for 1 hour
+      next: { revalidate: 86400 } // Cache for 24 hours
     });
     if (!res.ok) throw new Error("Failed to fetch blogs");
     const data = await res.json();

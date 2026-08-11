@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     const response = await fetch(`https://api.github.com/${endpoint}`, {
       headers,
       // GitHub stats endpoints can be cached to avoid excessive API calls
-      next: { revalidate: 3600 }, 
+      next: { revalidate: 86400 }, 
     });
 
     if (response.status === 202) {

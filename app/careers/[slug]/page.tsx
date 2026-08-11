@@ -41,7 +41,7 @@ interface PageProps {
 async function getJobDetails(slug: string): Promise<JobDetail | null> {
   try {
     const res = await fetch(`https://api.interviewkit.online/api/jobs/${slug}/`, {
-      next: { revalidate: 60 } // cache for 1 min so new jobs appear fast
+      next: { revalidate: 86400 } // cache for 24 hours to reduce Vercel ISR writes
     });
     if (!res.ok) return null;
     return await res.json();
