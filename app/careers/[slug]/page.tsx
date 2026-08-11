@@ -65,10 +65,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${cleanTitle} at ${job.company} | KCC Careers`,
     description: `KCC is hiring a ${cleanTitle} at ${job.company} in ${job.location}. Click to apply now!`,
+    alternates: {
+      canonical: `/careers/${slug}`,
+    },
     openGraph: {
       title: `${cleanTitle} at ${job.company}`,
       description: `Join ${job.company} as a ${cleanTitle}. Apply today on Kerala Coders Cafe.`,
       type: "website",
+      url: `/careers/${slug}`,
+      // Image comes from the co-located opengraph-image.tsx route, which
+      // renders a branded card — job.logo is just initials text, not a URL.
     },
     twitter: {
       card: "summary_large_image",
@@ -159,8 +165,33 @@ export default async function CareerDetailPage({ params }: PageProps) {
     );
   }
 
+  const jobPostingLd = {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    title: job.title,
+    description: job.description,
+    datePosted: job.posted_at,
+    employmentType: job.job_type,
+    hiringOrganization: {
+      "@type": "Organization",
+      name: job.company,
+    },
+    jobLocationType: job.location_type?.toLowerCase() === "remote" ? "TELECOMMUTE" : undefined,
+    jobLocation: {
+      "@type": "Place",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: job.location,
+      },
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jobPostingLd) }}
+      />
       <NavBar />
 
       <main className="min-h-screen bg-[#F8FAFC] text-black pt-32 pb-24 px-6 md:px-12 relative isolate">

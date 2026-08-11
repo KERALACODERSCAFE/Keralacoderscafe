@@ -32,18 +32,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${blog.title} | KCC Blog`,
     description: blog.excerpt,
+    alternates: {
+      canonical: `/blog/${slug}`,
+    },
     openGraph: {
       title: blog.title,
       description: blog.excerpt,
       type: "article",
       url: `/blog/${slug}`,
-      images: blog.cover_image ? [blog.cover_image] : ["https://www.keralacoderscafe.in/og-image.jpg"],
+      images: blog.cover_image ? [blog.cover_image] : ["/og-image.jpg"],
     },
     twitter: {
       card: "summary_large_image",
       title: blog.title,
       description: blog.excerpt,
-      images: blog.cover_image ? [blog.cover_image] : ["https://www.keralacoderscafe.in/og-image.jpg"],
+      images: blog.cover_image ? [blog.cover_image] : ["/og-image.jpg"],
     }
   };
 }
@@ -92,5 +95,39 @@ export default async function BlogDetailPage({ params }: PageProps) {
     console.error("Failed to fetch similar blogs", error);
   }
 
-  return <BlogDetailClient blog={blog} similarBlogs={similarBlogs} />;
+  const articleLd = blog
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: blog.title,
+        description: blog.excerpt,
+        image: blog.cover_image ? [blog.cover_image] : undefined,
+        datePublished: blog.published_at,
+        author: {
+          "@type": "Person",
+          name: blog.author_name || "Kerala Coders Cafe",
+        },
+        publisher: {
+          "@type": "Organization",
+          name: "Kerala Coders Cafe",
+          logo: {
+            "@type": "ImageObject",
+            url: "https://kcc.sh/logo.png",
+          },
+        },
+        mainEntityOfPage: `https://kcc.sh/blog/${slug}`,
+      }
+    : null;
+
+  return (
+    <>
+      {articleLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }}
+        />
+      )}
+      <BlogDetailClient blog={blog} similarBlogs={similarBlogs} />
+    </>
+  );
 }
