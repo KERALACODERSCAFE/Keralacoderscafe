@@ -1,18 +1,30 @@
-"use client";
+import type { Metadata } from "next";
+import JoinPageClient from "./JoinPageClient";
 
-import { useState } from "react";
-import JoinGate from "../components/JoinGate";
-import Footer from "../components/Footer";
+export const metadata: Metadata = {
+  title: "Join the Community | Kerala Coders Cafe",
+  description:
+    "Join Kerala Coders Cafe's WhatsApp and Telegram communities to connect with developers, designers, and tech enthusiasts across Kerala.",
+  alternates: {
+    canonical: "/join",
+  },
+  openGraph: {
+    title: "Join the Community | Kerala Coders Cafe",
+    description:
+      "Join Kerala Coders Cafe's WhatsApp and Telegram communities to connect with developers across Kerala.",
+    type: "website",
+    url: "/join",
+    images: ["/og-image.jpg"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Join the Community | Kerala Coders Cafe",
+    description:
+      "Join Kerala Coders Cafe's WhatsApp and Telegram communities to connect with developers across Kerala.",
+    images: ["/og-image.jpg"],
+  },
+};
 
 export default function JoinPage() {
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
-  return (
-    <main className="min-h-screen bg-kcc-paper">
-      <div className="pt-24 lg:pt-32">
-        <JoinGate onStatusChange={setIsSubmitted} />
-      </div>
-      {!isSubmitted && <Footer />}
-    </main>
-  );
+  return <JoinPageClient />;
 }

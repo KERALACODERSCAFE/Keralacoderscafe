@@ -84,7 +84,7 @@ export const metadata: Metadata = {
     description:
       "A vibrant community of developers from Kerala. Build, learn, and grow together.",
     siteName: "Kerala Coders Cafe",
-    images: ["https://www.keralacoderscafe.in/og-image.jpg"],
+    images: ["/og-image.jpg"],
   },
 
   twitter: {
@@ -93,7 +93,7 @@ export const metadata: Metadata = {
     description:
       "Join Kerala's fastest growing developer community.",
     creator: "@KeralaCodersCafe",
-    images: ["https://www.keralacoderscafe.in/og-image.jpg"],
+    images: ["/og-image.jpg"],
   },
 
   icons: {
