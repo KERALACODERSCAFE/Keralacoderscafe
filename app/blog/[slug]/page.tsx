@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import BlogDetailClient from "./BlogDetailClient";
 
-export const dynamicParams = false;
+
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -10,7 +10,7 @@ interface PageProps {
 async function getBlogDetails(slug: string) {
   try {
     const res = await fetch(`https://api.interviewkit.online/api/blogs/${slug}/`, {
-      next: { revalidate: 3600 } // cache for 1 hour
+      next: { revalidate: 86400 } // cache for 24 hours
     });
     if (!res.ok) return null;
     return await res.json();
@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export async function generateStaticParams() {
   try {
     const res = await fetch("https://api.interviewkit.online/api/blogs/", {
-      next: { revalidate: 3600 }
+      next: { revalidate: 86400 }
     });
     if (!res.ok) return [];
     const data = await res.json();
@@ -74,7 +74,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
   let similarBlogs = [];
   try {
     const res = await fetch("https://api.interviewkit.online/api/blogs/", {
-      next: { revalidate: 3600 }
+      next: { revalidate: 86400 }
     });
     if (res.ok) {
       const data = await res.json();

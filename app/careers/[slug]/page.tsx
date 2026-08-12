@@ -41,7 +41,7 @@ interface PageProps {
 async function getJobDetails(slug: string): Promise<JobDetail | null> {
   try {
     const res = await fetch(`https://api.interviewkit.online/api/jobs/${slug}/`, {
-      next: { revalidate: 60 } // cache for 1 min so new jobs appear fast
+      next: { revalidate: 86400 } // cache for 24 hours to reduce Vercel ISR writes
     });
     if (!res.ok) return null;
     return await res.json();
@@ -79,22 +79,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export async function generateStaticParams() {
-  try {
-    const res = await fetch("https://api.interviewkit.online/api/jobs/", {
-      next: { revalidate: 3600 }
-    });
-    if (!res.ok) return [];
-    const data = await res.json();
-    const allJobs = Array.isArray(data) ? data : [];
-    return allJobs
-      .filter((job: any) => job.slug)
-      .map((job: any) => ({
-        slug: job.slug,
-      }));
-  } catch (error) {
-    console.error("Error generating static params for careers:", error);
-    return [];
-  }
+  // We return an empty array to avoid building 750+ static job pages during build time.
+  // Since 'dynamicParams = true' is set, Next.js will generate job pages on-demand (ISR) 
+  // when a user actually visits the specific career URL.
+  return [];
 }
 
 export default async function CareerDetailPage({ params }: PageProps) {
