@@ -1,4 +1,5 @@
 import Hero from "./components/Hero";
+import Events from "./components/Events";
 import Marquee from "./components/Marquee";
 import Mission from "./components/Mission";
 import Contributors from "./components/Contributors";
@@ -24,6 +25,7 @@ export default async function Home() {
 
       <Marquee />
       <Hero />
+      <Events />
       <Mission />
       <Contributors />
       <Projects />

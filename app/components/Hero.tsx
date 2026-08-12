@@ -159,10 +159,7 @@ export default function Hero() {
             <div className="mt-10 animate-fade-in-up delay-100">
 
               <div className="inline-block border-2 border-black bg-kcc-green px-4 py-1.5 text-sm font-black uppercase tracking-widest shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-6">
-                <ScrambleText phrases={[
-                  "Built in Kerala • Powered by curiosity",
-                  "Built in Kerala • Powered by curiosity"
-                ]} delay={3000} />
+                Built in Kerala • Powered by curiosity
               </div>
 
               <h1 className="mt-2 max-w-[850px] text-[clamp(3.5rem,10vw,7.5rem)] font-black leading-[0.88] tracking-[-0.05em] text-black uppercase">
