@@ -76,9 +76,9 @@ export default function NavBar() {
 
   useEffect(() => {
     if (pathname !== "/") {
-      const activeLink = navLinks.find(link => 
-        link.type === "page" 
-          ? pathname.startsWith(link.href) 
+      const activeLink = navLinks.find(link =>
+        link.type === "page"
+          ? pathname.startsWith(link.href)
           : link.href === pathname
       );
       if (activeLink) {
@@ -101,9 +101,9 @@ export default function NavBar() {
 
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string, name: string) => {
+    // Let Next.js Link handle navigation to hash routes.
+    // This preserves default hash navigation to homepage sections.
     if (href.startsWith("/#") && pathname !== "/") {
-      e.preventDefault();
-      window.location.href = href;
       return;
     }
 
@@ -182,15 +182,14 @@ export default function NavBar() {
                   <Link
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href, link.name)}
-                    className={`text-[10px] sm:text-xs font-bold uppercase tracking-tight transition-colors whitespace-nowrap ${
-                      activeSection === link.name
+                    className={`text-[10px] sm:text-xs font-bold uppercase tracking-tight transition-colors whitespace-nowrap ${activeSection === link.name
                         ? isDarkNav
                           ? "text-white border-b-2 border-white"
                           : "text-black border-b-2 border-black"
                         : isDarkNav
                           ? "text-white/60 hover:text-white"
                           : "text-black/60 hover:text-black"
-                    }`}
+                      }`}
                   >
                     {link.name}
                   </Link>
@@ -205,11 +204,10 @@ export default function NavBar() {
 
             <Link
               href="/join"
-              className={`inline-flex h-8 sm:h-10 items-center gap-1.5 sm:gap-2 border-2 bg-kcc-green px-3 sm:px-5 rounded-full text-[10px] sm:text-xs font-black uppercase transition-all shrink-0 order-2 lg:order-3 hover:translate-x-[-1px] hover:translate-y-[-1px] ${
-                isDarkNav
+              className={`inline-flex h-8 sm:h-10 items-center gap-1.5 sm:gap-2 border-2 bg-kcc-green px-3 sm:px-5 rounded-full text-[10px] sm:text-xs font-black uppercase transition-all shrink-0 order-2 lg:order-3 hover:translate-x-[-1px] hover:translate-y-[-1px] ${isDarkNav
                   ? "border-white/80 text-black hover:bg-white hover:text-black shadow-[2px_2px_0px_0px_rgba(255,255,255,0.15)] hover:shadow-[3px_3px_0px_0px_rgba(255,255,255,0.25)]"
                   : "border-black text-black hover:bg-black hover:text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
-              }`}
+                }`}
             >
               <span className="hidden sm:inline">Join the Community</span>
               <span className="sm:hidden">Join</span>
