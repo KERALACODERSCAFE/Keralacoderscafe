@@ -58,7 +58,7 @@ export default function ProjectsPage() {
       <main className="max-w-6xl mx-auto px-6 py-24 pb-32">
 
         {/* Header Section */}
-        <section 
+        <section
           ref={header.ref}
           className="mt-12 mb-16 flex flex-col md:flex-row items-center justify-between gap-8"
           style={{
@@ -94,7 +94,7 @@ export default function ProjectsPage() {
         </section>
 
         {/* Tier 1: Active Focus Project */}
-        <section 
+        <section
           ref={activeFocus.ref}
           className="relative mt-20"
           style={{
@@ -169,7 +169,7 @@ export default function ProjectsPage() {
         </section>
 
         {/* Tier 2: Upcoming Projects Spotlight */}
-        <section 
+        <section
           ref={upcoming.ref}
           className="relative mt-32"
           style={{
@@ -226,7 +226,7 @@ export default function ProjectsPage() {
         </section>
 
         {/* Tier 3: Community Ideas Grid */}
-        <section 
+        <section
           ref={ideas.ref}
           className="relative mt-32 p-8 md:p-16"
           style={{
@@ -283,7 +283,7 @@ export default function ProjectsPage() {
         </section>
 
         {/* Submit idea CTA */}
-        <section 
+        <section
           ref={cta.ref}
           className="mt-24 bg-black p-8 md:p-12 relative overflow-hidden border-4 border-black"
           style={{

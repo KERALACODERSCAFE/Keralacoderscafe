@@ -1,6 +1,6 @@
 "use client";
 
-import { Mic, Share2 } from "lucide-react";
+import { Video, Calendar, Users, Lightbulb, Target, ArrowRight, ArrowUpRight, ArrowDown, Clock, Coffee, Zap, Globe, X } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 
@@ -10,7 +10,6 @@ interface EventsProps {
 
 export default function Events({ isDetailsPage = false }: EventsProps) {
   const [copied, setCopied] = useState(false);
-
 
   const handleShare = async () => {
     try {
@@ -32,258 +31,349 @@ export default function Events({ isDetailsPage = false }: EventsProps) {
   };
 
   return (
-    <section className="relative w-full wave-bg text-white py-16 px-4 md:px-12 overflow-x-hidden flex justify-center font-sans z-10">
+    <section className="relative w-full bg-[#111] text-white py-12 px-4 md:px-8 overflow-x-hidden flex justify-center z-10 selection:bg-[#ccff00] selection:text-black">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=VT323&family=Archivo:wght@800;900&display=swap');
-        .pixel-font { font-family: 'VT323', monospace; }
-        .archivo-font { font-family: 'Archivo', sans-serif; }
-        
-        .wave-bg {
-          background-color: #101012;
-          background-image: 
-            radial-gradient(120% 150% at 50% 10%, transparent 40%, rgba(153, 122, 222, 0.03) 50%, transparent 60%),
-            radial-gradient(120% 150% at 50% 90%, transparent 40%, rgba(153, 122, 222, 0.03) 50%, transparent 60%);
-          background-size: 100% 200px;
+        @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+        .font-archivo {
+          font-family: 'Archivo', sans-serif;
         }
-        
-        .starburst {
-          background: #3b429e;
-          clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+
+        .font-space {
+          font-family: 'Space Mono', monospace;
+        }
+
+        .bg-grid {
+          background-image: 
+            linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+          background-size: 32px 32px;
+        }
+
+        .writing-vertical {
+          writing-mode: vertical-rl;
+          text-orientation: mixed;
+        }
+
+        @keyframes vapour-rise {
+          0% { transform: translateY(0); opacity: 0; }
+          20% { opacity: 1; }
+          80% { opacity: 1; }
+          100% { transform: translateY(-8px); opacity: 0; }
+        }
+
+        .coffee-vapour path:nth-of-type(1) { animation: vapour-rise 2s infinite ease-in-out 0s; }
+        .coffee-vapour path:nth-of-type(2) { animation: vapour-rise 2s infinite ease-in-out 0.4s; }
+        .coffee-vapour path:nth-of-type(4) { animation: vapour-rise 2s infinite ease-in-out 0.8s; }
+
+        @keyframes sunday-flash {
+          0%, 100% { color: #f4f4f5; text-shadow: 4px 4px 0px rgba(0,0,0,0.5); }
+          3% { color: #222; text-shadow: none; }
+          6% { color: #f4f4f5; text-shadow: 4px 4px 0px rgba(0,0,0,0.5); }
+          7% { color: #222; text-shadow: none; }
+          8% { color: #f4f4f5; text-shadow: 4px 4px 0px rgba(0,0,0,0.5); }
+          9% { color: #f4f4f5; text-shadow: 4px 4px 0px rgba(0,0,0,0.5); }
+          10% { color: #333; text-shadow: none; }
+          11% { color: #f4f4f5; text-shadow: 4px 4px 0px rgba(0,0,0,0.5); }
+          50% { color: #f4f4f5; text-shadow: 4px 4px 0px rgba(0,0,0,0.5); }
+          51% { color: #555; text-shadow: none; }
+          52% { color: #f4f4f5; text-shadow: 4px 4px 0px rgba(0,0,0,0.5); }
+          70% { color: #f4f4f5; text-shadow: 4px 4px 0px rgba(0,0,0,0.5); }
+          71% { color: #111; text-shadow: none; }
+          72% { color: #f4f4f5; text-shadow: 4px 4px 0px rgba(0,0,0,0.5); }
+        }
+
+        .flash-sunday {
+          animation: sunday-flash 3s infinite;
         }
       `}</style>
 
-      <div className="relative z-10 w-full max-w-[1000px] flex flex-col gap-12 md:gap-16">
+      {/* Background Grid */}
+      <div className="absolute inset-0 bg-grid z-0"></div>
 
-        {/* Top Header Section */}
-        <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 relative w-full">
-
-          {/* Pixel decoration left */}
-          <div className="absolute left-0 md:left-10 top-10 flex-col gap-1 hidden sm:flex">
-            <div className="w-5 h-5 bg-white"></div>
-            <div className="flex gap-1">
-              <div className="w-5 h-5 bg-white"></div>
-              <div className="w-5 h-5 bg-white"></div>
-            </div>
+      <div className="relative z-10 w-full max-w-[1000px] mx-auto border border-white/20 bg-[#121212] shadow-2xl flex flex-col font-space">
+        
+        {/* Top Navbar */}
+        <div className="flex justify-between items-stretch border-b border-white/20 h-12">
+          <div className="bg-[#7b61ff] px-4 md:px-6 flex items-center gap-3">
+            <Video className="w-5 h-5 text-black" fill="currentColor" />
+            <span className="font-bold text-white uppercase tracking-widest text-sm font-space">ONLINE MEETUP</span>
           </div>
-
-          <div className="flex flex-col items-center z-10 relative">
-            <h2 className="text-[#9f84db] archivo-font font-black text-7xl md:text-[160px] lg:text-[200px] leading-none tracking-tighter uppercase">
-              SUNDAY
-            </h2>
-            {/* Date Badge */}
-            <div className="bg-[#101012] text-white border-[3px] border-white px-6 py-2 rounded-full font-sans font-black uppercase tracking-[0.2em] text-sm md:text-lg -mt-2 md:-mt-6 shadow-[6px_6px_0_0_#9f84db] rotate-[-2deg] z-20">
-              AUGUST 16, 2026
-            </div>
-          </div>
-
-          <div className="flex items-center justify-center w-32 h-20 md:w-40 md:h-24 rounded-[100%] border-[2px] border-white text-white rotate-[-10deg] backface-hidden transform-gpu absolute right-0 md:relative md:right-auto -top-4 md:top-auto md:-ml-8 z-20">
-            <span className="text-center text-xs md:text-sm font-bold uppercase tracking-[0.2em] leading-tight">
-              FREE<br />RSVP
-            </span>
-          </div>
-
-          {/* Pixel decoration right */}
-          <div className="absolute right-0 md:right-10 bottom-0 flex-col items-end gap-1 hidden sm:flex">
-            <div className="flex gap-1">
-              <div className="w-5 h-5 bg-white"></div>
-              <div className="w-5 h-5 bg-white"></div>
-            </div>
-            <div className="w-5 h-5 bg-white mr-6"></div>
+          <div className="px-4 md:px-6 flex items-center gap-3 border-l border-white/20">
+            <span className="font-bold text-[#7b61ff] uppercase tracking-widest text-xs md:text-sm">SAVE THE DATE</span>
+            <X className="w-5 h-5 text-[#7b61ff]" />
           </div>
         </div>
 
-        {/* Meetup Title Badge */}
-        <div className="w-full max-w-[1000px] mx-auto z-10 mt-8 text-center">
-          <h3 className="archivo-font font-black text-2xl md:text-4xl uppercase tracking-widest text-white inline-block border-[3px] border-white px-6 py-3 shadow-[8px_8px_0_0_#9f84db] rotate-[-2deg] backface-hidden transform-gpu bg-[#101012]">
-            🚀 OUR ONLINE MEETUP!
-          </h3>
+        {/* Hero Title Section */}
+        <div className="p-6 md:p-12 border-b border-white/20 relative">
+          <div className="flex justify-between items-start">
+            <div className="flex flex-col font-archivo font-black leading-[0.85] tracking-tighter">
+              <h2 className="text-[60px] sm:text-[100px] md:text-[140px] text-[#f4f4f5] flash-sunday" style={{ textShadow: "4px 4px 0px rgba(0,0,0,0.5)" }}>SUNDAY</h2>
+              <h2 className="text-[60px] sm:text-[100px] md:text-[140px] text-[#7b61ff]" style={{ textShadow: "4px 4px 0px rgba(0,0,0,0.5)" }}>MEETUP</h2>
+            </div>
+            
+            {/* Right decorative area */}
+            <div className="hidden md:flex flex-col items-end gap-12">
+              <div className="flex items-start gap-8">
+                <ArrowUpRight className="w-20 h-20 text-white stroke-[1]" />
+                <div className="grid grid-cols-4 gap-3 opacity-40">
+                  {[...Array(16)].map((_, i) => <div key={i} className="w-1.5 h-1.5 bg-white rounded-full"></div>)}
+                </div>
+              </div>
+              <div className="text-right font-archivo font-bold text-xl uppercase leading-tight mt-auto">
+                <p className="text-white">LET'S BUILD.</p>
+                <p className="text-white">SHARE.</p>
+                <p className="text-[#ccff00]">GROW TOGETHER.</p>
+                <div className="w-16 h-2 bg-[#ccff00] mt-3 ml-auto"></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Date Badge */}
+          <div className="mt-12 flex border border-[#ccff00] w-fit font-space">
+            <div className="bg-[#ccff00] px-4 py-3 flex items-center justify-center border-r border-[#ccff00]">
+              <Calendar className="w-7 h-7 text-black" strokeWidth={2.5} />
+            </div>
+            <div className="px-6 py-3 flex items-center justify-center">
+              <span className="text-[#ccff00] font-bold text-lg md:text-xl uppercase tracking-widest">AUGUST 16, 2026</span>
+            </div>
+          </div>
         </div>
 
-        {/* Mobile View More Button */}
+        {/* View More Button (Visible on Home Page) */}
         {!isDetailsPage && (
-          <div className="md:hidden flex justify-center pb-4 w-full relative z-20">
+          <div className="flex justify-center p-6 border-b border-white/20 w-full bg-[#121212]">
             <Link
               href="/events/sunday-meetup"
-              className="bg-[#9f84db] text-white font-black uppercase tracking-widest px-8 py-4 rounded-full border-[3px] border-white shadow-[6px_6px_0_0_#fff] hover:translate-y-1 hover:shadow-none transition-all active:scale-95"
+              className="w-full md:w-auto text-center bg-[#ccff00] text-black font-bold uppercase tracking-widest px-8 py-4 font-space hover:bg-white transition-colors"
             >
-              View More Details
+              View Full Details
             </Link>
           </div>
         )}
 
-        {/* Middle Content (Hidden on mobile if not details page) */}
-        <div className={`${!isDetailsPage ? "hidden md:flex" : "flex"} flex-col gap-12 md:gap-16 w-full max-w-[1000px] mx-auto z-10`}>
+        {/* Main Content Body */}
+        <div className={`${!isDetailsPage ? "hidden md:flex" : "flex"} flex-col w-full`}>
 
-          {/* Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 px-4">
+          {/* WHAT TO EXPECT Divider */}
+          <div className="flex items-center p-6 md:p-8 gap-4 md:gap-8 border-b border-white/20">
+            <div className="bg-white text-black px-4 py-2 font-bold uppercase tracking-widest text-xs md:text-sm whitespace-nowrap font-space">
+              WHAT TO EXPECT?
+            </div>
+            <div className="h-px bg-white/30 flex-1"></div>
+            <div className="text-white/50 text-2xl tracking-[0.3em] font-black hidden sm:block">////</div>
+          </div>
 
+          {/* 3 Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 md:p-8 border-b border-white/20">
+            
             {/* Card 1 */}
-            <div className="bg-[#9f84db] text-black rounded-3xl p-6 md:p-8 shadow-[8px_8px_0_0_#fff] border-[3px] border-white rotate-[-2deg] backface-hidden transform-gpu hover:rotate-0 hover:translate-y-[-5px] transition-all flex flex-col">
-              <div className="pixel-font text-6xl mb-2 opacity-50">01</div>
-              <p className="font-bold tracking-wider leading-relaxed text-sm md:text-base font-sans mt-auto">
-                In this meetup, everyone will get a chance to introduce and explain their new or existing projects/products.
-              </p>
+            <div className="border border-white/20 flex flex-col relative min-h-[320px] bg-[#121212]">
+              <div className="flex justify-between items-start p-6">
+                <div className="text-5xl font-archivo font-black text-black bg-[#ccff00] px-4 py-2">01</div>
+                <Users className="w-12 h-12 text-[#ccff00]" strokeWidth={1.5} />
+              </div>
+              <div className="px-6 flex-1">
+                <div className="w-8 h-1.5 mb-6 bg-[#ccff00]"></div>
+                <p className="text-gray-300 font-space text-sm leading-relaxed">
+                  In this session, everyone will get a chance to introduce themselves and share their projects/ideas.
+                </p>
+              </div>
+              <div className="w-full h-4 bg-[#ccff00] mt-6"></div>
             </div>
 
             {/* Card 2 */}
-            <div className="bg-white text-black rounded-3xl p-6 md:p-8 shadow-[8px_8px_0_0_#3b429e] border-[3px] border-[#3b429e] rotate-[1deg] backface-hidden transform-gpu hover:rotate-0 hover:translate-y-[-5px] transition-all flex flex-col">
-              <div className="pixel-font text-6xl mb-2 text-[#3b429e] opacity-50">02</div>
-              <p className="font-bold tracking-wider leading-relaxed text-sm md:text-base font-sans mt-auto">
-                If you’re interested in presenting your project, contact the Admin. Based on your project, you’ll be invited to present it during the meetup. 🎤
-              </p>
+            <div className="border border-white/20 flex flex-col relative min-h-[320px] bg-[#121212]">
+              <div className="flex justify-between items-start p-6">
+                <div className="text-5xl font-archivo font-black text-black bg-[#7b61ff] px-4 py-2">02</div>
+                <Lightbulb className="w-12 h-12 text-[#7b61ff]" strokeWidth={1.5} />
+              </div>
+              <div className="px-6 flex-1">
+                <div className="w-8 h-1.5 mb-6 bg-[#7b61ff]"></div>
+                <p className="text-gray-300 font-space text-sm leading-relaxed">
+                  If you're interested in promoting your project, contact the Admin. Short 5-7 min presentations will be hosted for you in this meetup. 🚀
+                </p>
+              </div>
+              <div className="w-full h-4 bg-[#7b61ff] mt-6"></div>
             </div>
 
             {/* Card 3 */}
-            <div className="bg-[#3b429e] text-white rounded-3xl p-6 md:p-8 shadow-[8px_8px_0_0_#9f84db] border-[3px] border-[#9f84db] rotate-[-1deg] backface-hidden transform-gpu hover:rotate-0 hover:translate-y-[-5px] transition-all flex flex-col">
-              <div className="pixel-font text-6xl mb-2 opacity-50">03</div>
-              <p className="font-bold tracking-wider leading-relaxed text-sm md:text-base font-sans mt-auto">
-                We’re hoping for maximum participation! 🙌 This will be a great opportunity to share project insights, features & ideas, while improving communication and presentation skills.
-              </p>
+            <div className="border border-white/20 flex flex-col relative min-h-[320px] bg-[#121212]">
+              <div className="flex justify-between items-start p-6">
+                <div className="text-5xl font-archivo font-black text-black bg-[#ccff00] px-4 py-2">03</div>
+                <Target className="w-12 h-12 text-[#ccff00]" strokeWidth={1.5} />
+              </div>
+              <div className="px-6 flex-1">
+                <div className="w-8 h-1.5 mb-6 bg-[#ccff00]"></div>
+                <p className="text-gray-300 font-space text-sm leading-relaxed">
+                  We're looking for members participated 👑 This will be a great opportunity to share your knowledge, network & showcase your products/services.
+                </p>
+              </div>
+              <div className="w-full h-4 bg-[#ccff00] mt-6"></div>
             </div>
 
           </div>
 
           {/* CTA Banner */}
-          <div className="mx-4 bg-[#101012] border-[3px] border-[#9f84db] p-8 md:p-12 flex flex-col items-center justify-center text-center gap-8 shadow-[12px_12px_0_0_#3b429e] rounded-[2rem]">
-            <p className="text-white archivo-font font-black text-xl md:text-2xl tracking-widest uppercase leading-snug max-w-2xl">
-              Let’s get to know what projects/products everyone is working on! 🔥
-            </p>
-            <div className="flex flex-col gap-8 w-full items-center mt-4">
-              {/* WhatsApp CTA */}
-              <div className="flex flex-col sm:flex-row items-center gap-4 w-full justify-center">
-                <span className="text-white font-bold tracking-widest uppercase text-sm">
-                  Get the Meet Link:
+          <div className="bg-[#7b61ff] flex flex-col lg:flex-row border-b border-white/20">
+            
+            {/* Left: Giant Asterisk */}
+            <div className="hidden md:flex p-10 items-center justify-center border-r border-black/20">
+              <div className="text-[180px] leading-none text-black font-black font-archivo translate-y-[20px]">*</div>
+            </div>
+            
+            {/* Middle: Text */}
+            <div className="flex-1 p-8 md:p-12 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-black/20">
+              <h3 className="font-archivo font-black text-3xl md:text-4xl lg:text-5xl text-black uppercase leading-tight tracking-tight">
+                LET'S GET TO KNOW WHAT <br className="hidden md:block" />
+                PROJECTS/PRODUCTS EVERYONE <br className="hidden md:block" />
+                IS WORKING ON! 
+                <span className="inline-flex bg-black p-2 ml-4 align-middle translate-y-[-4px]">
+                  <Zap className="w-6 h-6 lg:w-8 lg:h-8 text-[#ccff00]" fill="currentColor" />
                 </span>
-                <a href="#" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#25D366] border-[3px] border-white text-black px-8 py-4 font-black uppercase tracking-widest text-sm hover:bg-white hover:text-[#25D366] transition-colors shadow-[6px_6px_0_0_#fff] rounded-full text-center">
-                  JOIN WHATSAPP CHANNEL
+              </h3>
+            </div>
+
+            {/* Right: Buttons */}
+            <div className="p-8 md:p-12 flex flex-col justify-center gap-8 w-full lg:w-[400px]">
+              <div className="flex flex-col gap-3">
+                <span className="text-xs font-bold text-black uppercase tracking-widest font-space">GET THE MEET LINK</span>
+                <a 
+                  href="https://whatsapp.com/channel/0029Vb7rrWPA2pLKAUOz4F29" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="flex justify-between items-center bg-[#ccff00] text-black font-bold px-5 py-4 uppercase text-sm border-2 border-transparent hover:border-black transition-all font-space"
+                >
+                  JOIN WHATSAPP CHANNEL <ArrowRight className="w-5 h-5" />
                 </a>
               </div>
-
-              <div className="w-16 h-[2px] bg-white/20"></div>
-
-              {/* Email CTA */}
-              <div className="flex flex-col sm:flex-row items-center gap-4 w-full justify-center">
-                <span className="text-[#9f84db] font-bold tracking-widest uppercase text-sm">
-                  Want to present?
-                </span>
-                <div className="flex items-center gap-3 w-full sm:w-auto">
-                  <a href="mailto:Keralacoderscafe@gmail.com" className="flex-1 sm:flex-none inline-block bg-white border-[3px] border-[#3b429e] text-black px-6 py-3 font-black uppercase tracking-widest text-sm hover:bg-[#3b429e] hover:text-white transition-colors shadow-[4px_4px_0_0_#3b429e] rounded-full text-center">
-                    Contact Admin
-                  </a>
-                  <button
-                    onClick={handleShare}
-                    className="flex-none bg-[#9f84db] text-white border-[3px] border-white p-3 rounded-full hover:bg-white hover:text-[#9f84db] transition-colors shadow-[4px_4px_0_0_#3b429e] relative group"
-                    title="Share Event"
-                  >
-                    <Share2 className="w-5 h-5" strokeWidth={2.5} />
-                    {copied && (
-                      <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] font-bold px-2 py-1 rounded whitespace-nowrap z-50">
-                        Copied!
-                      </span>
-                    )}
-                  </button>
-                </div>
+              <div className="flex flex-col gap-3">
+                <span className="text-xs font-bold text-black uppercase tracking-widest font-space">WANT TO PRESENT?</span>
+                <a 
+                  href="mailto:Keralacoderscafe@gmail.com"
+                  className="flex justify-between items-center bg-black text-white font-bold px-5 py-4 uppercase text-sm border-2 border-transparent hover:border-white hover:bg-[#111] transition-all font-space"
+                >
+                  CONTACT ADMIN <ArrowRight className="w-5 h-5" />
+                </a>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Bottom Section (Always visible) */}
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-8 pt-8 w-full max-w-[1000px] mx-auto z-10">
+          {/* Bottom Grid Layout */}
+          <div className="flex flex-col md:flex-row border-b border-white/20">
+            
+            {/* Left Half (Google Meet & Time) */}
+            <div className="w-full md:w-[45%] flex flex-col border-b md:border-b-0 md:border-r border-white/20">
+              
+              {/* Platform */}
+              <div className="flex items-center gap-6 p-8 border-b border-white/20">
+                <div className="bg-[#7b61ff] p-4 flex items-center justify-center">
+                  <Video className="w-8 h-8 text-black" fill="currentColor" />
+                </div>
+                <div>
+                  <div className="text-[10px] font-space tracking-widest text-white/60 mb-2 font-bold">PLATFORM</div>
+                  <div className="text-2xl md:text-3xl font-bold font-space text-white">GOOGLE MEET</div>
+                </div>
+              </div>
 
-          {/* Left: Graphic */}
-          <div className="flex flex-col items-center lg:items-start relative w-full lg:w-[30%] mt-8 lg:mt-0">
-            <div className="text-center lg:text-left mb-6 lg:ml-12">
-              <p className="text-gray-300 archivo-font text-sm font-medium uppercase tracking-[0.15em] leading-relaxed">
-                CODE, COFFEE &<br />NETWORKING
+              {/* Time */}
+              <div className="flex items-center gap-6 p-8 border-b border-white/20">
+                <div className="bg-[#ccff00] p-4 flex items-center justify-center">
+                  <Clock className="w-8 h-8 text-black" fill="currentColor" />
+                </div>
+                <div>
+                  <div className="text-[10px] font-space tracking-widest text-white/60 mb-2 font-bold">TIME</div>
+                  <div className="text-3xl md:text-4xl font-bold font-space text-white">07:00 PM</div>
+                  <div className="text-[#ccff00] text-sm font-space font-bold mt-2">(GMT +5:30) IST</div>
+                </div>
+              </div>
+
+              {/* Coffee / Conversations */}
+              <div className="flex items-center justify-between p-8">
+                <div className="grid grid-cols-4 gap-4 opacity-30">
+                  {[...Array(16)].map((_, i) => <div key={i} className="w-1.5 h-1.5 bg-white rounded-full"></div>)}
+                </div>
+                <div className="flex items-center gap-5">
+                  <div className="font-archivo font-bold text-[#ccff00] uppercase text-right leading-snug tracking-wide text-sm md:text-base">
+                    <div>CODE.</div>
+                    <div>COFFEE.</div>
+                    <div>CONVERSATIONS.</div>
+                  </div>
+                  <Coffee className="w-10 h-10 md:w-12 md:h-12 text-[#ccff00] coffee-vapour" strokeWidth={1.5} />
+                </div>
+              </div>
+
+            </div>
+
+            {/* Right Half (Agenda) */}
+            <div className="w-full md:w-[55%] flex bg-[#e5e5e5] text-black">
+              
+              <div className="flex-1 flex flex-col">
+                {/* Agenda Header */}
+                <div className="flex justify-between items-center border-b border-black/10">
+                  <div className="p-6 md:p-8 font-archivo font-black text-2xl uppercase tracking-widest">AGENDA</div>
+                  <div className="p-6 md:p-8 bg-[#7b61ff] border-l border-black/10 flex items-center justify-center">
+                    <ArrowDown className="w-6 h-6 text-black" />
+                  </div>
+                </div>
+                
+                {/* Agenda List */}
+                <div className="p-6 md:p-10 flex flex-col gap-2 font-space text-sm">
+                  {[
+                    { time: "07:00 PM", desc: "Welcome & Introductions" },
+                    { time: "07:15 PM", desc: "Project Round - Quick Pitches" },
+                    { time: "07:45 PM", desc: "Open Discussion & Feedback" },
+                    { time: "08:15 PM", desc: "Networking & Q&A" },
+                    { time: "08:45 PM", desc: "Announcements & Wrap-up" }
+                  ].map((item, i) => (
+                    <div key={i} className="flex flex-col">
+                      <div className="flex items-center gap-6 py-4">
+                        <span className="text-[#7b61ff] font-bold w-20 flex-shrink-0">{item.time}</span>
+                        <div className="w-3 h-3 bg-[#7b61ff] flex-shrink-0"></div>
+                        <span className="text-black font-bold opacity-80">{item.desc}</span>
+                      </div>
+                      {i !== 4 && <div className="w-full border-b border-black/15 border-dashed"></div>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Vertical Yellow Strip */}
+              <div className="w-12 md:w-16 bg-[#ccff00] border-l border-black/10 flex flex-col items-center justify-between py-6">
+                <div className="writing-vertical font-archivo font-black text-black tracking-widest uppercase rotate-180 flex-1 flex items-center justify-center text-sm md:text-base">
+                  LET'S GROW TOGETHER
+                </div>
+                <ArrowDown className="w-6 h-6 text-black mt-6" />
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* Footer Ribbon */}
+          <div className="flex items-stretch w-full">
+            <div className="p-6 bg-[#7b61ff] flex items-center justify-center border-r border-white/20">
+              <Globe className="w-6 h-6 text-black" />
+            </div>
+            
+            <div className="p-6 flex-1 flex items-center justify-center text-center">
+              <p className="font-space text-xs md:text-sm font-bold tracking-widest uppercase text-white/90">
+                LET'S CONNECT, LEARN & BUILD AMAZING THINGS TOGETHER!
               </p>
             </div>
-
-            <div className="relative w-48 h-48 flex items-center justify-center lg:ml-8">
-              {/* Starburst */}
-              <div className="absolute inset-0 starburst transform rotate-12 scale-[1.3] backface-hidden transform-gpu opacity-90"></div>
-
-              {/* Mic outline */}
-              <div className="relative z-10 w-[70px] h-[110px] border-[3px] border-white rounded-full flex flex-col items-center justify-center bg-[#9f84db] -mt-16">
-                <Mic className="text-white w-10 h-10" strokeWidth={2} />
-              </div>
-
-              {/* Mic stand line */}
-              <div className="absolute z-0 w-[3px] h-12 bg-white top-[70px]"></div>
-
-              {/* Platform oval */}
-              <div className="absolute top-[100px] w-24 h-8 border-[2px] border-[#9f84db] rounded-[100%] bg-transparent z-10"></div>
-
-              {/* Date oval */}
-              <div className="absolute -bottom-4 -left-6 w-36 h-16 border-[2px] border-white rounded-[100%] bg-[#101012] flex items-center justify-center rotate-[-15deg] backface-hidden transform-gpu z-20">
-                <span className="pixel-font text-white text-3xl tracking-widest">THIS SUN</span>
-              </div>
-            </div>
+            
+            <button 
+              onClick={handleShare}
+              className="p-6 bg-[#7b61ff] flex items-center justify-center border-l border-white/20 hover:bg-[#684be6] transition-colors cursor-pointer"
+              title={copied ? "Copied!" : "Share Event"}
+            >
+              <ArrowUpRight className="w-6 h-6 text-black" />
+            </button>
           </div>
 
-          {/* Middle: SHOW (MEETUP) text */}
-          <div className="flex items-center gap-4 lg:gap-6 w-full lg:w-[40%] justify-center mt-4 lg:mt-0 lg:-ml-12">
-            <div className="flex flex-col text-white opacity-60 font-medium text-xl leading-none font-sans tracking-widest text-right">
-              <span>07</span>
-              <span>PM</span>
-            </div>
-            <h2 className="pixel-font text-white text-[80px] sm:text-[110px] lg:text-[140px] leading-none tracking-tight">
-              GOOGLE MEET
-
-            </h2>
-          </div>
-
-          {/* Right: Blue Ticket */}
-          <div className="w-full lg:w-[35%] flex justify-center lg:justify-end">
-            <div className="bg-[#3b429e] rounded-3xl p-6 md:p-8 relative w-full max-w-[360px] text-white rotate-[2deg] backface-hidden transform-gpu shadow-xl">
-              {/* Corner holes */}
-              <div className="absolute top-4 left-4 w-4 h-4 bg-[#101012] rounded-full"></div>
-              <div className="absolute top-4 right-4 w-4 h-4 bg-[#101012] rounded-full"></div>
-
-              <h4 className="text-center font-bold uppercase tracking-widest text-sm mb-6 mt-4 opacity-90 font-sans border-b border-white/20 pb-4">
-                PRESENTATION AGENDA:
-              </h4>
-
-              <div className="space-y-3 text-[10px] md:text-xs font-medium tracking-wide font-sans">
-                <div className="flex gap-3 border-b border-white/10 pb-2">
-                  <span className="opacity-70 font-bold">01.</span>
-                  <p><strong className="text-white">Introduction</strong> – Introduce yourself and your project.</p>
-                </div>
-                <div className="flex gap-3 border-b border-white/10 pb-2">
-                  <span className="opacity-70 font-bold">02.</span>
-                  <p><strong className="text-white">Project Overview</strong> – Explain what it is and why you built it.</p>
-                </div>
-                <div className="flex gap-3 border-b border-white/10 pb-2">
-                  <span className="opacity-70 font-bold">03.</span>
-                  <p><strong className="text-white">Features</strong> – Highlight the main features of your project.</p>
-                </div>
-                <div className="flex gap-3 border-b border-white/10 pb-2">
-                  <span className="opacity-70 font-bold">04.</span>
-                  <p><strong className="text-white">Tech Stack</strong> – Mention the technologies/tools you used.</p>
-                </div>
-                <div className="flex gap-3 border-b border-white/10 pb-2">
-                  <span className="opacity-70 font-bold">05.</span>
-                  <p><strong className="text-white">Live Demo</strong> – Show how the project works.</p>
-                </div>
-                <div className="flex gap-3 border-b border-white/10 pb-2">
-                  <span className="opacity-70 font-bold">06.</span>
-                  <p><strong className="text-white">Challenges</strong> – Share main challenges & what you learned.</p>
-                </div>
-                <div className="flex gap-3 border-b border-white/10 pb-2">
-                  <span className="opacity-70 font-bold">07.</span>
-                  <p><strong className="text-white">Future Plans</strong> – Explain what you plan to improve or add.</p>
-                </div>
-                <div className="flex gap-3 pb-1">
-                  <span className="opacity-70 font-bold">08.</span>
-                  <p><strong className="text-white">Q&A</strong> – Answer questions from the participants.</p>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-
       </div>
-
     </section>
   );
 }

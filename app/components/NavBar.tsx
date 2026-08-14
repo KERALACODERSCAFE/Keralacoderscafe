@@ -91,7 +91,7 @@ export default function NavBar() {
 
   useEffect(() => {
     if (pathname) {
-      if (pathname.startsWith("/blog") || pathname.startsWith("/teams")) {
+      if (pathname.startsWith("/blog") || pathname.startsWith("/teams") || pathname.startsWith("/events")) {
         document.documentElement.classList.add("dark");
       } else {
         document.documentElement.classList.remove("dark");
@@ -125,7 +125,7 @@ export default function NavBar() {
     }, 1200);
   };
 
-  const isDarkNav = pathname?.startsWith("/blog") || pathname?.startsWith("/teams");
+  const isDarkNav = pathname?.startsWith("/blog") || pathname?.startsWith("/teams") || pathname?.startsWith("/events");
 
   return (
     <div
