@@ -136,7 +136,7 @@ export default function Events({ isDetailsPage = false }: EventsProps) {
               <Calendar className="w-7 h-7 text-black" strokeWidth={2.5} />
             </div>
             <div className="px-6 py-3 flex items-center justify-center">
-              <span className="text-[#ccff00] font-bold text-lg md:text-xl uppercase tracking-widest">AUGUST 16, 2026</span>
+              <span className="text-[#ccff00] font-bold text-lg md:text-xl uppercase tracking-widest">COMING SOON</span>
             </div>
           </div>
         </div>
@@ -284,8 +284,8 @@ export default function Events({ isDetailsPage = false }: EventsProps) {
                 </div>
                 <div>
                   <div className="text-[10px] font-space tracking-widest text-white/60 mb-2 font-bold">TIME</div>
-                  <div className="text-3xl md:text-4xl font-bold font-space text-white">07:00 PM</div>
-                  <div className="text-[#ccff00] text-sm font-space font-bold mt-2">(GMT +5:30) IST</div>
+                  <div className="text-3xl md:text-4xl font-bold font-space text-white">COMING SOON</div>
+                  <div className="text-[#ccff00] text-sm font-space font-bold mt-2">TBA</div>
                 </div>
               </div>
 
