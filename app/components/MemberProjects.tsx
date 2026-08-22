@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ExternalLink, TrendingUp, Sparkles, Plus } from "lucide-react";
@@ -56,9 +56,27 @@ export default function MemberProjects({ initialVotes, initialVotedProjects = []
     )
     .slice(0, 7);
 
-  const featuredProjects = [...memberProjectsData]
-    .filter(p => (p as any).isFeatured)
-    .sort((a, b) => (votesMap[b.id] || 0) - (votesMap[a.id] || 0));
+  const featuredProjects = useMemo(() => {
+    const d = new Date();
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    const weekNo = Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+    const seed = d.getUTCFullYear() * 100 + weekNo;
+
+    let value = seed;
+    const prng = () => {
+      value = (value * 9301 + 49297) % 233280;
+      return value / 233280;
+    };
+
+    const shuffled = [...memberProjectsData];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(prng() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    
+    return shuffled.slice(0, 2).sort((a, b) => (votesMap[b.id] || 0) - (votesMap[a.id] || 0));
+  }, [votesMap]);
 
   return (
     <section id="community-projects" className="scroll-mt-24 px-6 py-28 md:px-12 bg-[#FDFBF7] border-t-[3px] border-black relative overflow-hidden">
