@@ -86,6 +86,32 @@ export default function Events({ isDetailsPage = false }: EventsProps) {
         .flash-sunday {
           animation: sunday-flash 3s infinite;
         }
+
+        #snake-pattern path { stroke: #7b61ff; stroke-width: 1px; }
+        .snake-group { stroke: #000; }
+        .snake {
+          stroke-dasharray: 32 224;
+          stroke-dashoffset: 256;
+          animation: stroke-anim 4s steps(32) infinite;
+        }
+        @keyframes stroke-anim {
+          to { stroke-dashoffset: 0; }
+        }
+        .snake-dot { animation: dot1 4s steps(1) infinite; }
+        @keyframes dot1 { 
+          0%, 26%, 91.1% { opacity: 1; }
+          26.1%, 91% { opacity: 0; }
+        }
+        .dot-2 { animation-name: dot2; }
+        @keyframes dot2 { 
+          0%, 26%, 51%, 100% { opacity: 0; }
+          26.1%, 50% { opacity: 1; }
+        }
+        .dot-3 { animation-name: dot3; }
+        @keyframes dot3 { 
+          0%, 50%, 92%, 100% { opacity: 0; }
+          50.1%, 92% { opacity: 1; }
+        }
       `}</style>
 
       {/* Background Grid */}
@@ -220,7 +246,20 @@ export default function Events({ isDetailsPage = false }: EventsProps) {
             
             {/* Left: Giant Asterisk */}
             <div className="hidden md:flex p-10 items-center justify-center border-r border-black/20">
-              <div className="text-[180px] leading-none text-black font-black font-archivo translate-y-[20px]">*</div>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 64 84" shapeRendering="crispEdges" className="w-[120px] h-[120px] lg:w-[150px] lg:h-[150px]">
+                <defs>
+                  <pattern id="snake-pattern" width="8" height="8" patternUnits="userSpaceOnUse" x="-4" y="-4">
+                    <path d="M 0 0 L8 0 8 8 0 8 z" fill="none"></path>
+                  </pattern>
+                </defs>
+                <g className="snake-group" strokeLinejoin="miter" strokeLinecap="square" strokeWidth="8" fill="none">
+                  <path className="snake-dot dot-1" d="M28,48 l8,0z" />
+                  <path className="snake-dot dot-2" d="M-4,48 l8,0z" />
+                  <path className="snake-dot dot-3" d="M4,16 l8,0z" />
+                  <path className="snake" d="M0 16 h48 v16 H32 v32 H0 V48 h16 V0 H0 v16"/>
+                </g>
+                <rect x="-4.5" y="-4.5" width="57" height="73" fill="url(#snake-pattern)"></rect>
+              </svg>
             </div>
             
             {/* Middle: Text */}
