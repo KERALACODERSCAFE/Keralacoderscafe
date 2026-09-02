@@ -433,9 +433,23 @@ export default function CodeCurtain() {
 
     let rafID: number;
     let lastTime = 0;
+    let isVisible = true;
+    
+    const observer = new IntersectionObserver((entries) => {
+      isVisible = entries[0].isIntersecting;
+    });
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
     
     const runloop = (time: number) => {
       rafID = requestAnimationFrame(runloop);
+      
+      // Pause animation if not in viewport to prevent scroll lag
+      if (!isVisible) {
+        lastTime = 0; 
+        return;
+      }
       
       const delta = lastTime === 0 ? 16 : (time - lastTime);
       lastTime = time;
@@ -464,6 +478,7 @@ export default function CodeCurtain() {
       cancelAnimationFrame(rafID);
       input.unbind();
       resizeObserver.disconnect();
+      observer.disconnect();
       if (c && containerRef.current?.contains(c)) {
         containerRef.current.removeChild(c);
       }
