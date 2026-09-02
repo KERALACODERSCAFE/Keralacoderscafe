@@ -293,17 +293,7 @@ const PageLoader: React.FC = () => {
                   fill: #d95715; 
                   animation: writeCafeLoader 3s ease-in-out forwards;
                 }
-                .text-chilanka {
-                  font-family: 'Chilanka', cursive;
-                  font-weight: 400;
-                  font-size: 32px;
-                  fill: #FFF;
-                  opacity: 0.9;
-                  letter-spacing: 2px;
-                  animation: writeCafeLoader 3s ease-in-out forwards;
-                  animation-delay: 0.5s;
-                  opacity: 0;
-                }
+
                 @keyframes writeCafeLoader {
                   0%, 10% { clip-path: inset(-20% 120% -20% -20%); opacity: 0; }
                   15% { opacity: 1; }
@@ -316,12 +306,6 @@ const PageLoader: React.FC = () => {
               <text x="10" y="100" className="text-kerala">KERALA</text>
               <text x="15" y="195" className="text-coders">CODERS</text>
               <text x="450" y="195" className="text-cafe" transform="rotate(-8, 450, 195)">Cafe</text>
-              <text x="15" y="240" className="text-chilanka">Happy Onam Guys</text>
-            </g>
-            <g transform="translate(680, 20)">
-              {['#FCCC12', '#FF7112', '#EF1541', '#6E55DC', '#069DE0', '#05AC3F'].map((c, i) => (
-                <circle key={i} cy={i * 32} r={12} fill={c} className="animate-pulse" style={{ animationDelay: `${i * 0.1}s` }} />
-              ))}
             </g>
           </svg>
         </div>

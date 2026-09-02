@@ -4,8 +4,9 @@ import Link from "next/link";
 import { ArrowUpRight, Github, MessageCircle } from "lucide-react";
 import ColourfulText from "./ColourfulText";
 import { heroMalayalam } from "../../lib/fonts";
-import FlowerGenerator from "./FlowerGenerator";
+
 import ScrambleText from "./ScrambleText";
+import CodeCurtain from "./CodeCurtain";
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import Script from "next/script";
 
@@ -84,7 +85,7 @@ export default function Hero() {
       .catch((err) => console.error("Failed to fetch GitHub contributors:", err));
   }, []);
 
-  const memoizedFlower = useMemo(() => <FlowerGenerator />, []);
+
   const memoizedDoodle = useMemo(() => React.createElement("css-doodle", {
     dangerouslySetInnerHTML: {
       __html: `
@@ -162,17 +163,14 @@ export default function Hero() {
                 Built in Kerala • Powered by curiosity
               </div>
 
-              <h1 className="mt-2 max-w-[850px] text-[clamp(3.5rem,10vw,7.5rem)] font-black leading-[0.88] tracking-[-0.05em] text-black uppercase">
+              <h1 className="relative z-30 mt-2 max-w-[850px] text-[clamp(3.5rem,10vw,7.5rem)] font-black leading-[0.88] tracking-[-0.05em] text-black uppercase pointer-events-none">
                 <ColourfulText
                   text="കേരള"
                   lang="ml"
                   className={`${heroMalayalam.className} inline-block text-[0.98em] font-extrabold tracking-[-0.045em]`}
                 />{" "}
                 <br className="hidden sm:block" />
-                <span className="relative inline-block">
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150px] h-[150px] sm:w-[350px] sm:h-[350px] -z-10 opacity-70 pointer-events-auto hidden sm:block">
-                    {!isMobile && memoizedFlower}
-                  </div>
+                <span className="relative inline-block pointer-events-auto">
                   <span className="relative z-10">Coders</span>
                 </span>
                 <span className="ml-2 bg-kcc-gold px-4 py-2 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] sm:ml-4 inline-block -rotate-2 transition-transform duration-200 hover:rotate-2 hover:scale-105 cursor-default">
@@ -181,12 +179,10 @@ export default function Hero() {
               </h1>
 
               <div className="relative mt-16 max-w-[640px] border-4 border-black p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] bg-[#475d50] overflow-hidden rounded-md">
-                {/* CSS Doodle background inside description box */}
-                {!isMobile && (
-                  <div className="absolute inset-0 opacity-45 pointer-events-none z-0 flex items-center justify-center scale-150">
-                    {memoizedDoodle}
-                  </div>
-                )}
+                {/* Code Curtain background inside description box */}
+                <div className="absolute inset-0 opacity-80 pointer-events-auto z-0 flex items-center justify-center">
+                  <CodeCurtain />
+                </div>
                 <p
                   className="relative z-10 text-[1.2rem] font-black leading-relaxed text-white sm:text-[1.35rem]"
                 >
