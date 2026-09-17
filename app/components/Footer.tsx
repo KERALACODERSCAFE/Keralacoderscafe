@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Github, MessageCircle, Mail, Twitter, Coffee, Copy, Check, X, ExternalLink } from "lucide-react";
+import { Github, MessageCircle, MessageSquare, Mail, Twitter, Coffee, Copy, Check, X, ExternalLink } from "lucide-react";
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { useLenis } from "lenis/react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -24,7 +24,7 @@ const communityLinks = [
 
 const resourcesLinks = [
   { label: "GitHub", href: "https://github.com/KERALACODERSCAFE/Keralacoderscafe" },
-  { label: "Contact Us", href: "/contact" },
+  { label: "Contact Us", href: `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "9544552818"}` },
   { label: "Privacy Policy", href: "/privacy" },
   { label: "Terms of Service", href: "/terms" },
   { label: "Freelance Enquiries", href: "mailto:keralacoderscafe@gmail.com?subject=Freelance%20Enquiry", highlight: true },
@@ -114,6 +114,10 @@ export default function Footer() {
                 <Link href="/join"
                   className="flex items-center justify-center w-10 h-10 rounded-full bg-[#F5A524] text-black hover:scale-110 transition-transform" aria-label="WhatsApp Community">
                   <MessageCircle className="w-5 h-5 fill-black" />
+                </Link>
+                <Link href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "9544552818"}`} target="_blank" rel="noopener"
+                  className="flex items-center justify-center w-10 h-10 rounded-full bg-[#25D366] text-white hover:scale-110 transition-transform" aria-label="WhatsApp Contact">
+                  <MessageSquare className="w-5 h-5 fill-current" />
                 </Link>
                 <Link href="mailto:keralacoderscafe@gmail.com"
                   className="flex items-center justify-center w-10 h-10 rounded-full bg-[#F5A524] text-black hover:scale-110 transition-transform" aria-label="Email">

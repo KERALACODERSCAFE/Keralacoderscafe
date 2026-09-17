@@ -222,9 +222,10 @@ export default function Teams({ initialVotes = 0 }: { initialVotes?: number }) {
                 </Link>
               </div>
 
-              <Link href="https://github.com/KERALACODERSCAFE" target="_blank" className="flex-1 min-w-[140px] bg-[#C0FF00] text-black rounded-lg flex items-center justify-center gap-2 px-4 py-3 font-black uppercase tracking-wider text-[10px] hover:brightness-110 transition-all">
-                <span>View Contributions</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
+
+              <Link href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "9544552818"}`} target="_blank" className="flex-1 min-w-[140px] bg-[#25D366] text-white rounded-lg flex items-center justify-center gap-2 px-4 py-3 font-black uppercase tracking-wider text-[10px] hover:brightness-110 transition-all">
+                <MessageSquare className="w-3.5 h-3.5" />
+                <span>Msg Me</span>
               </Link>
               
               <Link href="mailto:keralacoderscafe@gmail.com" className="flex-1 min-w-[140px] bg-transparent border border-white/20 rounded-lg text-white flex items-center justify-center gap-2 px-4 py-3 font-black uppercase tracking-wider text-[10px] hover:bg-white/5 transition-all">

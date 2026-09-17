@@ -406,36 +406,6 @@ export const memberProjectsData = [
     email: "Nospam@gmail.com"
   },
   {
-    id: 31,
-    name: "Fadhi Zaman P T",
-    author: "Fadhi Zaman P T",
-    description: "Portfolio Showcasing My Work",
-    stats: { stars: 0, forks: 0 },
-    category: "Portfolios",
-    icon: Briefcase,
-    animationClass: "group-hover:animate-icon-swing",
-    windowColor: "bg-[#2196F3]",
-    pillColor: "bg-[#FF5722]",
-    link: "https://fadhizamanpt.vercel.app/",
-    github: "https://github.com/fadhizamanpt",
-    email: "fadhizamantsy@gmail.com"
-  },
-  {
-    id: 32,
-    name: "Shelfy",
-    author: "Fadhi Zaman P T",
-    description: "Online library management system to manage books, members, and borrowings, with AI powered search and summaries.",
-    stats: { stars: 0, forks: 0 },
-    category: "SaaS",
-    icon: Cloud,
-    animationClass: "group-hover:animate-icon-float",
-    windowColor: "bg-[#009688]",
-    pillColor: "bg-[#FF5722]",
-    link: "https://shelfylibrary.vercel.app/",
-    github: "https://github.com/fadhizamanpt",
-    email: "fadhizamantsy@gmail.com"
-  },
-  {
     id: 33,
     name: "anatomyof-k8s",
     author: "Anas Kadambalath",
