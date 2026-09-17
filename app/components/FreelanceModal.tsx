@@ -7,6 +7,9 @@ import Link from "next/link";
 
 export default function FreelanceModal() {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedType, setSelectedType] = useState<string>("Web Development");
+
+  const workTypes = ["Web Development", "Mobile App", "UI/UX Design", "Consultation", "Other"];
 
   useEffect(() => {
     // Show modal if it hasn't been closed in this session yet
@@ -89,13 +92,33 @@ export default function FreelanceModal() {
                 </p>
               </div>
 
-              <p className="text-sm font-medium text-zinc-400 mb-6 leading-relaxed text-center px-1">
+              <p className="text-sm font-medium text-zinc-400 mb-5 leading-relaxed text-center px-1">
                 Looking for a developer? I'm currently taking on new projects. Let's talk about how I can help bring your ideas to life.
               </p>
 
+              {/* Work Type Selection */}
+              <div className="mb-6">
+                <p className="text-[9px] font-black uppercase tracking-[0.15em] text-zinc-500 mb-3 text-center">What do you need help with?</p>
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {workTypes.map(type => (
+                    <button
+                      key={type}
+                      onClick={() => setSelectedType(type)}
+                      className={`px-3 py-1.5 rounded-full text-[10px] font-bold tracking-wider transition-all ${
+                        selectedType === type
+                          ? "bg-[#00D9C0] text-black shadow-[0_0_10px_rgba(0,217,192,0.3)]"
+                          : "bg-white/5 text-zinc-400 border border-white/10 hover:bg-white/10 hover:text-white"
+                      }`}
+                    >
+                      {type}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div className="flex flex-col gap-3">
                 <Link
-                  href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "9544552818"}`}
+                  href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "9544552818"}?text=${encodeURIComponent(`Hi Akhil, I'm reaching out from Kerala Coders Cafe. I need freelance help with: ${selectedType}`)}`}
                   target="_blank"
                   onClick={handleClose}
                   className="flex items-center justify-center gap-2 w-full py-3.5 rounded-lg font-black uppercase tracking-wider text-[11px] text-white transition-all hover:brightness-110"
