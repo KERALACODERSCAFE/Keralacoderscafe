@@ -133,6 +133,7 @@ import SessionProviderWrapper from "./components/SessionProviderWrapper";
 import GoogleOneTap from "./components/GoogleOneTap";
 import Script from "next/script";
 import { Suspense } from "react";
+import FreelanceModal from "./components/FreelanceModal";
 
 export default function RootLayout({
   children,
@@ -229,6 +230,7 @@ export default function RootLayout({
           <Suspense fallback={null}>
             <PageLoader />
           </Suspense>
+          <FreelanceModal />
           <NavBar />
           <SmoothScroll>
             {children}
