@@ -155,7 +155,7 @@ export default function Hero() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-full w-full bg-[radial-gradient(#000_1.5px,transparent_1.5px)] [background-size:32px_32px] opacity-10 -z-10" />
 
       <div className="mx-auto max-w-[1280px] relative z-10">
-        <div className="grid items-center gap-24 lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)]">
+        <div className="grid items-start gap-24 lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)]">
           <div className="max-w-[750px]">
             <div className="mt-10 animate-fade-in-up delay-100">
 
