@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -30,19 +30,7 @@ export default function FreelanceModal() {
     { label: "Other", icon: Sparkles },
   ];
 
-  useEffect(() => {
-    // Show modal if it hasn't been closed in this session yet
-    const hasSeenModal = sessionStorage.getItem("kcc_freelance_modal_seen");
-
-    if (!hasSeenModal) {
-      // Delay showing the modal for 3 seconds so it's not too aggressive
-      const timer = setTimeout(() => {
-        setIsOpen(true);
-      }, 3000);
-
-      return () => clearTimeout(timer);
-    }
-  }, []);
+  // Auto-open logic disabled
 
   const handleClose = () => {
     setIsOpen(false);
@@ -139,16 +127,14 @@ export default function FreelanceModal() {
                           key={item.label}
                           type="button"
                           onClick={() => setSelectedType(item.label)}
-                          className={`flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-colors cursor-pointer ${
-                            isSelected
-                              ? "border-2 border-amber-400 bg-amber-400/10 text-amber-300"
-                              : "border border-dashed border-zinc-600 bg-zinc-800/60 text-zinc-200 hover:border-zinc-400 hover:bg-zinc-800 hover:text-white"
-                          }`}
+                          className={`flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-colors cursor-pointer ${isSelected
+                            ? "border-2 border-amber-400 bg-amber-400/10 text-amber-300"
+                            : "border border-dashed border-zinc-600 bg-zinc-800/60 text-zinc-200 hover:border-zinc-400 hover:bg-zinc-800 hover:text-white"
+                            }`}
                         >
                           <Icon
-                            className={`w-4 h-4 shrink-0 ${
-                              isSelected ? "text-amber-400" : "text-zinc-400"
-                            }`}
+                            className={`w-4 h-4 shrink-0 ${isSelected ? "text-amber-400" : "text-zinc-400"
+                              }`}
                           />
                           <span>{item.label}</span>
                           {isSelected && (
@@ -184,13 +170,12 @@ export default function FreelanceModal() {
                 {/* Primary Action Button: Simple, Solid WhatsApp Green, NO Glow */}
                 <div className="mb-4">
                   <Link
-                    href={`https://wa.me/${
-                      process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "9544552818"
-                    }?text=${encodeURIComponent(
-                      description.trim()
-                        ? `Hi Akhil, I'm reaching out from Kerala Coders Cafe. I'm interested in discussing a project for: ${selectedType}.\n\nProject details: ${description.trim()}`
-                        : `Hi Akhil, I'm reaching out from Kerala Coders Cafe. I'm interested in discussing a project for: ${selectedType}.`
-                    )}`}
+                    href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "9544552818"
+                      }?text=${encodeURIComponent(
+                        description.trim()
+                          ? `Hi Akhil, I'm reaching out from Kerala Coders Cafe. I'm interested in discussing a project for: ${selectedType}.\n\nProject details: ${description.trim()}`
+                          : `Hi Akhil, I'm reaching out from Kerala Coders Cafe. I'm interested in discussing a project for: ${selectedType}.`
+                      )}`}
                     target="_blank"
                     onClick={handleClose}
                     className="flex items-center justify-between w-full py-3.5 px-6 rounded-xl font-semibold text-sm sm:text-base text-white bg-[#25D366] hover:bg-[#20ba5a] transition-colors cursor-pointer shadow-sm"
