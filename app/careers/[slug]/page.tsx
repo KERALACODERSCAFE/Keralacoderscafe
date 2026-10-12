@@ -386,58 +386,104 @@ export default async function CareerDetailPage({ params }: PageProps) {
 
             <style dangerouslySetInnerHTML={{
               __html: `
-              .prose-custom p,
-              .prose-custom span,
-              .prose-custom div,
+              .prose-custom {
+                color: #334155;
+              }
               .prose-custom h1,
               .prose-custom h2,
               .prose-custom h3,
               .prose-custom h4,
               .prose-custom h5,
               .prose-custom h6 {
-                color: #475569 !important;
+                color: #0f172a !important;
+                font-weight: 800;
+                letter-spacing: -0.015em;
+                margin-top: 1.25rem;
+                margin-bottom: 0.35rem;
+                line-height: 1.35;
               }
+              .prose-custom h1:first-child,
+              .prose-custom h2:first-child,
+              .prose-custom h3:first-child,
+              .prose-custom h4:first-child,
+              .prose-custom h5:first-child,
+              .prose-custom h6:first-child {
+                margin-top: 0;
+              }
+              .prose-custom h1 { font-size: 1.35rem; }
+              .prose-custom h2 { font-size: 1.2rem; }
+              .prose-custom h3 { font-size: 1.05rem; }
+              .prose-custom h4 { font-size: 0.95rem; }
+
               .prose-custom p {
-                margin-bottom: 1.25rem;
+                margin-top: 0;
+                margin-bottom: 0.75rem;
                 font-weight: 500;
                 line-height: 1.6;
+                color: #475569 !important;
               }
+              .prose-custom p:empty,
+              .prose-custom p:has(> br:only-child) {
+                display: none;
+              }
+
               .prose-custom strong,
               .prose-custom b {
-                font-weight: 800;
+                font-weight: 750;
                 color: #0f172a !important;
-                display: inline-block;
-                margin-top: 1.5rem;
-                margin-bottom: 0.75rem;
-                font-size: 1.1rem;
+                display: inline;
+                margin: 0;
+                padding: 0;
+                font-size: inherit;
+                line-height: inherit;
+                vertical-align: baseline;
               }
+
               .prose-custom ul {
                 list-style: none;
                 padding-left: 0;
-                margin-bottom: 1.5rem;
+                margin-top: 0.35rem;
+                margin-bottom: 0.85rem;
               }
+              .prose-custom ol {
+                padding-left: 1.25rem;
+                margin-top: 0.35rem;
+                margin-bottom: 0.85rem;
+              }
+
               .prose-custom li {
-                display: flex;
-                align-items: flex-start;
-                gap: 0.5rem;
+                position: relative;
+                padding-left: 1.4rem;
                 font-weight: 500;
                 color: #475569 !important;
                 line-height: 1.6;
-                margin-bottom: 0.75rem;
+                margin-bottom: 0.35rem;
+                display: block;
               }
+              .prose-custom li::before {
+                content: "✓";
+                position: absolute;
+                left: 0;
+                top: 0;
+                color: #0D9488 !important; /* teal-600 */
+                font-weight: 900;
+                font-size: 0.95rem;
+                line-height: 1.6;
+              }
+              .prose-custom ol > li {
+                padding-left: 0.25rem;
+              }
+              .prose-custom ol > li::before {
+                content: none;
+              }
+
               .prose-custom li p,
               .prose-custom li div {
                 display: inline;
                 margin: 0;
+                padding: 0;
               }
-              .prose-custom li::before {
-                content: "✓";
-                color: #0D9488 !important; /* teal-600 */
-                font-weight: 900;
-                font-size: 1.1rem;
-                line-height: 1.4;
-                flex-shrink: 0;
-              }
+
               .prose-custom a {
                 color: #00B9A5 !important;
                 text-decoration: underline;
