@@ -189,9 +189,21 @@ export default function CareersClient({ initialJobs }: CareersClientProps) {
     setCurrentPage(1);
   }, [searchQuery, selectedCompanies, selectedWorkplaceTypes, selectedJobTypes, selectedFunctions]);
 
-  // Filter Logic - keep all jobs visible (no deletion/filtering of older postings)
-  const filteredJobs = initialJobs.filter((job) => {
+  // Only show jobs posted within the last 30 days
+  const activeJobs = initialJobs.filter((job) => {
+    try {
+      const postDate = new Date(job.posted_at);
+      const now = new Date();
+      const diffTime = now.getTime() - postDate.getTime();
+      const diffDays = diffTime / (1000 * 60 * 60 * 24);
+      return diffDays <= 30 && diffDays >= 0;
+    } catch {
+      return false;
+    }
+  });
 
+  // Filter Logic on active 30-day jobs
+  const filteredJobs = activeJobs.filter((job) => {
     const matchesSearch =
       job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       job.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -287,21 +299,21 @@ export default function CareersClient({ initialJobs }: CareersClientProps) {
   );
 
 
-  // Helper counts
+  // Helper counts (based on active 30-day jobs)
   const getCountForCompany = (company: string) => {
-    return initialJobs.filter(j => j.company === company).length;
+    return activeJobs.filter(j => j.company === company).length;
   };
 
   const getCountForWorkplace = (type: string) => {
-    return initialJobs.filter(j => j.location_type.toLowerCase() === type.toLowerCase()).length;
+    return activeJobs.filter(j => j.location_type.toLowerCase() === type.toLowerCase()).length;
   };
 
   const getCountForFunction = (func: string) => {
-    return initialJobs.filter(j => getJobFunction(j) === func).length;
+    return activeJobs.filter(j => getJobFunction(j) === func).length;
   };
 
   const getCountForJobType = (type: string) => {
-    return initialJobs.filter(j => j.job_type.toLowerCase() === type.toLowerCase()).length;
+    return activeJobs.filter(j => j.job_type.toLowerCase() === type.toLowerCase()).length;
   };
 
   return (
@@ -491,7 +503,7 @@ export default function CareersClient({ initialJobs }: CareersClientProps) {
               <div className="mb-6">
                 <h3 className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3">Company</h3>
                 <div className="flex flex-col gap-2 max-h-[160px] overflow-y-auto pr-1">
-                  {Array.from(new Set(initialJobs.map(j => j.company))).map((company) => (
+                  {Array.from(new Set(activeJobs.map(j => j.company))).map((company) => (
                     <label key={company} className="flex items-center gap-2.5 cursor-pointer text-xs font-semibold text-slate-600 hover:text-slate-950">
                       <input
                         type="checkbox"
