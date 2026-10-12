@@ -189,21 +189,8 @@ export default function CareersClient({ initialJobs }: CareersClientProps) {
     setCurrentPage(1);
   }, [searchQuery, selectedCompanies, selectedWorkplaceTypes, selectedJobTypes, selectedFunctions]);
 
-  // Filter Logic
+  // Filter Logic - keep all jobs visible (no deletion/filtering of older postings)
   const filteredJobs = initialJobs.filter((job) => {
-    // Only show jobs from the last 15 days
-    try {
-      const postDate = new Date(job.posted_at);
-      const now = new Date();
-      // Calculate difference in days
-      const diffTime = now.getTime() - postDate.getTime();
-      const diffDays = diffTime / (1000 * 60 * 60 * 24);
-      if (diffDays > 30) {
-        return false;
-      }
-    } catch {
-      return false;
-    }
 
     const matchesSearch =
       job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||

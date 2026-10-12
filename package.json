@@ -6,7 +6,9 @@
     "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "revalidate": "node scripts/revalidate.mjs",
+    "revalidate:prod": "node scripts/revalidate.mjs --prod"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
