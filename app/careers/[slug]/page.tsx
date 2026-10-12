@@ -4,6 +4,7 @@ import Link from "next/link";
 export const dynamicParams = true;
 import {
   ArrowLeft,
+  ArrowRight,
   MapPin,
   Briefcase,
   Building2,
@@ -12,7 +13,8 @@ import {
   ExternalLink,
   Award,
   FileText,
-  Send
+  Send,
+  Sparkles
 } from "lucide-react";
 import NavBar from "../../components/NavBar";
 import Footer from "../../components/Footer";
@@ -31,6 +33,20 @@ interface JobDetail {
   link: string;
   experience: string;
   description: string;
+  tags?: string[];
+  posted_at?: string;
+}
+
+interface SimilarJob {
+  slug: string;
+  title: string;
+  company: string;
+  logo: string;
+  location: string;
+  location_type: string;
+  job_type: string;
+  salary: string;
+  tags?: string[];
   posted_at?: string;
 }
 
@@ -41,13 +57,86 @@ interface PageProps {
 async function getJobDetails(slug: string): Promise<JobDetail | null> {
   try {
     const res = await fetch(`https://api.interviewkit.online/api/jobs/${slug}/`, {
-      next: { revalidate: 86400 } // cache for 24 hours to reduce Vercel ISR writes
+      next: { revalidate: 86400, tags: ["jobs"] } // cache for 24 hours, force revalidate on demand
     });
     if (!res.ok) return null;
     return await res.json();
   } catch {
     return null;
   }
+}
+
+async function getAllJobs(): Promise<SimilarJob[]> {
+  try {
+    const res = await fetch("https://api.interviewkit.online/api/jobs/", {
+      next: { revalidate: 86400, tags: ["jobs"] }
+    });
+    if (!res.ok) return [];
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
+function findSimilarJobs(currentSlug: string, currentJob: JobDetail, allJobs: SimilarJob[]): SimilarJob[] {
+  if (!Array.isArray(allJobs) || allJobs.length === 0) return [];
+
+  const candidates = allJobs.filter(j => j.slug !== currentSlug);
+
+  // Prioritize active jobs posted within the last 30 days
+  const now = Date.now();
+  const recentCandidates = candidates.filter(j => {
+    if (!j.posted_at) return true;
+    const postTime = new Date(j.posted_at).getTime();
+    if (isNaN(postTime)) return true;
+    const diffDays = (now - postTime) / (1000 * 60 * 60 * 24);
+    return diffDays <= 30 && diffDays >= 0;
+  });
+
+  const pool = recentCandidates.length >= 4 ? recentCandidates : candidates;
+
+  const currentTags = (currentJob.tags || []).map(t => t.toLowerCase());
+  const currentTitleWords = currentJob.title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, " ")
+    .split(/\s+/)
+    .filter(w => w.length > 2 && !["developer", "engineer", "senior", "lead", "junior", "trainee", "associate"].includes(w));
+
+  const scored = pool.map(j => {
+    let score = 0;
+    const jobTags = (j.tags || []).map(t => t.toLowerCase());
+    const jobTitle = j.title.toLowerCase();
+
+    // 1. Tag overlap (high relevance)
+    const sharedTags = jobTags.filter(t => currentTags.includes(t));
+    score += sharedTags.length * 4;
+
+    // 2. Keyword overlap in title
+    currentTitleWords.forEach(word => {
+      if (jobTitle.includes(word)) score += 3;
+    });
+
+    // 3. Same location type
+    if (j.location_type?.toLowerCase() === currentJob.location_type?.toLowerCase()) {
+      score += 1;
+    }
+
+    // 4. Same company
+    if (j.company?.toLowerCase() === currentJob.company?.toLowerCase()) {
+      score += 2;
+    }
+
+    return { job: j, score };
+  });
+
+  scored.sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    const dateA = a.job.posted_at ? new Date(a.job.posted_at).getTime() : 0;
+    const dateB = b.job.posted_at ? new Date(b.job.posted_at).getTime() : 0;
+    return dateB - dateA;
+  });
+
+  return scored.slice(0, 4).map(s => s.job);
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -87,7 +176,11 @@ export async function generateStaticParams() {
 
 export default async function CareerDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const job = await getJobDetails(slug);
+  const [job, allJobs] = await Promise.all([
+    getJobDetails(slug),
+    getAllJobs()
+  ]);
+  const similarJobs = job ? findSimilarJobs(slug, job, allJobs) : [];
 
   const getLocTypePillStyles = (type: string) => {
     switch (type.toLowerCase()) {
@@ -274,7 +367,7 @@ export default async function CareerDetailPage({ params }: PageProps) {
             <rect fill="url(#g)" width="100%" height="100%" />
           </svg>
         </div>
-        <div className="mx-auto max-w-4xl relative z-10">
+        <div className="mx-auto max-w-7xl relative z-10">
 
           {/* Back button */}
           <div className="mb-6 flex items-center justify-between">
@@ -287,8 +380,12 @@ export default async function CareerDetailPage({ params }: PageProps) {
             <ShareJobButton title={job.title} />
           </div>
 
-          {/* Job Header Card */}
-          <article className="border border-gray-100 bg-white p-5 md:p-8 rounded-[2rem] shadow-sm mb-6 relative overflow-hidden">
+          {/* 2-Column Responsive Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_380px] gap-8 items-start">
+            {/* Left Column: Job Overview & Description */}
+            <div className="min-w-0">
+              {/* Job Header Card */}
+              <article className="border border-gray-100 bg-white p-5 md:p-8 rounded-[2rem] shadow-sm mb-6 relative overflow-hidden">
             {/* Top Right Job Type Pill Removed */}
 
             <div className="flex items-center gap-5 pb-6 border-b border-gray-100">
@@ -522,6 +619,158 @@ export default async function CareerDetailPage({ params }: PageProps) {
               Apply Now <ExternalLink className="w-4 h-4 text-white" />
             </a>
           </div>
+        </div>
+        {/* End of Left Column */}
+
+            {/* Right Column: Sticky Sidebar with Quick Apply, Similar Jobs, and Ads */}
+            <aside className="w-full flex flex-col gap-6 lg:sticky lg:top-28">
+              {/* Quick Apply Card (Desktop only, mobile has sticky bottom bar) */}
+              <div className="hidden lg:block border border-gray-100 bg-white p-6 rounded-[2rem] shadow-sm">
+                <h3 className="text-xs font-black uppercase tracking-wider text-slate-400 mb-4">
+                  Quick Apply
+                </h3>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-center shrink-0">
+                    <svg className="w-7 h-7" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="48" y="144" width="416" height="288" rx="32" fill="#00B9A5" />
+                      <path d="M192 144V104C192 90.7 202.7 80 216 80H296C309.3 80 320 90.7 320 104V144" stroke="#00B9A5" strokeWidth="24" strokeLinecap="round" fill="none" />
+                      <rect x="232" y="232" width="48" height="36" rx="6" fill="#FFFFFF" />
+                      <path d="M48 248H464" stroke="#008F80" strokeWidth="12" />
+                    </svg>
+                  </div>
+                  <div className="min-w-0">
+                    <div className="font-extrabold text-sm text-slate-900 truncate">
+                      {job.title.replace(new RegExp(`\\s+at\\s+${job.company}`, "i"), "")}
+                    </div>
+                    <div className="text-xs font-bold text-slate-500 truncate flex items-center gap-1 mt-0.5">
+                      <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <span className="truncate">{job.company}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2.5 text-xs font-bold text-slate-600 mb-6 py-3 border-y border-slate-100">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-400 font-semibold flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5" /> Location
+                    </span>
+                    <span className="text-slate-800 truncate max-w-[170px]">{cleanLocation(job.location)}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-400 font-semibold flex items-center gap-1.5">
+                      <Briefcase className="w-3.5 h-3.5" /> Placement
+                    </span>
+                    <span className="capitalize text-slate-800">{job.location_type}</span>
+                  </div>
+                  {job.salary && job.salary.toLowerCase() !== "not disclosed" && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-400 font-semibold flex items-center gap-1.5">
+                        <DollarSign className="w-3.5 h-3.5" /> Salary
+                      </span>
+                      <span className="text-[#00B9A5] font-extrabold">{job.salary}</span>
+                    </div>
+                  )}
+                </div>
+
+                <a
+                  href={job.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full no-underline flex items-center justify-center gap-2 bg-[#064E3B] hover:bg-[#022C22] text-white py-3.5 px-4 font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm text-sm"
+                >
+                  Apply Now <ExternalLink className="w-4 h-4 text-white" />
+                </a>
+                <p className="text-[11px] text-center text-slate-400 font-medium mt-2.5">
+                  Opens original job posting in a new tab
+                </p>
+              </div>
+
+              {/* Similar Jobs Card */}
+              {similarJobs.length > 0 && (
+                <div className="border border-gray-100 bg-white p-5 md:p-6 rounded-[2rem] shadow-sm">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-[#E6F9F6] text-[#00B9A5] flex items-center justify-center shrink-0">
+                        <Sparkles className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-black uppercase tracking-tight text-slate-900 leading-tight">
+                          Similar Jobs
+                        </h3>
+                        <p className="text-[11px] font-semibold text-slate-400">
+                          Recommended for you
+                        </p>
+                      </div>
+                    </div>
+                    <span className="text-[10px] font-black uppercase bg-[#E6F9F6] text-[#00B9A5] border border-[#B2F5EA] px-2 py-0.5 rounded-full">
+                      {similarJobs.length} roles
+                    </span>
+                  </div>
+
+                  <div className="flex flex-col gap-3">
+                    {similarJobs.map((sim) => {
+                      const cleanSimTitle = sim.title.replace(new RegExp(`\\s+at\\s+${sim.company}`, "i"), "");
+                      return (
+                        <Link
+                          key={sim.slug}
+                          href={`/careers/${sim.slug}`}
+                          className="group p-3.5 rounded-2xl border border-slate-100 hover:border-[#00B9A5]/40 hover:bg-[#F0FDF4]/30 bg-slate-50/50 transition-all no-underline block"
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="min-w-0 flex-1">
+                              <h4 className="font-extrabold text-xs md:text-sm text-slate-900 group-hover:text-[#00B9A5] transition-colors truncate">
+                                {cleanSimTitle}
+                              </h4>
+                              <p className="text-xs font-semibold text-slate-500 truncate flex items-center gap-1 mt-0.5">
+                                <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                <span className="truncate">{sim.company}</span>
+                              </p>
+                            </div>
+                            <div className="w-7 h-7 rounded-full bg-white border border-slate-200/80 flex items-center justify-center text-slate-400 group-hover:text-[#00B9A5] group-hover:border-[#00B9A5]/40 shrink-0 transition-colors shadow-2xs">
+                              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                            </div>
+                          </div>
+
+                          <div className="mt-2.5 flex items-center gap-1.5 flex-wrap">
+                            {sim.location_type && (
+                              <span className={`text-[9px] font-black uppercase tracking-wider border px-2 py-0.5 rounded-full ${getLocTypePillStyles(sim.location_type)}`}>
+                                {sim.location_type}
+                              </span>
+                            )}
+                            {sim.location && (
+                              <span className="text-[11px] font-semibold text-slate-400 flex items-center gap-1 truncate max-w-[120px]">
+                                <MapPin className="w-3 h-3 text-slate-400 shrink-0" />
+                                <span className="truncate">{cleanLocation(sim.location)}</span>
+                              </span>
+                            )}
+                            {sim.salary && sim.salary.toLowerCase() !== "not disclosed" && (
+                              <span className="text-[11px] font-bold text-[#00B9A5] ml-auto">
+                                {sim.salary}
+                              </span>
+                            )}
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+
+                  <div className="mt-4 pt-3.5 border-t border-slate-100 text-center">
+                    <Link
+                      href="/careers"
+                      className="no-underline inline-flex items-center gap-1.5 text-xs font-black uppercase text-[#00B9A5] hover:text-[#008F80] transition-colors"
+                    >
+                      View all open positions <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </div>
+              )}
+
+              {/* Sidebar Ad Placement */}
+              <div className="rounded-[2rem] overflow-hidden">
+                <CareerDisplayAd />
+              </div>
+            </aside>
+          </div>
 
           {/* Sticky Mobile Apply Button (Docks at the bottom of this container) */}
           <div className="sticky bottom-0 -mx-6 md:hidden bg-white border-t border-gray-200 p-4 mt-6 shadow-[0_-4px_15px_rgba(0,0,0,0.05)] z-40">
@@ -538,14 +787,9 @@ export default async function CareerDetailPage({ params }: PageProps) {
             </a>
           </div>
 
-          {/* Ad slot right above the footer */}
-          <div className="mt-8">
-            <CareerDisplayAd />
-          </div>
-
           {/* Icon Attribution */}
-          <div className="mt-6 text-center text-[10px] text-slate-400">
-            Bag briefcase business case Icon by <a href="https://icon-icons.com/authors/452-dinosoftlabs" target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-650">DinosoftLabs</a> on <a href="https://icon-icons.com/authors/452-dinosoftlabs" target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-650">Icon-Icons.com</a>
+          <div className="mt-8 text-center text-[10px] text-slate-400">
+            Bag briefcase business case Icon by <a href="https://icon-icons.com/authors/452-dinosoftlabs" target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-600">DinosoftLabs</a> on <a href="https://icon-icons.com/authors/452-dinosoftlabs" target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-600">Icon-Icons.com</a>
           </div>
 
         </div>
